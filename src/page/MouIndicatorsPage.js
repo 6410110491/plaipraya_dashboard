@@ -241,11 +241,19 @@ function MouIndicatorsPage() {
         }
     ];
 
+    const totalIndicators = KpiData.length;
+
+    const passedIndicators = kpiData.filter(item => item.percents >= item.criterion).length;
+
+    const notPassedIndicators = totalIndicators - passedIndicators;
+
+    const successPercent = ((passedIndicators / totalIndicators) * 100).toFixed(1);
+
+    console.log(KpiData.filter(item => item.percents >= item.criterion))
+
     const handleSync = async (path) => {
         setLoading(true);
-        console.log(`${process.env.REACT_APP_BACKEND_URL}${path}`);
 
-        // 1. Save scroll position ก่อน reload
         const currentScrollY = window.scrollY;
         localStorage.setItem("scrollPosition", currentScrollY);
 
@@ -409,45 +417,43 @@ function MouIndicatorsPage() {
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
                             <FaList size={28} color="#3498db" />
-                            <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ทั้งหมด</h5>
-                            <p className="text-muted mb-3">รวมทั้งหมด 129 ตัวชี้วัด</p>
+                            <h6 className="mt-3 mb-1">รวมทั้งหมด</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{totalIndicators} ตัวชี้วัด</h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* การ์ด: ยังไม่ผ่าน */}
                 <Col md={3}>
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
                             <FaTimesCircle size={28} color="#e74c3c" />
-                            <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ยังไม่ผ่าน</h5>
-                            <p className="text-muted mb-3">47 ตัวชี้วัดยังไม่ผ่านเกณฑ์</p>
+                            <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* การ์ด: ผ่านแล้ว */}
                 <Col md={3}>
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
                             <FaCheckCircle size={28} color="#2ecc71" />
-                            <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ผ่านแล้ว</h5>
-                            <p className="text-muted mb-3">82 ตัวชี้วัดผ่านแล้ว</p>
+                            <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* การ์ด: ร้อยละ */}
                 <Col md={3}>
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
                             <FaPercentage size={28} color="#f1c40f" />
-                            <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ร้อยละ</h5>
-                            <p className="text-muted mb-3">ร้อยละความสำเร็จ 63.6%</p>
+                            <h6 className="mt-3 mb-1">ร้อยละ</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{successPercent}%</h5>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
+
 
 
             <Row className='mt-5'>
@@ -483,12 +489,19 @@ function MouIndicatorsPage() {
                                 ) : (
                                     <>
                                         <td style={{ textAlign: "start", verticalAlign: 'middle' }}>
-                                            <Link
+                                            {/* <Link
                                                 to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}`}
                                                 state={{ apipath: data.apipath, criterion: data.criterion, notDisplay: data.notDisplay }}
                                             >
                                                 {data.kpi}
-                                            </Link>
+                                            </Link> */}
+                                            <Link
+                                                to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}
+                                                ?apipath=${encodeURIComponent(data.apipath)}
+                                                &criterion=${encodeURIComponent(data.criterion)}
+                                                &notDisplay=${data.notDisplay}`}
+                                            >{data.kpi}</Link>
+
                                         </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.target}</td>

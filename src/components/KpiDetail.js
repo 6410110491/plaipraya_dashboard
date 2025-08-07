@@ -10,9 +10,13 @@ import Typography from '@mui/material/Typography';
 import { Card } from '@mui/material';
 
 function KpiDetail() {
+    const { page, kpi } = useParams();
     const location = useLocation();
-    const { apipath, criterion } = location.state || {};
-    const { kpiname } = useParams();
+    const searchParams = new URLSearchParams(location.search);
+
+    const apipath = searchParams.get('apipath');
+    const criterion = searchParams.get('criterion');
+    const notDisplay = searchParams.get('notDisplay');
 
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
@@ -76,7 +80,7 @@ function KpiDetail() {
             <Row className="mb-4">
                 <Col>
                     <h3 className="text-primary fw-bold">รายละเอียดตัวชี้วัด</h3>
-                    <p><strong>ตัวชี้วัด:</strong> {decodeURIComponent(kpiname)}</p>
+                    <p><strong>ตัวชี้วัด:</strong> {decodeURIComponent(kpi)}</p>
                 </Col>
             </Row>
 
