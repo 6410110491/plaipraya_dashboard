@@ -133,7 +133,7 @@ router.get('/get_s_colon_screen', async (req, res) => {
             chospital AS h
         LEFT JOIN s_colon_screen AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname

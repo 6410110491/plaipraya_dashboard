@@ -243,13 +243,14 @@ function MouIndicatorsPage() {
 
     const totalIndicators = KpiData.length;
 
-    const passedIndicators = kpiData.filter(item => item.percents >= item.criterion).length;
+    const passedIndicators = kpiData.filter(
+        item => typeof item.percents === 'number' && item.percents !== 0 && item.percents >= item.criterion
+    ).length;
+
 
     const notPassedIndicators = totalIndicators - passedIndicators;
 
     const successPercent = ((passedIndicators / totalIndicators) * 100).toFixed(1);
-
-    console.log(KpiData.filter(item => item.percents >= item.criterion))
 
     const handleSync = async (path) => {
         setLoading(true);
@@ -265,7 +266,6 @@ function MouIndicatorsPage() {
         } finally {
             window.location.reload();
 
-            // (จะไม่ทำงานหลัง reload แล้ว) แต่ยังดีที่มีไว้กรณีไม่ reload
             setTimeout(() => {
                 setLoading(false);
             }, 500);
@@ -278,9 +278,8 @@ function MouIndicatorsPage() {
             setLoading(true)
             try {
                 const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_mou`);
-                const raw = res.data; // array ที่มี kpi, target, result, percent
+                const raw = res.data;
 
-                // รวมข้อมูล
                 const merged = KpiData.map((item) => {
                     const found = raw.find((r) => r.kpi === item.database);
                     return {
@@ -352,7 +351,7 @@ function MouIndicatorsPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            // setLoading(true);
             if (!selectedKpiData || !selectedKpiData.database) return;
 
             try {
@@ -426,9 +425,9 @@ function MouIndicatorsPage() {
                 <Col md={3}>
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
-                            <FaTimesCircle size={28} color="#e74c3c" />
-                            <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
+                            <FaCheckCircle size={28} color="#2ecc71" />
+                            <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -436,9 +435,9 @@ function MouIndicatorsPage() {
                 <Col md={3}>
                     <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card.Body className="text-center">
-                            <FaCheckCircle size={28} color="#2ecc71" />
-                            <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
+                            <FaTimesCircle size={28} color="#e74c3c" />
+                            <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
+                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -498,9 +497,13 @@ function MouIndicatorsPage() {
                                             <Link
                                                 to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}
                                                 ?apipath=${encodeURIComponent(data.apipath)}
-                                                &criterion=${encodeURIComponent(data.criterion)}
+                                                &criterion=${data.criterion}
                                                 &notDisplay=${data.notDisplay}`}
-                                            >{data.kpi}</Link>
+                                                target="_blank"
+                                            >
+                                                {data.kpi}
+                                            </Link>
+
 
                                         </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>

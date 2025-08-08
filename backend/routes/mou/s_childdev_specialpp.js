@@ -93,7 +93,7 @@ router.get('/get_s_childdev', async (req, res) => {
         WHERE kpi = $1
         `, ['s_childdev_specialpp']);
 
-                await pool.query(`
+        await pool.query(`
         INSERT INTO summary_mou (a_code, a_name, target, result, percent, kpi)
         SELECT
             h.hoscode AS a_code,
@@ -110,7 +110,7 @@ router.get('/get_s_childdev', async (req, res) => {
             chospital AS h
         LEFT JOIN s_childdev_specialpp AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname

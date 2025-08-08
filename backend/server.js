@@ -19,6 +19,7 @@ app.use(cors({
 }));
 
 // Routes
+// mou
 app.use('/api', require('./routes/mou/s_childdev_specialpp'));
 app.use('/api', require('./routes/mou/s_anc_quality'));
 app.use('/api', require('./routes/mou/s_ncd_screen_repleate1'));
@@ -34,8 +35,21 @@ app.use('/api', require('./routes/mou/s_epi1_3'));
 app.use('/api', require('./routes/mou/s_dental_70'));
 app.use('/api', require('./routes/mou/s_thai_id'));
 
-
 app.use('/api', require('./routes/mou/summary_mou'));
+
+//กระทรวง
+app.use('/api', require('./routes/ministry/s_stroke_admit_death'));
+app.use('/api', require('./routes/ministry/s_death28pa'));
+app.use('/api', require('./routes/ministry/s_kpi_sepsis_septic'));
+app.use('/api', require('./routes/ministry/s_stemi_death'));
+app.use('/api', require('./routes/ministry/s_dm_hba1c'));
+
+app.use('/api', require('./routes/ministry/summary_ministry'));
+
+// ตรวจราชการ
+
+app.use('/api', require('./routes/inspector/summary_inspector'));
+
 
 // Port
 const port = process.env.PORT || 4000;

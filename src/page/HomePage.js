@@ -7,6 +7,8 @@ import { FaHandshake, FaUniversity, FaSearch } from 'react-icons/fa';
 function HomePage() {
     const [loading, setLoading] = useState(false);
     const [kpi, setKpi] = useState([]);
+    const [kpiMinistry, setKpiMinistry] = useState([]);
+    const [kpiInspector, setKpiInspector] = useState([]);
 
     const changepage = (path) => {
         window.location.href = "/" + path
@@ -45,7 +47,10 @@ function HomePage() {
                 { label: '21.) ระดับความสำเร็จในการดำเนินงานการใช้ยาอย่างสมเหตุผลในชุมชน (RDU community)', value: 0 },
                 { label: '22.) ระดับความสำเร็จของการส่งเสริมผลิตภัณฑ์สุขภาพให้ได้รับอนุญาต', value: 0 },
             ],
-        },
+        }
+    ];
+
+    const kpisMinistry = [
         {
             title: 'ตัวชี้วัดกระทรวง',
             page: 'ministry',
@@ -56,25 +61,25 @@ function HomePage() {
                 { label: '3.) อัตราความรอบรู้ด้านสุขภาพของประชาชนไทย อายุ 15 ปี ขึ้นไป', value: 0 },
                 { label: '4.) ระดับความรอบรู้สุขภาพของประชาชนเรื่องโรคอุบัติใหม่และอุบัติซ้ำเพิ่มขึ้นไม่น้อยกว่าร้อยละ 5', value: 0 },
                 { label: '5.) ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน และ/หรือโรคความดันโลหิตสูง 5', value: 0 },
-                { label: '5.1) ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน', value: 0 },
-                { label: '5.2) ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง', value: 0 },
+                { label: '5.1) ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน', database: 's_ncd_screen_repleate1', criterion: 70, value: 0 },
+                { label: '5.2) ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง', database: 's_ht_screen_follow', criterion: 85, value: 0 },
                 { label: '6) อัตราการเสียชีวิตและบาดเจ็บจากอุบัติเหตุทางถนนในกลุ่มเด็กและเยาวชนลดลง (ช่วงวัย 1-18 ปี)', value: 0 },
                 { label: '7) ร้อยละของโรงพยาบาลที่พัฒนาอนามัยสิ่งแวดล้อมได้ตามเกณฑ์ GREEN & CLEAN Hospital Challenge (ระดับมาตรฐานขึ้นไป และระดับท้าทาย)', value: 0 },
                 { label: '7.1) ร้อยละของโรงพยาบาลที่พัฒนาอนามัยสิ่งแวดล้อมได้ตามเกณฑ์ GREEN & CLEAN Hospital Challenge (ระดับมาตรฐานขึ้นไป)', value: 0 },
                 { label: '7.2) ร้อยละของโรงพยาบาลที่พัฒนาอนามัยสิ่งแวดล้อมได้ตามเกณฑ์ GREEN & CLEAN Hospital Challenge (ระดับระดับท้าทาย)', value: 0 },
                 { label: '8.) จำนวนการจัดตั้งหน่วยบริการปฐมภูมิและเครือข่ายหน่วยบริการปฐมภูมิ ตามพระราชบัญญัติระบบสุขภาพปฐมภูมิ พ.ศ. 2562', value: 0 },
                 { label: '9.) ร้อยละของชุมชนมีการดำเนินการจัดการสุขภาพที่เหมาะสมให้กับประชาชน', value: 0 },
-                { label: '10.) อัตราตายของผู้ป่วยโรคหลอดเลือดสมอง (Stroke: I60-I69)', value: 0 },
+                { label: '10.) อัตราตายของผู้ป่วยโรคหลอดเลือดสมอง (Stroke: I60-I69)', database: 's_stroke_admit_death', criterion: 7, value: 0 },
                 { label: '11.) อัตราความสำเร็จการรักษาผู้ป่วยวัณโรคปอดรายใหม่', value: 0 },
                 { label: '11.1) อัตราความสำเร็จการรักษาผู้ป่วยวัณโรคปอดรายใหม่', value: 0 },
                 { label: '11.2) อัตราความครอบคลุมการขึ้นทะเบียนรักษาของผู้ป่วยวัณโรครายใหม่และกลับเป็นซ้ำ', value: 0 },
-                { label: '12.) อัตราตายทารกแรกเกิดอายุน้อยกว่าหรือเท่ากับ 28 วัน', value: 0 },
-                { label: '13.) ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทยและการแพทย์ทางเลือก', value: 0 },
+                { label: '12.) อัตราตายทารกแรกเกิดอายุน้อยกว่าหรือเท่ากับ 28 วัน', database: 's_death28pa', criterion: 3.6, value: 0 },
+                { label: '13.) ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทยและการแพทย์ทางเลือก', database: 's_ttm35', criterion: 45, value: 0 },
                 { label: '14.) ร้อยละของผู้ป่วยที่ได้รับการวินิจฉัยโรค Common Diseases and Symptoms มีการสั่งจ่ายยาสมุนไพรเพิ่มขึ้น', value: 0 },
                 { label: '15.) อัตราการฆ่าตัวตายสำเร็จ', value: 0 },
                 { label: '16.) ร้อยละของผู้ป่วยโรคจิตเวชและสารเสพติดที่มีความเสี่ยงสูงต่อการก่อความรุนแรง (SMI-V) ที่เข้าสู่กระบวนการบำบัดรักษาในเขตสุขภาพได้รับการดูแลต่อเนื่องจนไม่ก่อความรุนแรงซ้ำ', value: 0 },
-                { label: '17.) อัตราตายผู้ป่วยติดเชื้อในกระแสเลือดแบบรุนแรงชนิด community-acquired', value: 0 },
-                { label: '18.) อัตราตายของผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันชนิด STEMI', value: 0 },
+                { label: '17.) อัตราตายผู้ป่วยติดเชื้อในกระแสเลือดแบบรุนแรงชนิด community-acquired', database: 's_kpi_sepsis_septic', criterion: 26, value: 0 },
+                { label: '18.) อัตราตายของผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันชนิด STEMI', database: 's_stemi_death', criterion: 9, value: 0 },
                 { label: '19.) ร้อยละผู้ป่วยไตเรื้อรัง stage 5 รายใหม่ ที่ลดลงจากปีงบประมาณก่อนหน้า', value: 0 },
                 { label: '20.) อัตราส่วนของจำนวนผู้บริจาคอวัยวะสมองตายที่ได้รับการผ่าตัดนำอวัยวะออก ต่อจำนวนผู้ป่วยเสียชีวิตในโรงพยาบาล', value: 0 },
                 { label: '21.) การคัดกรองมะเร็ง', value: 0 },
@@ -107,7 +112,10 @@ function HomePage() {
                 { label: '34.) อัตราการขยายตัวของกลุ่มอุตสาหกรรมการแพทย์และการท่องเที่ยวเชิงสุขภาพ', value: 0 },
                 { label: '35.) ร้อยละผลิตภัณฑ์สุขภาพที่ได้รับการส่งเสริมและได้รับการอนุญาต', value: 0 },
             ],
-        },
+        }
+    ]
+
+    const kpisInspector = [
         {
             title: 'ตัวชี้วัดตรวจราชการ',
             page: 'inspector',
@@ -187,8 +195,8 @@ function HomePage() {
                 { label: '35.2) ร้อยละของหน่วยบริการที่ประสบภาวะวิกฤตทางการเงิน (ระดับ 6)', value: 0 },
                 { label: '36.) หน่วยงานผ่านเกณฑ์ตรวจสอบรายงานการเงิน (หมวดสินทรัพย์ถาวร และลูกหนี้ค่ารักษาพยาบาล)', value: 0 }
             ],
-        },
-    ];
+        }
+    ]
 
     useEffect(() => {
         const fetchData = async () => {
@@ -214,6 +222,80 @@ function HomePage() {
                 });
 
                 setKpi(updatedKpis);
+
+            } catch (error) {
+                console.error('Error fetching KPI result:', error);
+            } finally {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 500);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_ministry`);
+                const raw = res.data;
+
+                const percentMap = new Map(raw.map(item => [item.kpi, item.percent]));
+
+                const updatedKpis = kpisMinistry.map(kpiGroup => {
+                    const updatedDetails = kpiGroup.details.map(detail => {
+                        const percent = percentMap.get(detail.database);
+                        return {
+                            ...detail,
+                            value: percent ?? detail.value,
+                        };
+                    });
+                    return {
+                        ...kpiGroup,
+                        details: updatedDetails,
+                    };
+                });
+
+                setKpiMinistry(updatedKpis);
+
+            } catch (error) {
+                console.error('Error fetching KPI result:', error);
+            } finally {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 500);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_inspector`);
+                const raw = res.data;
+
+                const percentMap = new Map(raw.map(item => [item.kpi, item.percent]));
+
+                const updatedKpis = kpisInspector.map(kpiGroup => {
+                    const updatedDetails = kpiGroup.details.map(detail => {
+                        const percent = percentMap.get(detail.database);
+                        return {
+                            ...detail,
+                            value: percent ?? detail.value,
+                        };
+                    });
+                    return {
+                        ...kpiGroup,
+                        details: updatedDetails,
+                    };
+                });
+
+                setKpiInspector(updatedKpis);
 
             } catch (error) {
                 console.error('Error fetching KPI result:', error);
@@ -310,8 +392,115 @@ function HomePage() {
                         <Card>
                             <Card.Header>สรุปตัวชี้วัด (KPI Summary)</Card.Header>
                             <Card.Body>
+                                {/* MOU */}
                                 <Accordion defaultActiveKey="0">
                                     {kpi.map((kpi, idx) => (
+                                        <Accordion.Item eventKey={`${idx}`} key={idx}>
+                                            <Accordion.Header>
+                                                <div className="d-flex justify-content-between align-items-center w-100">
+                                                    <div>
+                                                        <strong>{kpi.title}</strong>
+                                                        <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
+                                                    </div>
+                                                    <Button
+                                                        style={{ marginRight: "1rem" }}
+                                                        variant="outline-primary"
+                                                        size="sm"
+                                                        onClick={() => changepage(`kpi/${kpi.page}`)}
+                                                    >
+                                                        รายละเอียด
+                                                    </Button>
+                                                </div>
+                                            </Accordion.Header>
+                                            <Accordion.Body className="bg-light">
+                                                <ul className="list-group list-group-flush">
+                                                    {kpi.details.map((detail, i) => {
+                                                        // เช็คว่าหัวข้อย่อยไหม
+                                                        const isSubItem = /^\d+\.\d+\)/.test(detail.label);
+                                                        return (
+                                                            <li
+                                                                key={i}
+                                                                className="list-group-item d-flex justify-content-between align-items-start"
+                                                            >
+                                                                <span className={`fw-bold ${isSubItem ? 'ms-4' : ''}`}>
+                                                                    {detail.label}
+                                                                </span>
+                                                                <div className="d-flex align-items-center" style={{ minWidth: '200px' }}>
+                                                                    <ProgressBar
+                                                                        now={detail.value}
+                                                                        style={{ width: '120px', height: '12px' }}
+                                                                        variant={detail.value > detail.criterion ? "success" : "danger"}
+                                                                    />
+                                                                    <span className={`ms-2 ${detail.value > detail.criterion ? "text-success" : "text-danger"}`}>
+                                                                        {detail.value}%
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </Accordion.Body>
+
+                                        </Accordion.Item>
+                                    ))}
+                                </Accordion>
+
+                                {/* กระทรวง */}
+                                <Accordion defaultActiveKey="0">
+                                    {kpiMinistry.map((kpi, idx) => (
+                                        <Accordion.Item eventKey={`${idx}`} key={idx}>
+                                            <Accordion.Header>
+                                                <div className="d-flex justify-content-between align-items-center w-100">
+                                                    <div>
+                                                        <strong>{kpi.title}</strong>
+                                                        <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
+                                                    </div>
+                                                    <Button
+                                                        style={{ marginRight: "1rem" }}
+                                                        variant="outline-primary"
+                                                        size="sm"
+                                                        onClick={() => changepage(`kpi/${kpi.page}`)}
+                                                    >
+                                                        รายละเอียด
+                                                    </Button>
+                                                </div>
+                                            </Accordion.Header>
+                                            <Accordion.Body className="bg-light">
+                                                <ul className="list-group list-group-flush">
+                                                    {kpi.details.map((detail, i) => {
+                                                        // เช็คว่าหัวข้อย่อยไหม
+                                                        const isSubItem = /^\d+\.\d+\)/.test(detail.label);
+                                                        return (
+                                                            <li
+                                                                key={i}
+                                                                className="list-group-item d-flex justify-content-between align-items-start"
+                                                            >
+                                                                <span className={`fw-bold ${isSubItem ? 'ms-4' : ''}`}>
+                                                                    {detail.label}
+                                                                </span>
+                                                                <div className="d-flex align-items-center" style={{ minWidth: '200px' }}>
+                                                                    <ProgressBar
+                                                                        now={detail.value}
+                                                                        style={{ width: '120px', height: '12px' }}
+                                                                        variant={detail.value > detail.criterion ? "success" : "danger"}
+                                                                    />
+                                                                    <span className={`ms-2 ${detail.value > detail.criterion ? "text-success" : "text-danger"}`}>
+                                                                        {detail.value}%
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </Accordion.Body>
+
+                                        </Accordion.Item>
+                                    ))}
+                                </Accordion>
+
+                                {/* ราชการ */}
+                                <Accordion defaultActiveKey="0">
+                                    {kpiInspector.map((kpi, idx) => (
                                         <Accordion.Item eventKey={`${idx}`} key={idx}>
                                             <Accordion.Header>
                                                 <div className="d-flex justify-content-between align-items-center w-100">

@@ -1,4 +1,5 @@
 //MOU 18  ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทย และการแพทย์ทางเลือก
+//Ministry  13	ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทยและการแพทย์ทางเลือก
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
@@ -68,7 +69,35 @@ router.get('/get_s_ttm35', async (req, res) => {
             chospital AS h
         LEFT JOIN s_ttm35 AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
+        WHERE
+            h.hoscode = '99862'
+        GROUP BY h.hoscode, h.hosname
+        `);
+
+        await pool.query(`
+        DELETE FROM summary_ministry
+        WHERE kpi = $1
+        `, ['s_ttm35']);
+
+        await pool.query(`
+        INSERT INTO summary_ministry (a_code, a_name, target, result, percent, kpi)
+        SELECT
+            h.hoscode AS a_code
+            , concat(h.hoscode, ':', h.hosname) AS a_name
+            , coalesce(SUM("op_service_q1" + "op_service_q2" + "op_service_q3" + "op_service_q4"), 0) as "target"
+            , coalesce(SUM("tm_service_q1" + "tm_service_q2" + "tm_service_q3" + "tm_service_q4"), 0) as "result"
+            , coalesce(ROUND(
+                SUM("tm_service_q1" + "tm_service_q2" + "tm_service_q3" + "tm_service_q4") * 100.0 /
+                nullif(SUM("op_service_q1" + "op_service_q2" + "op_service_q3" + "op_service_q4"), 0),
+                2
+            ), 0) as percent
+            , 's_ttm35' AS kpi
+        FROM
+            chospital AS h
+        LEFT JOIN s_ttm35 AS s ON
+            h.hoscode = s.hospcode
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname

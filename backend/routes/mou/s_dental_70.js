@@ -77,16 +77,16 @@ router.get('/s_dental_70/data', async (req, res) => {
                     chospital as h
         left join s_dental_70 as s on
             h.hoscode = s.hospcode
-            and s.b_year = '2568'
+            and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
         where
             h.hdc_regist = 1
-            and (h.zone_code = '11'
-                or 'ALL' = '11')
-            and (h.chw_code = '81'
-                or 'ALL' = '81')
-            and (h.amp_code = '8106'
-                or 'ALL' = '8106')
+            and (h.zone_code = '${process.env.ZONE_CODE}'
+                or 'ALL' = '${process.env.ZONE_CODE}')
+            and (h.chw_code = '${process.env.CHW_CODE}'
+                or 'ALL' = '${process.env.CHW_CODE}')
+            and (h.amp_code = '${process.env.AMP_CODE}'
+                or 'ALL' = '${process.env.AMP_CODE}')
             and (h.tmb_code = 'ALL'
                 or 'ALL' = 'ALL')
             and (h.dep = 'ALL'
@@ -119,16 +119,16 @@ router.get('/s_dental_70/data', async (req, res) => {
             chospital as h
         left join s_dental_70 as s on
             h.hoscode = s.hospcode
-            and s.b_year = '2568'
+            and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
         where
             h.hdc_regist = 1
-            and (h.zone_code = '11'
-                or 'ALL' = '11')
-            and (h.chw_code = '81'
-                or 'ALL' = '81')
-            and (h.amp_code = '8106'
-                or 'ALL' = '8106')
+            and (h.zone_code = '${process.env.ZONE_CODE}'
+                or 'ALL' = '${process.env.ZONE_CODE}')
+            and (h.chw_code = '${process.env.CHW_CODE}'
+                or 'ALL' = '${process.env.CHW_CODE}')
+            and (h.amp_code = '${process.env.AMP_CODE}'
+                or 'ALL' = '${process.env.AMP_CODE}')
             and (h.tmb_code = 'ALL'
                 or 'ALL' = 'ALL')
             and (h.dep = 'ALL'
@@ -267,16 +267,16 @@ router.post('/s_dental_70/insert_data', async (req, res) => {
             chospital as h
         left join s_dental_70 as s on
             h.hoscode = s.hospcode
-            and s.b_year = '2568'
+            and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
         where
             h.hdc_regist = 1
-            and (h.zone_code = '11'
-                or 'ALL' = '11')
-            and (h.chw_code = '81'
-                or 'ALL' = '81')
-            and (h.amp_code = '8106'
-                or 'ALL' = '8106')
+            and (h.zone_code = '${process.env.ZONE_CODE}'
+                or 'ALL' = '${process.env.ZONE_CODE}')
+            and (h.chw_code = '${process.env.CHW_CODE}'
+                or 'ALL' = '${process.env.CHW_CODE}')
+            and (h.amp_code = '${process.env.AMP_CODE}'
+                or 'ALL' = '${process.env.AMP_CODE}')
             and (h.tmb_code = 'ALL'
                 or 'ALL' = 'ALL')
             and (h.dep = 'ALL'

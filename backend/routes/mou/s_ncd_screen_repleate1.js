@@ -1,4 +1,6 @@
 //MOU 4. ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน
+
+//ministy 5.1 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
@@ -79,7 +81,35 @@ router.get('/get_s_ncd_screen_repleate1', async (req, res) => {
             chospital AS h
         LEFT JOIN s_ncd_screen_repleate1 AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
+        WHERE
+            h.hoscode = '99862'
+        GROUP BY h.hoscode, h.hosname
+        `);
+
+        await pool.query(`
+        DELETE FROM summary_ministry
+        WHERE kpi = $1
+        `, ['s_ncd_screen_repleate1']);
+
+        await pool.query(`
+        INSERT INTO summary_ministry (a_code, a_name, target, result, percent, kpi)
+        SELECT
+            h.hoscode AS a_code
+            , concat(h.hoscode, ':', h.hosname) AS a_name
+            , coalesce(SUM("target"), 0) as "target"
+            , coalesce(SUM("result"), 0) as "result"
+            , coalesce(ROUND(
+                SUM("result") * 100.0 /
+                nullif(SUM("target"), 0),
+                2
+            ), 0) as percent
+            , 's_ncd_screen_repleate1' AS kpi
+        FROM
+            chospital AS h
+        LEFT JOIN s_ncd_screen_repleate1 AS s ON
+            h.hoscode = s.hospcode
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname

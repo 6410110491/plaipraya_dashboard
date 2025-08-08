@@ -1,4 +1,5 @@
 //MOU  5  ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง
+//ministy 5.2 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
@@ -66,7 +67,7 @@ router.get('/get_s_ht_screen_follow', async (req, res) => {
                 data.result_13,
                 data.r_home_bp_13,
                 data.r_hosp_bp_13,
-                data.non_follow90_13, 
+                data.non_follow90_13,
                 data.over90
 
             ]);
@@ -94,12 +95,39 @@ router.get('/get_s_ht_screen_follow', async (req, res) => {
             chospital AS h
         LEFT JOIN s_ht_screen_follow AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname
         `);
 
+        await pool.query(`
+        DELETE FROM summary_ministry
+        WHERE kpi = $1
+        `, ['s_ht_screen_follow']);
+
+        await pool.query(`
+        INSERT INTO summary_ministry (a_code, a_name, target, result, percent, kpi)
+        SELECT
+            h.hoscode AS a_code
+            , concat(h.hoscode, ':', h.hosname) AS a_name
+            , coalesce(SUM("target"), 0) as "target"
+            , coalesce(SUM("result"), 0) as "result"
+            , coalesce(ROUND(
+                SUM("result") * 100.0 /
+                nullif(SUM("target"), 0),
+                2
+            ), 0) as percent
+            , 's_ht_screen_follow' AS kpi
+        FROM
+            chospital AS h
+        LEFT JOIN s_ht_screen_follow AS s ON
+            h.hoscode = s.hospcode
+            AND s.b_year = '${process.env.B_YEAR}'
+        WHERE
+            h.hoscode = '99862'
+        GROUP BY h.hoscode, h.hosname
+        `);
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {
         console.error(err);

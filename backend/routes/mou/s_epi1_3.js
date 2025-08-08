@@ -208,7 +208,7 @@ router.get('/get_s_epi1_3', async (req, res) => {
             from chospital as h
             left join s_epi1 as s on
                 h.hoscode = s.hospcode
-                and s.b_year = '2568'
+                and s.b_year = '${process.env.B_YEAR}'
             where
                 h.hoscode = '99862'
             group by h.hoscode, h.hosname
@@ -227,7 +227,7 @@ router.get('/get_s_epi1_3', async (req, res) => {
             from chospital as h
             left join s_epi3 as s on
                 h.hoscode = s.hospcode
-                and s.b_year = '2568'
+                and s.b_year = '${process.env.B_YEAR}'
             where
                 h.hoscode = '99862'
             group by h.hoscode, h.hosname
@@ -259,11 +259,14 @@ router.get('/s_epi1_3/data', async (req, res) => {
                     dtp1_04 + dtp1_05 + dtp1_06 + dtp1_07 + dtp1_08 + dtp1_09
                 ) AS result
             FROM chospital AS h
-            LEFT JOIN s_epi1 AS s ON h.hoscode = s.hospcode AND s.b_year = '2568'
+            LEFT JOIN s_epi1 AS s ON h.hoscode = s.hospcode AND s.b_year = '${process.env.B_YEAR}'
             WHERE h.hdc_regist = 1
-                AND (h.zone_code = '11' OR 'ALL' = '11')
-                AND (h.chw_code = '81' OR 'ALL' = '81')
-                AND (h.amp_code = '8106' OR 'ALL' = '8106')
+                and (h.zone_code = '${process.env.ZONE_CODE}'
+                    or 'ALL' = '${process.env.ZONE_CODE}')
+                and (h.chw_code = '${process.env.CHW_CODE}'
+                    or 'ALL' = '${process.env.CHW_CODE}')
+                and (h.amp_code = '${process.env.AMP_CODE}'
+                    or 'ALL' = '${process.env.AMP_CODE}')
                 AND (h.tmb_code = 'ALL' OR 'ALL' = 'ALL')
                 AND (h.dep = 'ALL' OR 'ALL' = 'ALL')
                 AND (h.mcode IN ('ALL') OR 'ALL' IN ('ALL'))
@@ -282,11 +285,14 @@ router.get('/s_epi1_3/data', async (req, res) => {
                     mmr2_04 + mmr2_05 + mmr2_06 + mmr2_07 + mmr2_08 + mmr2_09
                 ) AS result
             FROM chospital AS h
-            LEFT JOIN s_epi3 AS s ON h.hoscode = s.hospcode AND s.b_year = '2568'
+            LEFT JOIN s_epi3 AS s ON h.hoscode = s.hospcode AND s.b_year = '${process.env.B_YEAR}'
             WHERE h.hdc_regist = 1
-                AND (h.zone_code = '11' OR 'ALL' = '11')
-                AND (h.chw_code = '81' OR 'ALL' = '81')
-                AND (h.amp_code = '8106' OR 'ALL' = '8106')
+                and (h.zone_code = '${process.env.ZONE_CODE}'
+                    or 'ALL' = '${process.env.ZONE_CODE}')
+                and (h.chw_code = '${process.env.CHW_CODE}'
+                    or 'ALL' = '${process.env.CHW_CODE}')
+                and (h.amp_code = '${process.env.AMP_CODE}'
+                    or 'ALL' = '${process.env.AMP_CODE}')
                 AND (h.tmb_code = 'ALL' OR 'ALL' = 'ALL')
                 AND (h.dep = 'ALL' OR 'ALL' = 'ALL')
                 AND (h.mcode IN ('ALL') OR 'ALL' IN ('ALL'))

@@ -77,7 +77,7 @@ router.get('/get_s_dm_control', async (req, res) => {
             chospital AS h
         LEFT JOIN s_dm_control AS s ON
             h.hoscode = s.hospcode
-            AND s.b_year = '2568'
+            AND s.b_year = '${process.env.B_YEAR}'
         WHERE
             h.hoscode = '99862'
         GROUP BY h.hoscode, h.hosname

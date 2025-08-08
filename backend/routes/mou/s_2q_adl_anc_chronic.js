@@ -136,12 +136,12 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
             ]);
         }
 
-            await pool.query(`
+        await pool.query(`
             DELETE FROM summary_mou
             WHERE kpi = $1
             `, ['s_2q_adl_anc_chronic']);
 
-            await pool.query(`
+        await pool.query(`
             INSERT INTO summary_mou (a_code, a_name, target, result, percent, kpi)
                 select
                     h.hoscode as a_code,
@@ -156,7 +156,7 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
                 left join (
                     select hospcode, sum(target) as target, sum(result) as result
                     from s_2q_adl
-                    where b_year = '2568'
+                    where s.b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) adl on h.hoscode = adl.hospcode
                 left join (
@@ -172,20 +172,23 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
                             coalesce("60_1B0281",0)
                         ) as result
                     from s_2q_chronic
-                    where b_year = '2568'
+                    where s.b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) chronic on h.hoscode = chronic.hospcode
                 left join (
                     select hospcode, sum(target) as target, sum(result) as result
                     from s_2q_anc
-                    where b_year = '2568'
+                    where s.b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) anc on h.hoscode = anc.hospcode
                 where
                     h.hdc_regist = 1
-                    and (h.zone_code = '11' or 'ALL' = '11')
-                    and (h.chw_code = '81' or 'ALL' = '81')
-                    and (h.amp_code = '8106' or 'ALL' = '8106')
+                    and (h.zone_code = '${process.env.ZONE_CODE}'
+                        or 'ALL' = '${process.env.ZONE_CODE}')
+                    and (h.chw_code = '${process.env.CHW_CODE}'
+                        or 'ALL' = '${process.env.CHW_CODE}')
+                    and (h.amp_code = '${process.env.AMP_CODE}'
+                        or 'ALL' = '${process.env.AMP_CODE}')
                     and (h.tmb_code = 'ALL' or 'ALL' = 'ALL')
                     and (h.dep = 'ALL' or 'ALL' = 'ALL')
                     and (h.mcode in ('ALL') or 'ALL' in ('ALL'))

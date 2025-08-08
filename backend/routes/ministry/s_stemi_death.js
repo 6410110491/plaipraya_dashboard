@@ -1,13 +1,13 @@
-//MOU 10  อัตราการคัดกรองมะเร็งเต้านมในสตรีอายุ 30 – 70 ปี
+//Ministry  18	อัตราตายของผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันชนิด STEMI
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
 
-router.get('/get_s_breast_screen', async (req, res) => {
+router.get('/get_s_stemi_death', async (req, res) => {
     try {
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
-            tableName: "s_breast_screen",
+            tableName: "s_stemi_death",
             year: "2568",
             province: "81",
             type: "json"
@@ -15,16 +15,18 @@ router.get('/get_s_breast_screen', async (req, res) => {
 
         const dataList = response.data;
 
-        await pool.query('TRUNCATE TABLE s_breast_screen');
+        await pool.query('TRUNCATE TABLE s_stemi_death');
 
         for (const data of dataList) {
             await pool.query(`
-                INSERT INTO s_breast_screen (
-                    id, hospcode, areacode, date_com, b_year, target, result
-                    , result1, result2
+                INSERT INTO s_stemi_death (
+                    id, hospcode, areacode, date_com, b_year, 
+                    targetq1, targetq2, targetq3, targetq4,
+                    resultq1, resultq2, resultq3, resultq4
                 ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, 
-                    $8, $9
+                    $1, $2, $3, $4, $5, 
+                    $6, $7, $8, $9, 
+                    $10, $11, $12, $13
                 )
             `, [
                 data.id,
@@ -32,39 +34,47 @@ router.get('/get_s_breast_screen', async (req, res) => {
                 data.areacode,
                 data.date_com || null,
                 data.b_year,
-                data.target,
-                data.result,
-                data.result1,
-                data.result2
+                data.targetq1, 
+                data.targetq2, 
+                data.targetq3, 
+                data.targetq4,
+                data.resultq1, 
+                data.resultq2, 
+                data.resultq3, 
+                data.resultq4
+
             ]);
         }
 
         await pool.query(`
-        DELETE FROM summary_mou
+        DELETE FROM summary_ministry
         WHERE kpi = $1
-        `, ['s_breast_screen']);
+        `, ['s_stemi_death']);
 
         await pool.query(`
-        INSERT INTO summary_mou (a_code, a_name, target, result, percent, kpi)
-        SELECT
-            h.hoscode AS a_code,
-            concat(h.hoscode, ':', h.hosname) AS a_name,
-            coalesce(SUM("target"), 0) as "target",
-            coalesce(SUM("result"), 0) as "result",
-            coalesce(ROUND(
-                SUM("result") * 100.0 /
-                nullif(SUM("target"), 0),
-                2
-            ), 0) as percent,
-            's_breast_screen' AS kpi
-        FROM
-            chospital AS h
-        LEFT JOIN s_breast_screen AS s ON
+        INSERT INTO summary_ministry (a_code, a_name, target, result, percent, kpi)
+        select
+            h.hoscode as a_code
+            , concat(h.hoscode, ':', h.hosname) as a_name
+            , SUM("targetq1" + "targetq2" + "targetq3" + "targetq4") as "target"
+            , SUM("resultq1" + "resultq2" + "resultq3" + "resultq4") as "result"
+            , coalesce(ROUND(
+                        SUM("resultq1" + "resultq2" + "resultq3" + "resultq4") * 100.0 /
+                        nullif(SUM("targetq1" + "targetq2" + "targetq3" + "targetq4"), 0),
+                        2
+                    ), 0) as percent
+            , 's_stemi_death' AS kpi
+        from
+            chospital as h
+        left join s_stemi_death as s on
             h.hoscode = s.hospcode
-            AND s.b_year = '${process.env.B_YEAR}'
+            and s.b_year = '${process.env.B_YEAR}'
+            and 1 = 1
         WHERE
-            h.hoscode = '99862'
-        GROUP BY h.hoscode, h.hosname
+            h.hoscode = '11344'
+        group by
+            h.hoscode
+            , h.hosname
         `);
 
         res.status(200).json({ message: 'Import success', count: dataList.length });
@@ -74,22 +84,20 @@ router.get('/get_s_breast_screen', async (req, res) => {
     }
 });
 
-router.get('/s_breast_screen/data', async (req, res) => {
+router.get('/s_stemi_death/data', async (req, res) => {
     try {
         const response = await pool.query(`
         select
             h.hoscode as a_code
-            , CONCAT(h.hosname) AS a_name
-            , coalesce(SUM("target"), 0) as "target"
-            , coalesce(SUM("result"), 0) as "result"
-            , coalesce(ROUND(
-                SUM("result") * 100.0 /
-                nullif(SUM("target"), 0),
-                2
-            ), 0) as percent
+            , CONCAT(h.hosname) as a_name
+            , coalesce(SUM("targetq1" + "targetq2" + "targetq3" + "targetq4"), 0) as "target"
+            , coalesce(SUM("resultq1" + "resultq2" + "resultq3" + "resultq4"), 0) as "result"
+            , coalesce(ROUND(SUM("resultq1" + "resultq2" + "resultq3" + "resultq4") * 100.0 /
+            nullif(SUM("targetq1" + "targetq2" + "targetq3" + "targetq4"), 0),
+            2), 0) as percent
         from
             chospital as h
-        left join s_breast_screen as s on
+        left join s_stemi_death as s on
             h.hoscode = s.hospcode
             and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
@@ -115,30 +123,23 @@ router.get('/s_breast_screen/data', async (req, res) => {
             h.hoscode
             , h.hosname
         union all
-        select 
-            '99999' as a_code
-            ,
-            'รวมทั้งสิ้น' as a_name
-            ,
-            SUM(q1.target) as target
-            ,
-            SUM(q1.result) as result
-            ,
-            ROUND(
-                SUM(q1.result) * 100.0 / nullif(SUM(q1.target), 0),
-                2
-            ) as percent
-        from (
+                select 
+                '99999' as a_code
+                ,'รวมทั้งสิ้น' as a_name
+                ,SUM(q1.target) as target
+                , SUM(q1.result) as result
+                , coalesce(ROUND(
+                SUM(q1.result) * 100.0 / nullif(SUM(q1.target), 0),2
+                ), 0) as percent
+        from(
         select
             h.hoscode as a_code
             , concat(h.hoscode, ':', h.hosname) as a_name
-            , sum("target") as "target"
-            , sum("result") as "result"
-            , sum("result1") as "result1"
-            , sum("result2") as "result2"
+            , SUM("targetq1" + "targetq2" + "targetq3" + "targetq4") as "target"
+            , SUM("resultq1" + "resultq2" + "resultq3" + "resultq4") as "result"
         from
             chospital as h
-        left join s_breast_screen as s on
+        left join s_stemi_death as s on
             h.hoscode = s.hospcode
             and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
@@ -164,8 +165,8 @@ router.get('/s_breast_screen/data', async (req, res) => {
             h.hoscode
             , h.hosname
         ) as q1
-        order by 
-            a_code;
+        order by
+            a_code
     `)
 
         res.json(response.rows)

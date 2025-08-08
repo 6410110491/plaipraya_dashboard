@@ -1,13 +1,13 @@
-//MOU 10  อัตราการคัดกรองมะเร็งเต้านมในสตรีอายุ 30 – 70 ปี
+//Ministy  12	อัตราตายทารกแรกเกิดอายุน้อยกว่าหรือเท่ากับ 28 วัน
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
 
-router.get('/get_s_breast_screen', async (req, res) => {
+router.get('/get_s_death28pa', async (req, res) => {
     try {
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
-            tableName: "s_breast_screen",
+            tableName: "s_death28pa",
             year: "2568",
             province: "81",
             type: "json"
@@ -15,56 +15,57 @@ router.get('/get_s_breast_screen', async (req, res) => {
 
         const dataList = response.data;
 
-        await pool.query('TRUNCATE TABLE s_breast_screen');
+        await pool.query('TRUNCATE TABLE s_death28pa');
 
         for (const data of dataList) {
             await pool.query(`
-                INSERT INTO s_breast_screen (
-                    id, hospcode, areacode, date_com, b_year, target, result
-                    , result1, result2
+                INSERT INTO s_death28pa (
+                    id, hospcode, areacode, date_com, b_year, 
+                    target, result
                 ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, 
-                    $8, $9
+                    $1, $2, $3, $4, $5, 
+                    $6, $7
                 )
             `, [
                 data.id,
                 data.hospcode,
                 data.areacode,
-                data.date_com || null,
+                data.date_com,
                 data.b_year,
                 data.target,
                 data.result,
-                data.result1,
-                data.result2
             ]);
         }
 
         await pool.query(`
-        DELETE FROM summary_mou
+        DELETE FROM summary_ministry
         WHERE kpi = $1
-        `, ['s_breast_screen']);
+        `, ['s_death28pa']);
 
         await pool.query(`
-        INSERT INTO summary_mou (a_code, a_name, target, result, percent, kpi)
-        SELECT
-            h.hoscode AS a_code,
-            concat(h.hoscode, ':', h.hosname) AS a_name,
-            coalesce(SUM("target"), 0) as "target",
-            coalesce(SUM("result"), 0) as "result",
-            coalesce(ROUND(
-                SUM("result") * 100.0 /
-                nullif(SUM("target"), 0),
-                2
-            ), 0) as percent,
-            's_breast_screen' AS kpi
-        FROM
-            chospital AS h
-        LEFT JOIN s_breast_screen AS s ON
+        INSERT INTO summary_ministry (a_code, a_name, target, result, percent, kpi)
+        select
+            h.hoscode as a_code
+            , concat(h.hoscode, ':', h.hosname) as a_name
+            , SUM("target") as "target"
+            , SUM("result") as "result"
+            , coalesce(ROUND(SUM("result") * 1000.0 /
+                nullif(SUM("target"), 0),2
+            ), 0) as percent
+            , 's_death28pa' AS kpi
+        from
+            chospital as h
+        left join s_death28pa as s on
             h.hoscode = s.hospcode
-            AND s.b_year = '${process.env.B_YEAR}'
+            and s.b_year = '${process.env.B_YEAR}'
+            and 1 = 1
         WHERE
-            h.hoscode = '99862'
-        GROUP BY h.hoscode, h.hosname
+            h.hoscode = '11344'
+        group by
+            h.hoscode
+            , h.hosname
+        order by
+            h.hoscode
         `);
 
         res.status(200).json({ message: 'Import success', count: dataList.length });
@@ -74,22 +75,20 @@ router.get('/get_s_breast_screen', async (req, res) => {
     }
 });
 
-router.get('/s_breast_screen/data', async (req, res) => {
+router.get('/s_death28pa/data', async (req, res) => {
     try {
         const response = await pool.query(`
         select
             h.hoscode as a_code
-            , CONCAT(h.hosname) AS a_name
+            , CONCAT(h.hosname) as a_name
             , coalesce(SUM("target"), 0) as "target"
             , coalesce(SUM("result"), 0) as "result"
-            , coalesce(ROUND(
-                SUM("result") * 100.0 /
-                nullif(SUM("target"), 0),
-                2
+            , coalesce(ROUND(SUM("result") * 1000.0 /
+            nullif(SUM("target"), 0),2
             ), 0) as percent
         from
-            chospital as h
-        left join s_breast_screen as s on
+                    chospital as h
+        left join s_death28pa as s on
             h.hoscode = s.hospcode
             and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
@@ -115,30 +114,23 @@ router.get('/s_breast_screen/data', async (req, res) => {
             h.hoscode
             , h.hosname
         union all
-        select 
-            '99999' as a_code
-            ,
-            'รวมทั้งสิ้น' as a_name
-            ,
-            SUM(q1.target) as target
-            ,
-            SUM(q1.result) as result
-            ,
-            ROUND(
-                SUM(q1.result) * 100.0 / nullif(SUM(q1.target), 0),
-                2
-            ) as percent
-        from (
-        select
+                select 
+                '99999' as a_code
+                ,'รวมทั้งสิ้น' as a_name
+                ,SUM(q1.target) as target
+                , SUM(q1.result) as result
+                , coalesce(ROUND(
+                SUM(q1.result) * 100.0 / nullif(SUM(q1.target), 0),2
+                ), 0) as percent
+        from(
+            select
             h.hoscode as a_code
             , concat(h.hoscode, ':', h.hosname) as a_name
-            , sum("target") as "target"
-            , sum("result") as "result"
-            , sum("result1") as "result1"
-            , sum("result2") as "result2"
+            , SUM("target") as "target"
+            , SUM("result") as "result"
         from
             chospital as h
-        left join s_breast_screen as s on
+        left join s_death28pa as s on
             h.hoscode = s.hospcode
             and s.b_year = '${process.env.B_YEAR}'
             and 1 = 1
@@ -164,8 +156,8 @@ router.get('/s_breast_screen/data', async (req, res) => {
             h.hoscode
             , h.hosname
         ) as q1
-        order by 
-            a_code;
+        order by
+            a_code
     `)
 
         res.json(response.rows)

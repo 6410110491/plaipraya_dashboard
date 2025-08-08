@@ -10,13 +10,14 @@ import Typography from '@mui/material/Typography';
 import { Card } from '@mui/material';
 
 function KpiDetail() {
-    const { page, kpi } = useParams();
+    const { kpiname } = useParams();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
 
     const apipath = searchParams.get('apipath');
     const criterion = searchParams.get('criterion');
     const notDisplay = searchParams.get('notDisplay');
+    const a_code = searchParams.get('a_code');
 
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
@@ -35,9 +36,26 @@ function KpiDetail() {
         'ศูนย์สุขภาพชุมชนโรงพยาบาลปลายพระยา': 'ศสช.รพ.ปลายพระยา',
     };
 
+    const hospitals = [
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านบางเหียน", hospcode: "09034", key: "1" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านทะเลหอย", hospcode: "09035", key: "2" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านช่องแบก", hospcode: "09036", key: "3" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านตัวอย่าง", hospcode: "09037", key: "4" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านเขาต่อ", hospcode: "09038", key: "5" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านนา", hospcode: "09039", key: "6" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านบางเหลียว", hospcode: "09040", key: "7" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านโคกแซะ", hospcode: "09041", key: "8" },
+        { name: "โรงพยาบาลปลายพระยา", hospcode: "11344", key: "9" },
+        { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านคลองปัญญา", hospcode: "14218", key: "10" },
+        { name: "ศูนย์สุขภาพชุมชนโรงพยาบาลปลายพระยา", hospcode: "99862", key: "11" },
+    ];
+
     const valueFormatter = (item) => `${item.value}%`;
 
-    const desktopOS = data?.filter(item => item.a_code === "99862").map(item => {
+    const defaultHosp = "ศูนย์สุขภาพชุมชนโรงพยาบาลปลายพระยา";
+    const selectedHosp = hospitals.find(h => h.hospcode === a_code)?.name || defaultHosp;
+
+    const desktopOS = data?.filter(item => (item.a_code === a_code)).map(item => {
         const percent = Number(item.percent);
         return [
             { label: 'ผ่าน', value: percent, color: '#4CAF50' },
@@ -80,7 +98,7 @@ function KpiDetail() {
             <Row className="mb-4">
                 <Col>
                     <h3 className="text-primary fw-bold">รายละเอียดตัวชี้วัด</h3>
-                    <p><strong>ตัวชี้วัด:</strong> {decodeURIComponent(kpi)}</p>
+                    <p><strong>ตัวชี้วัด:</strong> {decodeURIComponent(kpiname)}</p>
                 </Col>
             </Row>
 
@@ -101,7 +119,7 @@ function KpiDetail() {
                             width={250}
                         />
                         <Typography variant="subtitle1" className="mt-3">
-                            ศูนย์สุขภาพชุมชนโรงพยาบาลปลายพระยา
+                            {selectedHosp}
                         </Typography>
                     </Card>
                 </Col>

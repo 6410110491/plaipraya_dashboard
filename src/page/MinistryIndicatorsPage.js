@@ -13,10 +13,34 @@ function MinistryIndicatorsPage() {
   const [selectedKpiData, setSelectedKpiData] = useState(null);
 
   const [formData, setFormData] = useState({
-    target: '',
-    result: '',
+    target1: '', result1: '',
+    target2: '', result2: '',
+    target3: '', result3: '',
+    target4: '', result4: '',
+    target5: '', result5: '',
+    target6: '', result6: '',
+    target7: '', result7: '',
+    target8: '', result8: '',
+    target9: '', result9: '',
+    target10: '', result10: '',
+    target11: '', result11: '',
 
   })
+
+  const hospitals = [
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านบางเหียน", hospcode: "09034", key: "1" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านทะเลหอย", hospcode: "09035", key: "2" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านช่องแบก", hospcode: "09036", key: "3" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านตัวอย่าง", hospcode: "09037", key: "4" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านเขาต่อ", hospcode: "09038", key: "5" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านนา", hospcode: "09039", key: "6" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านบางเหลียว", hospcode: "09040", key: "7" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านโคกแซะ", hospcode: "09041", key: "8" },
+    { name: "โรงพยาบาลปลายพระยา", hospcode: "11344", key: "9" },
+    { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านคลองปัญญา", hospcode: "14218", key: "10" },
+    { name: "ศูนย์สุขภาพชุมชนโรงพยาบาลปลายพระยา", hospcode: "99862", key: "11" },
+  ];
+
 
   const [showModal, setShowModal] = useState(false);
 
@@ -52,6 +76,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -60,6 +85,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -68,6 +94,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -76,6 +103,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -83,26 +111,29 @@ function MinistryIndicatorsPage() {
       page: 'ministry', index: '5', kpi: 'ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน และ/หรือโรคความดันโลหิตสูง 5', notDisplay: true
     },
     {
-      page: 'ministry', index: '', kpi: '5.1 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
-      target: 0, result: 0, percents: 0.00
+      page: 'ministry', index: '', kpi: '5.1 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคเบาหวาน', criterion: 70,
+      apipath: '/s_ncd_screen_repleate1/data',
+      link: 'https://hdc.moph.go.th/center/public/standard-report-detail/e9e461e793e8258f47d46d6956f12832',
+      sync_api: '/get_s_ncd_screen_repleate1',
+      a_code: "99862",
+      database: 's_ncd_screen_repleate1',
+      target: 0, result: 0, percents: 0.00, manual: false
     },
     {
-      page: 'ministry', index: '', kpi: '5.2 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
-      target: 0, result: 0, percents: 0.00
+      page: 'ministry', index: '', kpi: '5.2 ร้อยละการตรวจติดตามยืนยันวินิจฉัยกลุ่มสงสัยป่วยโรคความดันโลหิตสูง', criterion: 85,
+      apipath: '/s_ht_screen_follow/data',
+      link: 'https://hdc.moph.go.th/center/public/standard-report-detail/b57439ff27302ade8c38d1dd189644a4',
+      sync_api: '/get_s_ht_screen_follow',
+      a_code: "99862",
+      database: 's_ht_screen_follow',
+      target: 0, result: 0, percents: 0.00, manual: false
     },
     {
       page: 'ministry', index: '6', kpi: 'อัตราการเสียชีวิตและบาดเจ็บจากอุบัติเหตุทางถนนในกลุ่มเด็กและเยาวชนลดลง (ช่วงวัย 1-18 ปี)', criterion: 0,
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -114,6 +145,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -122,6 +154,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -130,6 +163,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -138,15 +172,18 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '10', kpi: 'อัตราตายของผู้ป่วยโรคหลอดเลือดสมอง (Stroke: I60-I69)', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '10', kpi: 'อัตราตายของผู้ป่วยโรคหลอดเลือดสมอง (Stroke: I60-I69)', criterion: 7,
+      apipath: '/s_stroke_admit_death/data',
+      link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/7ac059f4e4e3d08750d2ee23600556af',
+      sync_api: '/get_s_stroke_admit_death',
+      database: 's_stroke_admit_death',
+      a_code: "11344",
+      a_name: "โรงพยาบาลปลายพระยา",
       target: 0, result: 0, percents: 0.00
     },
     {
@@ -157,6 +194,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -165,23 +203,28 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '12', kpi: 'อัตราตายทารกแรกเกิดอายุน้อยกว่าหรือเท่ากับ 28 วัน', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '12', kpi: 'อัตราตายทารกแรกเกิดอายุน้อยกว่าหรือเท่ากับ 28 วัน', criterion: 3.6,
+      apipath: '/s_death28pa/data',
+      link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/0acbbb84a5c774c129dfc849a742d766',
+      sync_api: '/get_s_death28pa',
+      a_code: "99862",
+      database: 's_death28pa',
+      a_code: "11344",
+      a_name: "โรงพยาบาลปลายพระยา",
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '13', kpi: 'ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทยและการแพทย์ทางเลือก', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '13', kpi: 'ร้อยละของประชาชนที่มารับบริการในระดับปฐมภูมิได้รับการรักษาด้วยการแพทย์แผนไทยและการแพทย์ทางเลือก', criterion: 45,
+      apipath: '/s_ttm35/data',
+      link: 'https://hdc.moph.go.th/center/public/standard-report-detail/8f3d7d8e9dd50372641546bf12895c04',
+      sync_api: '/get_s_ttm35',
+      database: 's_ttm35',
+      a_code: "99862",
       target: 0, result: 0, percents: 0.00
     },
     {
@@ -189,6 +232,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -197,6 +241,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -205,23 +250,26 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '17', kpi: 'อัตราตายผู้ป่วยติดเชื้อในกระแสเลือดแบบรุนแรงชนิด community-acquired', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '17', kpi: 'อัตราตายผู้ป่วยติดเชื้อในกระแสเลือดแบบรุนแรงชนิด community-acquired', criterion: 26,
+      apipath: '/s_kpi_sepsis_septic/data',
+      link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/00366a85bd3c2b6932a228df29137252',
+      sync_api: '/get_s_kpi_sepsis_septic',
+      a_code: "11344",
+      database: 's_kpi_sepsis_septic',
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '18', kpi: 'อัตราตายของผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันชนิด STEMI', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '18', kpi: 'อัตราตายของผู้ป่วยโรคกล้ามเนื้อหัวใจตายเฉียบพลันชนิด STEMI', criterion: 9,
+      apipath: '/s_stemi_death/data',
+      link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/9fb3a84cf0feae3615a63f476252bf34',
+      sync_api: '/get_s_stemi_death',
+      a_code: "11344",
+      database: 's_stemi_death',
       target: 0, result: 0, percents: 0.00
     },
     {
@@ -229,6 +277,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -237,6 +286,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -248,6 +298,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -256,6 +307,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -264,6 +316,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -272,6 +325,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -280,6 +334,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -288,6 +343,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -296,6 +352,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -307,6 +364,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -315,6 +373,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -323,6 +382,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -331,6 +391,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -342,6 +403,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -350,6 +412,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -358,6 +421,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -369,15 +433,17 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
     {
-      page: 'ministry', index: '', kpi: '29.2 ร้อยละของผู้ป่วยโรคเบาหวาน ได้รับการตรวจ HbA1c อย่างน้อยปีละ 1 ครั้ง', criterion: 0,
-      apipath: '',
-      // link: '',
-      sync_api: '',
-      database: '',
+      page: 'ministry', index: '', kpi: '29.2 ร้อยละของผู้ป่วยโรคเบาหวาน ได้รับการตรวจ HbA1c อย่างน้อยปีละ 1 ครั้ง', criterion: 70,
+      apipath: '/s_dm_hba1c/data',
+      link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/fdc28cd7317936b7b734cec34103524c',
+      sync_api: '/get_s_dm_hba1c',
+      a_code: "99862",
+      database: 's_dm_hba1c',
       target: 0, result: 0, percents: 0.00
     },
     {
@@ -385,6 +451,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -393,6 +460,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -401,6 +469,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -412,6 +481,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -420,6 +490,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -428,6 +499,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -436,6 +508,7 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     },
@@ -444,17 +517,27 @@ function MinistryIndicatorsPage() {
       apipath: '',
       // link: '',
       sync_api: '',
+      a_code: "99862",
       database: '',
       target: 0, result: 0, percents: 0.00
     }
   ];
 
+  const totalIndicators = KpiData.length;
+
+  const passedIndicators = kpiData.filter(
+    item => typeof item.percents === 'number' && item.percents !== 0 && item.percents >= item.criterion
+  ).length;
+
+
+  const notPassedIndicators = totalIndicators - passedIndicators;
+
+  const successPercent = ((passedIndicators / totalIndicators) * 100).toFixed(1);
+
 
   const handleSync = async (path) => {
     setLoading(true);
-    console.log(`${process.env.REACT_APP_BACKEND_URL}${path}`);
 
-    // 1. Save scroll position ก่อน reload
     const currentScrollY = window.scrollY;
     localStorage.setItem("scrollPosition", currentScrollY);
 
@@ -466,7 +549,6 @@ function MinistryIndicatorsPage() {
     } finally {
       window.location.reload();
 
-      // (จะไม่ทำงานหลัง reload แล้ว) แต่ยังดีที่มีไว้กรณีไม่ reload
       setTimeout(() => {
         setLoading(false);
       }, 500);
@@ -478,10 +560,9 @@ function MinistryIndicatorsPage() {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_mou`);
-        const raw = res.data; // array ที่มี kpi, target, result, percent
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_ministry`);
+        const raw = res.data;
 
-        // รวมข้อมูล
         const merged = KpiData.map((item) => {
           const found = raw.find((r) => r.kpi === item.database);
           return {
@@ -516,24 +597,71 @@ function MinistryIndicatorsPage() {
   }, []);
 
   const handleManualInsert = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/insert_summary`, {
-        a_code: selectedKpiData.a_code,
-        a_name: selectedKpiData.a_name,
-        target: formData.target,
-        result: formData.result,
-        kpi: selectedKpiData.database
+      const insertPayloads = [];
+      hospitals.forEach(hosp => {
+        if (!hosp.hospcode) {
+          console.warn(`Skipping hospital with missing hospcode:`, hosp);
+          return;
+        }
+        const target = formData[`target${hosp.key}`];
+        const result = formData[`result${hosp.key}`];
+        if (!target && !result) return;
+
+        const payload = {
+          hospcode: hosp.hospcode,
+          ...(target && { target }),
+          ...(result && { result }),
+        };
+
+        insertPayloads.push(payload);
       });
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
+      if (insertPayloads.length > 0) {
+        const apiEndpoint = selectedKpiData?.manual === true && `${process.env.REACT_APP_BACKEND_URL}/api/${selectedKpiData.database}/insert_data`
+        await axios.post(apiEndpoint, insertPayloads);
+      }
+
       window.location.reload();
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+
+    } catch (error) {
+      console.error("Insert error:", error);
+      alert(error.response.data.error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // setLoading(true);
+      if (!selectedKpiData || !selectedKpiData.database) return;
+
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/${selectedKpiData.database}/data`
+        );
+        const data = response.data;
+
+        const updatedFormData = {};
+        data.forEach((item, index) => {
+          updatedFormData[`target${index + 1}`] = item.target || '';
+          updatedFormData[`result${index + 1}`] = item.result || '';
+        });
+
+        setFormData(prev => ({
+          ...prev,
+          ...updatedFormData
+        }));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedKpiData]);
   return (
     <Container fluid className='mb-5'>
       {loading && (
@@ -569,57 +697,56 @@ function MinistryIndicatorsPage() {
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaList size={28} color="#3498db" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ทั้งหมด</h5>
-              <p className="text-muted mb-3">รวมทั้งหมด 129 ตัวชี้วัด</p>
+              <h6 className="mt-3 mb-1">รวมทั้งหมด</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{totalIndicators} ตัวชี้วัด</h5>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* การ์ด: ยังไม่ผ่าน */}
-        <Col md={3}>
-          <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-            <Card.Body className="text-center">
-              <FaTimesCircle size={28} color="#e74c3c" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ยังไม่ผ่าน</h5>
-              <p className="text-muted mb-3">47 ตัวชี้วัดยังไม่ผ่านเกณฑ์</p>
-            </Card.Body>
-          </Card>
-        </Col>
-
-        {/* การ์ด: ผ่านแล้ว */}
         <Col md={3}>
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaCheckCircle size={28} color="#2ecc71" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ผ่านแล้ว</h5>
-              <p className="text-muted mb-3">82 ตัวชี้วัดผ่านแล้ว</p>
+              <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* การ์ด: ร้อยละ */}
+        <Col md={3}>
+          <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
+            <Card.Body className="text-center">
+              <FaTimesCircle size={28} color="#e74c3c" />
+              <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
+            </Card.Body>
+          </Card>
+        </Col>
+
         <Col md={3}>
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaPercentage size={28} color="#f1c40f" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ร้อยละ</h5>
-              <p className="text-muted mb-3">ร้อยละความสำเร็จ 63.6%</p>
+              <h6 className="mt-3 mb-1">ร้อยละ</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{successPercent}%</h5>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
+
+
       <Row className='mt-5'>
         <Table striped bordered hover>
           <thead className="table-primary text-center">
             <tr>
-              <th>ลำดับ</th>
-              <th>ตัวชี้วัด</th>
-              <th>เกณฑ์</th>
-              <th>เป้าหมาย</th>
-              <th>ผลงาน</th>
-              <th>ร้อยละ</th>
-              <th>อ้างอิง</th>
+              <th >ลำดับ</th>
+              <th >ตัวชี้วัด</th>
+              <th >เกณฑ์</th>
+              <th >เป้าหมาย</th>
+              <th >ผลงาน</th>
+              <th >ร้อยละ</th>
+              <th >อ้างอิง</th>
               <th></th>
             </tr>
           </thead>
@@ -642,12 +769,25 @@ function MinistryIndicatorsPage() {
                 ) : (
                   <>
                     <td style={{ textAlign: "start", verticalAlign: 'middle' }}>
+                      {/* <Link
+                                                to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}`}
+                                                state={{ apipath: data.apipath, criterion: data.criterion, notDisplay: data.notDisplay }}
+                                            >
+                                                {data.kpi}
+                                            </Link> */}
                       <Link
-                        to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}`}
-                        state={{ apipath: data.apipath, criterion: data.criterion, notDisplay: data.notDisplay }}
+                        to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}
+                                                ?apipath=${encodeURIComponent(data.apipath)}
+                                                &criterion=${data.criterion}
+                                                &notDisplay=${data.notDisplay}
+                                                &a_code=${data.a_code}
+                        `}
+                        target="_blank"
                       >
                         {data.kpi}
                       </Link>
+
+
                     </td>
                     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
                     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.target}</td>
@@ -684,9 +824,8 @@ function MinistryIndicatorsPage() {
                         <BsThreeDotsVertical size={18} />
                       </button>
                     </td>
-
-
                   </>
+
                 )}
               </tr>
             )}
@@ -701,58 +840,182 @@ function MinistryIndicatorsPage() {
         centered
         style={{ maxHeight: "80vh", marginTop: "4.75rem" }}
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 999,
+          backgroundColor: '#fff'
+        }}>
           <Modal.Title>{selectedKpiData?.kpi}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ maxHeight: "80vh" }}>
           {selectedKpiData && (
             <div className="d-flex flex-column gap-3">
               {/* แถวสำหรับปุ่มซิงค์ */}
-              <div
-
-              >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <p className="mb-0 fw-bold">ซิงค์ข้อมูล:</p>
-                  <Button
-                    variant="primary"
-                    style={{ marginLeft: "1rem" }}
-                    onClick={() => handleSync(selectedKpiData.sync_api)}
-                  >
-                    ซิงค์ข้อมูล <IoReload className="ms-2" />
-                  </Button>
-                </div>
-
-                <div className="row g-3" style={{ marginTop: "0.5rem" }}>
-                  <div className="col-md-4">
-                    <label className="form-label fw-bold">เป้าหมาย</label>
-                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                      name='target' onChange={handleChange} value={formData.target} />
+              <div>
+                {selectedKpiData?.sync_api && (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <p className="mb-0 fw-bold">ซิงค์ข้อมูล:</p>
+                    <Button
+                      variant="outline-primary"
+                      style={{ marginLeft: "1rem" }}
+                      onClick={() => handleSync(selectedKpiData.sync_api)}
+                    >
+                      ซิงค์ข้อมูล <IoReload className="ms-2" />
+                    </Button>
                   </div>
-                  <div className="col-md-4">
-                    <label className="form-label fw-bold">ผลงาน</label>
-                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                      name='result' onChange={handleChange} value={formData.result} />
-                  </div>
-                </div>
+                )}
+
+                {selectedKpiData?.manual === true &&
+                  (
+                    <Row style={{ marginTop: '1rem' }}>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านบางเหียน</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target1' onChange={handleChange} value={formData.target1 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result1' onChange={handleChange} value={formData.result1 ?? ''} />
+                        </Col>
+                      </Row>
+
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านทะเลหอย</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target2' onChange={handleChange} value={formData.target2 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result2' onChange={handleChange} value={formData.result2 ?? ''} />
+                        </Col>
+                      </Row>
+
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านช่องแบก</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target3' onChange={handleChange} value={formData.target3 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result3' onChange={handleChange} value={formData.result3 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านตัวอย่าง</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target4' onChange={handleChange} value={formData.target4 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result4' onChange={handleChange} value={formData.result4 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านเขาต่อ</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target5' onChange={handleChange} value={formData.target5 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result5' onChange={handleChange} value={formData.result5 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านนา</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target6' onChange={handleChange} value={formData.target6 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result6' onChange={handleChange} value={formData.result6 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านบางเหลียว</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target7' onChange={handleChange} value={formData.target7 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result7' onChange={handleChange} value={formData.result7 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านโคกแซะ</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target8' onChange={handleChange} value={formData.target8 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result8' onChange={handleChange} value={formData.result8 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพ.ปลายพระยา</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target9' onChange={handleChange} value={formData.target9 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result9' onChange={handleChange} value={formData.result9 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>รพสต.บ้านคลองปัญญา</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target10' onChange={handleChange} value={formData.target10 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result10' onChange={handleChange} value={formData.result10 ?? ''} />
+                        </Col>
+                      </Row>
+                      <Row style={{ marginTop: '0.75rem' }}>
+                        <Col sm={12} md={3}><p>ศสช.รพ.ปลายพระยา</p></Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
+                            name='target11' onChange={handleChange} value={formData.target11 ?? ''} />
+                        </Col>
+                        <Col sm={6} md={4}>
+                          <Form.Control type="text" placeholder="กรอกผลงาน..."
+                            name='result11' onChange={handleChange} value={formData.result11 ?? ''} />
+                        </Col>
+                      </Row>
+
+                    </Row>
+                  )
+                }
               </div>
 
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={handleOpenConFirmPopup}>
-            บันทึก
-          </Button>
-
+          {selectedKpiData?.manual === true && (
+            <Button variant="success" onClick={handleOpenConFirmPopup}>
+              บันทึก
+            </Button>
+          )}
           <Button variant="secondary" onClick={handleClose}>
             ปิด
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
 
 
       {/* confirm popup */}
-      <Modal show={showConfirmPopup} onHide={handleCloseConFirmPopup} centered>
+      < Modal show={showConfirmPopup} onHide={handleCloseConFirmPopup} centered >
         <Modal.Header closeButton>
           <Modal.Title>ยืนยัน</Modal.Title>
         </Modal.Header>
@@ -769,8 +1032,8 @@ function MinistryIndicatorsPage() {
             ยืนยัน
           </Button>
         </Modal.Footer>
-      </Modal>
-    </Container>
+      </Modal >
+    </Container >
   )
 }
 
