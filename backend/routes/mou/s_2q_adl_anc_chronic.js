@@ -156,7 +156,7 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
                 left join (
                     select hospcode, sum(target) as target, sum(result) as result
                     from s_2q_adl
-                    where s.b_year = '${process.env.B_YEAR}'
+                    where b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) adl on h.hoscode = adl.hospcode
                 left join (
@@ -172,13 +172,13 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
                             coalesce("60_1B0281",0)
                         ) as result
                     from s_2q_chronic
-                    where s.b_year = '${process.env.B_YEAR}'
+                    where b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) chronic on h.hoscode = chronic.hospcode
                 left join (
                     select hospcode, sum(target) as target, sum(result) as result
                     from s_2q_anc
-                    where s.b_year = '${process.env.B_YEAR}'
+                    where b_year = '${process.env.B_YEAR}'
                     group by hospcode
                 ) anc on h.hoscode = anc.hospcode
                 where

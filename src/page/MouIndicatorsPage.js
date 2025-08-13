@@ -76,6 +76,7 @@ function MouIndicatorsPage() {
             apipath: '/s_childdev/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/2238b7879f442749bd1804032119e824',
             sync_api: '/get_s_childdev',
+            a_code: "99862",
             database: 's_childdev_specialpp',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -84,13 +85,15 @@ function MouIndicatorsPage() {
             apipath: '/s_anc_quality/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/5087190fa0a3c28974fdde7fd1443d5e',
             sync_api: '/get_s_anc_quality',
+            a_code: "99862",
             database: 's_anc_quality',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '3', kpi: 'ร้อยละของผู้มีภาวะพึ่งพิงได้รับการดูแลตาม Care Plan', criterion: 99,
             // link: 'https://ltc.anamai.moph.go.th/',
-            // database: 's_anc_quality',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
@@ -98,6 +101,7 @@ function MouIndicatorsPage() {
             apipath: '/s_ncd_screen_repleate1/data',
             link: 'https://hdc.moph.go.th/center/public/standard-report-detail/e9e461e793e8258f47d46d6956f12832',
             sync_api: '/get_s_ncd_screen_repleate1',
+            a_code: "99862",
             database: 's_ncd_screen_repleate1',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -106,6 +110,7 @@ function MouIndicatorsPage() {
             apipath: '/s_ht_screen_follow/data',
             link: 'https://hdc.moph.go.th/center/public/standard-report-detail/b57439ff27302ade8c38d1dd189644a4',
             sync_api: '/get_s_ht_screen_follow',
+            a_code: "99862",
             database: 's_ht_screen_follow',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -115,6 +120,7 @@ function MouIndicatorsPage() {
             apipath: '/s_epi_complete/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/f033ab37c30201f73f142449d037028d',
             sync_api: '/get_s_epi_complete',
+            a_code: "99862",
             database: 's_epi_complete',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -123,13 +129,15 @@ function MouIndicatorsPage() {
             apipath: '/s_epi1_3/data',
             link: 'https://hdc.moph.go.th/kbi/public/search?q=MMR',
             sync_api: '/get_s_epi1_3',
+            a_code: "99862",
             database: 's_epi1_3',
             target: 0, result: 0, percents: 0.00, manual: false
 
         },
         {
             page: 'mou', index: '7', kpi: 'จำนวนการจัดตั้งหน่วยบริการปฐมภูมิและเครือข่ายหน่วยบริการปฐมภูมิตามพระราชบัญญัติระบบสุขภาพปฐมภูมิ พ.ศ.2562', criterion: 80,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
@@ -137,20 +145,21 @@ function MouIndicatorsPage() {
             apipath: '/s_dental_70/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/43b53d1950da4739e9a7f8ee4b0d25d2',
             sync_api: '/get_s_dental_70',
+            a_code: "99862",
             database: 's_dental_70',
-            // a_code: "99999",
-            // a_name: "รวมทั้งสิ้น",
             target: 0, result: 0, percents: 0.00, manual: true
         },
         { page: 'mou', index: '9', kpi: 'อัตราความสำเร็จการรักษาผู้ป่วยวัณโรคปอดรายใหม่', notDisplay: true },
         {
             page: 'mou', index: '', kpi: '9.1 อัตราความครอบคลุมการขึ้นทะเบียนของผู้ป่วยวัณโรครายใหม่และกลับเป็นซ้ำ', criterion: 85,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '', kpi: '9.2 อัตราความสำเร็จการรักษาผู้ป่วยวัณโรคปอดรายใหม่', criterion: 85,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
@@ -158,12 +167,14 @@ function MouIndicatorsPage() {
             apipath: '/s_breast_screen/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/308526013808e90ce8f30d66e3b5ad82',
             sync_api: '/get_s_breast_screen',
+            a_code: "99862",
             database: 's_breast_screen',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '11', kpi: 'ร้อยละประชากรสตรีกลุ่มเป้า อายุ 30 - 60 ปี ที่ได้รับการคัดกรองมะเร็งปากมดลูก', criterion: 70,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
@@ -171,6 +182,7 @@ function MouIndicatorsPage() {
             apipath: '/s_colon_screen/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/6c88a8d6cbd2779301d3198b82a45cdf',
             sync_api: '/get_s_colon_screen',
+            a_code: "99862",
             database: 's_colon_screen',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -184,6 +196,7 @@ function MouIndicatorsPage() {
             apipath: '/s_dm_control/data',
             link: 'https://hdc.moph.go.th/center/public/standard-report-detail/137a726340e4dfde7bbbc5d8aeee3ac3',
             sync_api: '/get_s_dm_control',
+            a_code: "99862",
             database: 's_dm_control',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -192,6 +205,7 @@ function MouIndicatorsPage() {
             apipath: '/s_ht_control/data',
             link: 'https://hdc.moph.go.th/center/public/standard-report-detail/2e3813337b6b5377c2f68affe247d5f9',
             sync_api: '/get_s_ht_control',
+            a_code: "99862",
             database: 's_ht_control',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -200,12 +214,14 @@ function MouIndicatorsPage() {
             apipath: '/s_2q_adl_anc_chronic/data',
             link: 'https://hdc.moph.go.th/kbi/public/search?q=2Q',
             sync_api: '/get_s_2q_adl_anc_chronic',
+            a_code: "99862",
             database: 's_2q_adl_anc_chronic',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '17', kpi: 'ร้อยละของผู้ป่วยที่ได้รับการวินิจฉัยโรค Common Diseases and Symptoms มีการสั่งจ่ายยาสมุนไพรเพิ่มขึ้น', criterion: 60,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
@@ -213,6 +229,7 @@ function MouIndicatorsPage() {
             apipath: '/s_ttm35/data',
             link: 'https://hdc.moph.go.th/center/public/standard-report-detail/8f3d7d8e9dd50372641546bf12895c04',
             sync_api: '/get_s_ttm35',
+            a_code: "99862",
             database: 's_ttm35',
             target: 0, result: 0, percents: 0.00, manual: false
         },
@@ -221,22 +238,26 @@ function MouIndicatorsPage() {
             apipath: '/s_thai_id/data',
             link: 'https://kbo.moph.go.th/health_id/',
             sync_api: '',
+            a_code: "99862",
             database: 's_thai_id',
             target: 0, result: 0, percents: 0.00, manual: true
         },
         {
             page: 'mou', index: '20', kpi: 'การประเมินเกณฑ์ประสิทธิภาพทางการเงิน (TPS) ผ่านเกณฑ์ ร้อยละ 81 – 100 ระดับดีมาก (5)', criterion: 81,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '21', kpi: 'ระดับความสำเร็จในการดำเนินงานการใช้ยาอย่างสมเหตุผลในชุมชน (RDU community)', criterion: 80,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         },
         {
             page: 'mou', index: '22', kpi: 'ระดับความสำเร็จของการส่งเสริมผลิตภัณฑ์สุขภาพให้ได้รับอนุญาต', criterion: 80,
-            // database: 's_childdev',
+            a_code: "99862",
+            database: '',
             target: 0, result: 0, percents: 0.00, manual: false
         }
     ];
@@ -498,7 +519,8 @@ function MouIndicatorsPage() {
                                                 to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}
                                                 ?apipath=${encodeURIComponent(data.apipath)}
                                                 &criterion=${data.criterion}
-                                                &notDisplay=${data.notDisplay}`}
+                                                &notDisplay=${data.notDisplay}
+                                                &a_code=${data.a_code}`}
                                                 target="_blank"
                                             >
                                                 {data.kpi}
