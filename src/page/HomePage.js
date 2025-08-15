@@ -400,18 +400,25 @@ function HomePage() {
                                                 <div className="d-flex justify-content-between align-items-center w-100">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
-                                                        <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
+                                                        <Badge bg="info" className="ms-3" as="span">
+                                                            {kpi.summary}
+                                                        </Badge>
                                                     </div>
-                                                    <Button
+                                                    <div
+                                                        role="button"
+                                                        tabIndex={0}
+                                                        className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
-                                                        variant="outline-primary"
-                                                        size="sm"
-                                                        onClick={() => changepage(`kpi/${kpi.page}`)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // กันไม่ให้ accordion toggle
+                                                            changepage(`kpi/${kpi.page}`);
+                                                        }}
                                                     >
                                                         รายละเอียด
-                                                    </Button>
+                                                    </div>
                                                 </div>
                                             </Accordion.Header>
+
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
@@ -455,16 +462,20 @@ function HomePage() {
                                                         <strong>{kpi.title}</strong>
                                                         <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
                                                     </div>
-                                                    <Button
+                                                    <span
+                                                        role="button"
+                                                        className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
-                                                        variant="outline-primary"
-                                                        size="sm"
-                                                        onClick={() => changepage(`kpi/${kpi.page}`)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // ป้องกันไม่ให้ Accordion เปิด/ปิด
+                                                            changepage(`kpi/${kpi.page}`);
+                                                        }}
                                                     >
                                                         รายละเอียด
-                                                    </Button>
+                                                    </span>
                                                 </div>
                                             </Accordion.Header>
+
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
@@ -508,14 +519,17 @@ function HomePage() {
                                                         <strong>{kpi.title}</strong>
                                                         <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
                                                     </div>
-                                                    <Button
+                                                    <span
+                                                        role="button"
+                                                        className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
-                                                        variant="outline-primary"
-                                                        size="sm"
-                                                        onClick={() => changepage(`kpi/${kpi.page}`)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // ป้องกันไม่ให้ Accordion เปิด/ปิด
+                                                            changepage(`kpi/${kpi.page}`);
+                                                        }}
                                                     >
                                                         รายละเอียด
-                                                    </Button>
+                                                    </span>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body className="bg-light">

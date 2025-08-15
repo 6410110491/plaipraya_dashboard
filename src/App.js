@@ -7,6 +7,9 @@ import MinistryIndicatorsPage from './page/MinistryIndicatorsPage';
 import InspectorIndicatorsPage from './page/InspectorIndicatorsPage';
 import KpiDetail from './components/KpiDetail';
 import Footer from './components/Footer';
+import TopBar from './components/TopBar';
+import Login from './page/Login';
+import Signup from './page/Signup';
 
 function App() {
   return (
@@ -20,12 +23,15 @@ function App() {
             minHeight: '100vh',
             width: '100%'
           }}>
+            <TopBar />
             <div style={{ padding: '20px', width: '100%', flex: 1 }}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/kpi/mou" element={<MouIndicatorsPage />} />
                 <Route path="/kpi/ministry" element={<MinistryIndicatorsPage />} />
                 <Route path="/kpi/inspector" element={<InspectorIndicatorsPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
 
                 <Route path="/kpi/:page/detail/:kpiname" element={<KpiDetail />} />
               </Routes>

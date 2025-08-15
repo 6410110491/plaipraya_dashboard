@@ -2,14 +2,26 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
+const helmet = require('helmet');
+const session = require("express-session");
+const rateLimit = require("express-rate-limit");
 
 const db = require('./config/db');
 
 const app = express();
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+})
+
 
 // Middleware
 app.use(bodyParser.json({ limit: '50mb' }));
+app.use(helmet());
+app.use(limiter)
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
@@ -17,6 +29,21 @@ app.use(cors({
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     exposedHeaders: ["set-cookie"]
 }));
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        credentials: true,
+        name: "sid",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: process.env.ENVIRONMENT === "production" ? "true" : "auto",
+            httpOnly: true,
+            expires: 1000 * 60 * 60 * 24 * 7,
+            sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
+        },
+    })
+);
 
 // Routes
 // mou
@@ -49,6 +76,9 @@ app.use('/api', require('./routes/ministry/summary_ministry'));
 // ตรวจราชการ
 
 app.use('/api', require('./routes/inspector/summary_inspector'));
+
+//auth
+app.use('/api', require('./routes/auth'));
 
 
 // Port
