@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from "sweetalert2";
 import { Form, Button, Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios'
 
@@ -23,11 +24,19 @@ function Signup() {
         setFormData({ ...formData, [name]: value });
     };
 
+    const changepage = (path) => {
+        window.location.href = "/" + path
+    }
+
     const handleSignup = async (e) => {
         e.preventDefault();
 
         if (formData.password !== formData.passwordConfirm) {
-            alert("Password ไม่ตรงกัน");
+            Swal.fire({
+                icon: 'error',
+                title: 'Password ไม่ตรงกัน',
+                confirmButtonText: 'ตกลง'
+            });
             return;
         }
 
@@ -41,9 +50,31 @@ function Signup() {
                 department: formData.department
             }, { withCredentials: true });
 
-            console.log(res.data);
+            if (res.data.loggedIn) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'สมัครสมาชิกสำเร็จ',
+                    text: 'ไปยังหน้า Login เพื่อเข้าสู่ระบบ',
+                    confirmButtonText: 'ตกลง'
+                }).then(() => {
+                    changepage('login'); 
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'สมัครสมาชิกไม่สำเร็จ',
+                    text: res.data.status,
+                    confirmButtonText: 'ตกลง'
+                });
+            }
         } catch (err) {
             console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่',
+                confirmButtonText: 'ตกลง'
+            });
         }
     };
 

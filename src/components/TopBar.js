@@ -1,10 +1,6 @@
 import {
-    CDBDropDown,
-    CDBDropDownMenu,
-    CDBDropDownToggle,
     CDBNavbar,
     CDBNavbarNav,
-    CDBNavBrand,
     CDBNavItem,
 } from 'cdbreact';
 import { NavLink } from 'react-router-dom';
@@ -35,7 +31,7 @@ function TopBar() {
 
     const handleLogout = async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logout`, {
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logout`, {
                 withCredentials: true
             });
             // setUsername(null)

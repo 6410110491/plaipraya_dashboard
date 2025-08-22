@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button, Accordion, Badge, ProgressBar, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Accordion, ProgressBar, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 
 import { FaHandshake, FaUniversity, FaSearch } from 'react-icons/fa';
@@ -18,7 +18,6 @@ function HomePage() {
         {
             title: 'ตัวชี้วัด MOU',
             page: 'mou',
-            summary: '10%',
             details: [
                 { label: '1.) ร้อยละของเด็กอายุ 0-5 ปี พัฒนาการสมวัย', database: 's_childdev_specialpp', criterion: 87, value: 0 },
                 { label: '2.) ร้อยละของหญิงตั้งครรภ์ได้รับบริการฝากครรภ์คุณภาพ', database: 's_anc_quality', criterion: 50, value: 0 },
@@ -54,7 +53,6 @@ function HomePage() {
         {
             title: 'ตัวชี้วัดกระทรวง',
             page: 'ministry',
-            summary: '85%',
             details: [
                 { label: '1.) อัตราส่วนการตายมารดาไทยต่อการเกิดมีชีพแสนคน', value: 0 },
                 { label: '2.) ร้อยละของเด็กอายุ 0 - 5 ปีมีพัฒนาการสมวัย', value: 0 },
@@ -119,7 +117,6 @@ function HomePage() {
         {
             title: 'ตัวชี้วัดตรวจราชการ',
             page: 'inspector',
-            summary: '85%',
             details: [
                 { label: '1.) ร้อยละของจังหวัดในเขตสุขภาพที่มีเครือข่ายราชทัณฑ์ปันสุข ทําความ ดี เพื่อชาติ ศาสน์ กษัตริย์(สะสม)', value: 0 },
                 { label: '2.) ผู้ต้องขังได้รับการคัดกรอง CXR', value: 0 },
@@ -400,9 +397,6 @@ function HomePage() {
                                                 <div className="d-flex justify-content-between align-items-center w-100">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
-                                                        <Badge bg="info" className="ms-3" as="span">
-                                                            {kpi.summary}
-                                                        </Badge>
                                                     </div>
                                                     <div
                                                         role="button"
@@ -410,7 +404,7 @@ function HomePage() {
                                                         className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); // กันไม่ให้ accordion toggle
+                                                            e.stopPropagation(); 
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -422,7 +416,7 @@ function HomePage() {
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
-                                                        // เช็คว่าหัวข้อย่อยไหม
+                        
                                                         const isSubItem = /^\d+\.\d+\)/.test(detail.label);
                                                         return (
                                                             <li
@@ -460,14 +454,13 @@ function HomePage() {
                                                 <div className="d-flex justify-content-between align-items-center w-100">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
-                                                        <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
                                                     </div>
                                                     <span
                                                         role="button"
                                                         className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); // ป้องกันไม่ให้ Accordion เปิด/ปิด
+                                                            e.stopPropagation(); 
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -479,7 +472,6 @@ function HomePage() {
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
-                                                        // เช็คว่าหัวข้อย่อยไหม
                                                         const isSubItem = /^\d+\.\d+\)/.test(detail.label);
                                                         return (
                                                             <li
@@ -517,14 +509,13 @@ function HomePage() {
                                                 <div className="d-flex justify-content-between align-items-center w-100">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
-                                                        <Badge bg="info" className="ms-3">{kpi.summary}</Badge>
                                                     </div>
                                                     <span
                                                         role="button"
                                                         className="btn btn-outline-primary btn-sm"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); // ป้องกันไม่ให้ Accordion เปิด/ปิด
+                                                            e.stopPropagation(); 
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -535,7 +526,6 @@ function HomePage() {
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
-                                                        // เช็คว่าหัวข้อย่อยไหม
                                                         const isSubItem = /^\d+\.\d+\)/.test(detail.label);
                                                         return (
                                                             <li

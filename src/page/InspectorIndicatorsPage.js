@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 
 import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 function InspectorIndicatorsPage() {
   const [loading, setLoading] = useState(false);
@@ -564,26 +565,46 @@ function InspectorIndicatorsPage() {
     }
   ];
 
+  const totalIndicators = KpiData.length;
+
+  const passedIndicators = kpiData.filter(
+    item => typeof item.percents === 'number' && item.percents !== 0 && item.percents >= item.criterion
+  ).length;
+
+
+  const notPassedIndicators = totalIndicators - passedIndicators;
+
+  const successPercent = ((passedIndicators / totalIndicators) * 100).toFixed(1);
+
   const handleSync = async (path) => {
     setLoading(true);
-    console.log(`${process.env.REACT_APP_BACKEND_URL}${path}`);
 
-    // 1. Save scroll position ก่อน reload
     const currentScrollY = window.scrollY;
     localStorage.setItem("scrollPosition", currentScrollY);
 
     try {
       await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}`);
+      setLoading(false);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Sync สำเร็จ',
+        text: 'ข้อมูลถูกซิงค์เรียบร้อยแล้ว',
+        confirmButtonText: 'ตกลง',
+      });
     } catch (error) {
       console.error('Sync ล้มเหลว:', error);
-      alert('Sync ล้มเหลว!');
+      setLoading(false);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Sync ล้มเหลว',
+        text: 'ไม่สามารถซิงค์ข้อมูลได้ กรุณาลองใหม่',
+        confirmButtonText: 'ตกลง',
+      });
     } finally {
-      window.location.reload();
-
-      // (จะไม่ทำงานหลัง reload แล้ว) แต่ยังดีที่มีไว้กรณีไม่ reload
       setTimeout(() => {
         setLoading(false);
       }, 500);
+      window.location.reload();
     }
   };
 
@@ -593,9 +614,8 @@ function InspectorIndicatorsPage() {
       setLoading(true)
       try {
         const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_mou`);
-        const raw = res.data; // array ที่มี kpi, target, result, percent
+        const raw = res.data; 
 
-        // รวมข้อมูล
         const merged = KpiData.map((item) => {
           const found = raw.find((r) => r.kpi === item.database);
           return {
@@ -625,7 +645,7 @@ function InspectorIndicatorsPage() {
       setTimeout(() => {
         window.scrollTo(0, parseInt(savedScroll, 10));
         localStorage.removeItem("scrollPosition");
-      }, 100); // รอ DOM พร้อม
+      }, 100);
     }
   }, []);
 
@@ -684,41 +704,38 @@ function InspectorIndicatorsPage() {
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaList size={28} color="#3498db" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ทั้งหมด</h5>
-              <p className="text-muted mb-3">รวมทั้งหมด 129 ตัวชี้วัด</p>
+              <h6 className="mt-3 mb-1">รวมทั้งหมด</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{totalIndicators} ตัวชี้วัด</h5>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* การ์ด: ยังไม่ผ่าน */}
-        <Col md={3}>
-          <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-            <Card.Body className="text-center">
-              <FaTimesCircle size={28} color="#e74c3c" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ยังไม่ผ่าน</h5>
-              <p className="text-muted mb-3">47 ตัวชี้วัดยังไม่ผ่านเกณฑ์</p>
-            </Card.Body>
-          </Card>
-        </Col>
-
-        {/* การ์ด: ผ่านแล้ว */}
         <Col md={3}>
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaCheckCircle size={28} color="#2ecc71" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ผ่านแล้ว</h5>
-              <p className="text-muted mb-3">82 ตัวชี้วัดผ่านแล้ว</p>
+              <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
             </Card.Body>
           </Card>
         </Col>
 
-        {/* การ์ด: ร้อยละ */}
+        <Col md={3}>
+          <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
+            <Card.Body className="text-center">
+              <FaTimesCircle size={28} color="#e74c3c" />
+              <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
+            </Card.Body>
+          </Card>
+        </Col>
+
         <Col md={3}>
           <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
             <Card.Body className="text-center">
               <FaPercentage size={28} color="#f1c40f" />
-              <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ร้อยละ</h5>
-              <p className="text-muted mb-3">ร้อยละความสำเร็จ 63.6%</p>
+              <h6 className="mt-3 mb-1">ร้อยละ</h6>
+              <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{successPercent}%</h5>
             </Card.Body>
           </Card>
         </Col>
@@ -822,7 +839,6 @@ function InspectorIndicatorsPage() {
         <Modal.Body style={{ maxHeight: "80vh" }}>
           {selectedKpiData && (
             <div className="d-flex flex-column gap-3">
-              {/* แถวสำหรับปุ่มซิงค์ */}
               <div
 
               >

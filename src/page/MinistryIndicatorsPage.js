@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 
 import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 function MinistryIndicatorsPage() {
   const [loading, setLoading] = useState(false);
@@ -543,15 +544,27 @@ function MinistryIndicatorsPage() {
 
     try {
       await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}`);
+      setLoading(false);
+      await Swal.fire({
+        icon: 'success',
+        title: 'Sync สำเร็จ',
+        text: 'ข้อมูลถูกซิงค์เรียบร้อยแล้ว',
+        confirmButtonText: 'ตกลง',
+      });
     } catch (error) {
       console.error('Sync ล้มเหลว:', error);
-      alert('Sync ล้มเหลว!');
+      setLoading(false);
+      await Swal.fire({
+        icon: 'error',
+        title: 'Sync ล้มเหลว',
+        text: 'ไม่สามารถซิงค์ข้อมูลได้ กรุณาลองใหม่',
+        confirmButtonText: 'ตกลง',
+      });
     } finally {
-      window.location.reload();
-
       setTimeout(() => {
         setLoading(false);
       }, 500);
+      window.location.reload();
     }
   };
 
