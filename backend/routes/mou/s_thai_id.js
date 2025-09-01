@@ -3,9 +3,12 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
 
-router.post('/s_thai_id/insert_data', async (req, res) => {
+router.post('/s_thai_id/insert_data', isLoggedIn, async (req, res) => {
     const dataToInsert = req.body;
 
     if (!Array.isArray(dataToInsert) || dataToInsert.length === 0) {
@@ -15,6 +18,8 @@ router.post('/s_thai_id/insert_data', async (req, res) => {
     const client = await pool.connect();
 
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         await client.query('BEGIN');
 
         await client.query('TRUNCATE TABLE s_thai_id');
@@ -57,10 +62,21 @@ router.post('/s_thai_id/insert_data', async (req, res) => {
         `);
 
         await client.query('COMMIT'); // Commit the transaction
+        logger.info(`${decoded.username} called`, {
+            context: 's_thai_id',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'บันทึกข้อมูลสำเร็จ' });
     } catch (err) {
         await client.query('ROLLBACK'); // Rollback on error
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 's_thai_id',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     } finally {
         client.release();

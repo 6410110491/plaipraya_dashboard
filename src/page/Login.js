@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -21,15 +22,35 @@ function Login() {
             );
 
             if (res.data.loggedIn) {
-                console.log("Login successful");
-                changepage("")
-            } else {
-                console.log("Login failed:", res.data.status);
+                Swal.fire({
+                    icon: "success",
+                    title: "เข้าสู่ระบบสำเร็จ",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    changepage("");
+                });
             }
         } catch (err) {
             console.error(err);
+
+            if (err.response && err.response.status === 401) {
+                Swal.fire({
+                    icon: "error",
+                    title: "เข้าสู่ระบบไม่สำเร็จ",
+                    text: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้",
+                });
+            }
         }
     };
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;

@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
-router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
+router.get('/get_s_2q_adl_anc_chronic', isLoggedIn, async (req, res) => {
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         // s_2q_adl
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
             tableName: "s_2q_adl",
@@ -196,13 +201,23 @@ router.get('/get_s_2q_adl_anc_chronic', async (req, res) => {
                     and h.hoscode = '99862'
             `);
 
-
+        logger.info(`${decoded.username} called`, {
+            context: 'get_s_2q_adl_anc_chronic',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'Import success', count_adl: dataList.length, count_anc: dataList_anc.length, count_chronic: dataList_chronic.length });
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 'get_s_2q_adl_anc_chronic',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     }
-});
+},);
 
 router.get('/s_2q_adl_anc_chronic/data', async (req, res) => {
     try {

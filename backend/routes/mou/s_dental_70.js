@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
-router.get('/get_s_dental_70', async (req, res) => {
+router.get('/get_s_dental_70', isLoggedIn, async (req, res) => {
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
             tableName: "s_dental_70",
             year: "2568",
@@ -53,9 +58,74 @@ router.get('/get_s_dental_70', async (req, res) => {
             ]);
         }
 
+        await pool.query(`
+        DELETE FROM summary_mou
+        WHERE kpi = $1
+        `, ['s_dental_70']);
+
+        await pool.query(`
+        INSERT INTO summary_mou (a_code, a_name, target, result, percent, kpi)
+        select 
+                '99999' as a_code
+                ,'รวมทั้งสิ้น' as a_name
+                ,SUM(q1.target) as target
+                , SUM(q1.result) as result
+                , coalesce(ROUND(
+                SUM(q1.result) * 100.0 / nullif(SUM(q1.target), 0),2
+                ), 0) as percent
+                , 's_dental_70' AS kpi
+        from(
+            select
+            h.hoscode as a_code
+            , concat(h.hosname) as a_name
+            , coalesce(SUM("target"), 0) as "target"
+            , sum("result") as "result"
+        from
+            chospital as h
+        left join s_dental_70 as s on
+            h.hoscode = s.hospcode
+            and s.b_year = '${process.env.B_YEAR}'
+            and 1 = 1
+        where
+            h.hdc_regist = 1
+            and (h.zone_code = '${process.env.ZONE_CODE}'
+                or 'ALL' = '${process.env.ZONE_CODE}')
+            and (h.chw_code = '${process.env.CHW_CODE}'
+                or 'ALL' = '${process.env.CHW_CODE}')
+            and (h.amp_code = '${process.env.AMP_CODE}'
+                or 'ALL' = '${process.env.AMP_CODE}')
+            and (h.tmb_code = 'ALL'
+                or 'ALL' = 'ALL')
+            and (h.dep = 'ALL'
+                or 'ALL' = 'ALL')
+            and (h.mcode in ('ALL')
+                or 'ALL' in ('ALL'))
+            and (h.mcode in ('ALL')
+                or 'ALL' in ('ALL'))
+            and (h.hoscode in ('ALL')
+                or 'ALL' in ('ALL'))
+        group by
+            h.hoscode
+            , h.hosname
+        ) as q1
+        order by
+            a_code
+        `);
+
+        logger.info(`${decoded.username} called`, {
+            context: 'get_s_dental_70',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 'get_s_dental_70',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     }
 });
@@ -155,7 +225,7 @@ router.get('/s_dental_70/data', async (req, res) => {
 });
 
 
-router.post('/s_dental_70/insert_data', async (req, res) => {
+router.post('/s_dental_70/insert_data', isLoggedIn, async (req, res) => {
     const dataArray = req.body;
 
     if (!Array.isArray(dataArray) || dataArray.length === 0) {
@@ -165,6 +235,8 @@ router.post('/s_dental_70/insert_data', async (req, res) => {
     const client = await pool.connect();
 
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         await client.query('BEGIN');
 
         for (const item of dataArray) {
@@ -295,11 +367,22 @@ router.post('/s_dental_70/insert_data', async (req, res) => {
             a_code
         `);
 
+        logger.info(`${decoded.username} called`, {
+            context: 's_dental_70/insert_data',
+            username: decoded.username
+        });
         return res.status(200).json({ message: 'อัปเดตข้อมูลสำเร็จสำหรับรายการที่มีข้อมูลเดิม' });
 
     } catch (err) {
         await client.query('ROLLBACK');
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 's_dental_70/insert_data',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         return res.status(500).json({ error: 'Server error', detail: err.message });
     } finally {
         client.release();

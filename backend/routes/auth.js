@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const logger = require('../logger');
+const isLoggedIn = require('../middleware/isLogin');
 
 function generateTimestampId() {
     const timestamp = Date.now();
@@ -14,6 +17,11 @@ router.post('/login', async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
+            logger.warn(`${username} ->Bad Request`, {
+                username: username,
+                context: 'logged in',
+                timestamp: new Date().toISOString(),
+            });
             return res.status(400).json({ loggedIn: false, status: "Username and password required" });
         }
 
@@ -23,23 +31,56 @@ router.post('/login', async (req, res) => {
         );
 
         if (potentialLogin.rowCount === 0) {
-            return res.json({ loggedIn: false, status: "Invalid username or password" });
+            logger.warn(`${username} ->Invalid username or password`, {
+                username: username,
+                context: 'logged in',
+                timestamp: new Date().toISOString(),
+            });
+            return res.status(401).json({ loggedIn: false, status: "Invalid username or password" });
         }
 
         const isSamePass = await bcrypt.compare(password, potentialLogin.rows[0].password);
         if (!isSamePass) {
-            return res.json({ loggedIn: false, status: "Invalid username or password" });
+            logger.warn(`${username} ->Invalid username or password`, {
+                username: username,
+                context: 'logged in',
+                timestamp: new Date().toISOString(),
+            });
+            return res.status(401).json({ loggedIn: false, status: "Invalid username or password" });
         }
 
-        req.session.user = {
-            username: username,
-            id: potentialLogin.rows[0].id,
+        const payload = {
+            id: potentialLogin.rows[0].id,       // แก้จาก potentialLogin.id
+            loggedIn: true,
+            username: potentialLogin.rows[0].username
         };
 
-        res.json({ loggedIn: true, username });
+        jwt.sign(payload, process.env.COOKIE_SECRET, { expiresIn: '1d' }, (err, token) => {
+            if (err) {
+                return res.status(500).json({ message: "Server Error" });
+            }
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'Strict',
+                maxAge: 24 * 60 * 60 * 1000 // 1 วัน
+            });
+
+            // ส่ง response หลังตั้ง cookie
+            res.json({ loggedIn: true, username: potentialLogin.rows[0].username });
+            logger.info(`User logged in: ${potentialLogin.rows[0].username}`, { username: potentialLogin.rows[0].username });
+        });
 
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: username,
+            context: 'logged in',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).json({ loggedIn: false, status: "Server error" });
     }
 });
@@ -89,17 +130,15 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-router.get("/logout", (req, res) => {
+router.get("/logout", async (req, res) => {
     try {
-        if (req.session) {
-            req.session.destroy(err => {
-                if (err) {
-                    console.error('Session destroy error:', err);
-                    return res.status(500).json({ error: 'Failed to logout' });
-                }
-                res.clearCookie('sid', { path: '/' });
-                return res.status(200).json({ message: 'Logged out successfully' });
-            });
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
+        if (token) {
+            res.clearCookie('token');
+            res.clearCookie('connect.sid');
+            logger.info(`User logged out: ${decoded.username}`, { username: decoded.username });
+            return res.status(200).json({ message: 'Logged out successfully' });
         } else {
             res.status(401).json({ error: 'No active session' });
         }
@@ -111,13 +150,25 @@ router.get("/logout", (req, res) => {
 
 
 
-router.get("/checkAuth", (req, res) => {
-    if (req.session.user && req.session.user.username) {
-        res.json({ loggedIn: true, username: req.session.user.username });
-    } else {
+router.get("/checkAuth", isLoggedIn, (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.json({ loggedIn: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
+        res.json({
+            username: decoded.username,
+            loggedIn: true,
+            id: decoded.id
+        });
+    } catch (err) {
         res.json({ loggedIn: false });
     }
 });
+
+
 
 
 module.exports = router;

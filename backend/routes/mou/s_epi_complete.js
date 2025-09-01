@@ -3,9 +3,15 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
-router.get('/get_s_epi_complete', async (req, res) => {
+
+router.get('/get_s_epi_complete', isLoggedIn, async (req, res) => {
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
             tableName: "s_epi_complete",
             year: "2568",
@@ -89,9 +95,20 @@ router.get('/get_s_epi_complete', async (req, res) => {
         GROUP BY h.hoscode, h.hosname
         `);
 
+        logger.info(`${decoded.username} called`, {
+            context: 'get_s_epi_complete',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 'get_s_epi_complete',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     }
 });

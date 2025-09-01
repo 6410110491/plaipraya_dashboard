@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
-router.get('/get_s_epi1_3', async (req, res) => {
+router.get('/get_s_epi1_3', isLoggedIn, async (req, res) => {
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
             tableName: "s_epi1",
             year: "2568",
@@ -236,9 +241,20 @@ router.get('/get_s_epi1_3', async (req, res) => {
         order by a_code;
         `);
 
+        logger.info(`${decoded.username} called`, {
+            context: 'get_s_epi1_3',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'Import success', count_epi1: dataList.length, count_epi3: dataList_s_epi3.length });
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 'get_s_epi1_3',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     }
 });

@@ -23,6 +23,9 @@ function TopBar() {
                     setUsername(res.data.username);
                 }
             } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    return
+                }
                 console.error("Auth check failed:", error);
             }
         };

@@ -71,6 +71,10 @@ function MouIndicatorsPage() {
         setFormData({ ...formData, [name]: value });
     };
 
+    const changepage = (path) => {
+        window.location.href = "/" + path
+    }
+
     const KpiData = [
         {
             page: 'mou', index: '1', kpi: 'ร้อยละของเด็กอายุ 0-5 ปี พัฒนาการสมวัย', criterion: 87,
@@ -281,28 +285,40 @@ function MouIndicatorsPage() {
         localStorage.setItem("scrollPosition", currentScrollY);
 
         try {
-            await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}`);
+            await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api${path}`, {
+                withCredentials: true
+            });
             setLoading(false);
             await Swal.fire({
                 icon: 'success',
                 title: 'Sync สำเร็จ',
                 text: 'ข้อมูลถูกซิงค์เรียบร้อยแล้ว',
                 confirmButtonText: 'ตกลง',
+            }).then(() => {
+                window.location.reload();
             });
         } catch (error) {
             console.error('Sync ล้มเหลว:', error);
             setLoading(false);
-            await Swal.fire({
-                icon: 'error',
-                title: 'Sync ล้มเหลว',
-                text: 'ไม่สามารถซิงค์ข้อมูลได้ กรุณาลองใหม่',
-                confirmButtonText: 'ตกลง',
-            });
+            if (error.response && error.response.status === 401) {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'ยังไม่ได้เข้าสู่ระบบ',
+                    text: 'กรุณาเข้าสู่ระบบใหม่',
+                    confirmButtonText: 'ไปที่หน้าเข้าสู่ระบบ',
+                }).then(() => {
+                    changepage("login");
+                });
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Sync ล้มเหลว',
+                    text: 'ไม่สามารถซิงค์ข้อมูลได้ กรุณาลองใหม่',
+                    confirmButtonText: 'ตกลง',
+                });
+            }
         } finally {
-            setTimeout(() => {
-                setLoading(false);
-            }, 500);
-            window.location.reload();
+            setLoading(false);
         }
     };
 
@@ -565,11 +581,11 @@ function MouIndicatorsPage() {
                                                 }}
                                                 onClick={() => {
                                                     setSelectedKpiData(data);
-                                                    setFormData({
-                                                        target: '',
-                                                        result: '',
+                                                    // setFormData({
+                                                    //     target: '',
+                                                    //     result: '',
 
-                                                    });
+                                                    // });
                                                     handleShow();
                                                 }}
                                             >

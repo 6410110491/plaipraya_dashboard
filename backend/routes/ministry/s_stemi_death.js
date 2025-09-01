@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const pool = require('../../config/db');
+const logger = require('../../logger');
+const isLoggedIn = require('../../middleware/isLogin');
+const jwt = require('jsonwebtoken');
 
-router.get('/get_s_stemi_death', async (req, res) => {
+router.get('/get_s_stemi_death', isLoggedIn, async (req, res) => {
     try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         const response = await axios.post('https://opendata.moph.go.th/api/report_data', {
             tableName: "s_stemi_death",
             year: "2568",
@@ -34,13 +39,13 @@ router.get('/get_s_stemi_death', async (req, res) => {
                 data.areacode,
                 data.date_com || null,
                 data.b_year,
-                data.targetq1, 
-                data.targetq2, 
-                data.targetq3, 
+                data.targetq1,
+                data.targetq2,
+                data.targetq3,
                 data.targetq4,
-                data.resultq1, 
-                data.resultq2, 
-                data.resultq3, 
+                data.resultq1,
+                data.resultq2,
+                data.resultq3,
                 data.resultq4
 
             ]);
@@ -77,9 +82,20 @@ router.get('/get_s_stemi_death', async (req, res) => {
             , h.hosname
         `);
 
+        logger.info(`${decoded.username} called`, {
+            context: 'get_s_stemi_death',
+            username: decoded.username
+        });
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {
         console.error(err);
+        logger.error('Error in API', {
+            username: decoded.username,
+            context: 'get_s_stemi_death',
+            stack: err.stack,
+            error: err.message,
+            timestamp: new Date().toISOString(),
+        });
         res.status(500).send('Server Error');
     }
 });

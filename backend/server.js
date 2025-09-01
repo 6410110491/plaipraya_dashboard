@@ -5,6 +5,7 @@ const createError = require('http-errors');
 const helmet = require('helmet');
 const session = require("express-session");
 const rateLimit = require("express-rate-limit");
+const cookieParser = require('cookie-parser');
 
 const db = require('./config/db');
 
@@ -22,6 +23,7 @@ const limiter = rateLimit({
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(helmet());
 app.use(limiter)
+app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
@@ -29,21 +31,6 @@ app.use(cors({
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     exposedHeaders: ["set-cookie"]
 }));
-app.use(
-    session({
-        secret: process.env.COOKIE_SECRET,
-        credentials: true,
-        name: "sid",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            secure: process.env.ENVIRONMENT === "production" ? "true" : "auto",
-            httpOnly: true,
-            expires: 1000 * 60 * 60 * 24 * 7,
-            sameSite: process.env.ENVIRONMENT === "production" ? "none" : "lax",
-        },
-    })
-);
 
 // Routes
 // mou
