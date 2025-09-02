@@ -62,19 +62,19 @@ function Login() {
     }
 
     return (
-        <Container fluid className="d-flex justify-content-center align-items-center" style={{ height: "100%" }}>
-            <Row>
-                <Col>
-                    <Card style={{ width: '450px', padding: '20px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
+        <Container fluid className="d-flex justify-content-center align-items-center h-100">
+            <Row className="w-100 justify-content-center">
+                <Col xs={12} sm={8} md={6} lg={4} xl={3}>
+                    <Card className="shadow p-3">
                         <Card.Body>
-                            <h3 style={{ textAlign: "center" }}>KPI Dashboard</h3>
+                            <h3 className="text-center">KPI Dashboard</h3>
                             <Card.Title className="text-center mb-4">เข้าสู่ระบบ</Card.Title>
                             <Form onSubmit={handleLogin}>
                                 <Form.Group className="mb-4" controlId="formUsername">
                                     <Form.Control
                                         type="text"
                                         placeholder="ชื่อผู้ใช้งาน"
-                                        name='username'
+                                        name="username"
                                         value={formData.username}
                                         onChange={handleChange}
                                         required
@@ -83,9 +83,9 @@ function Login() {
 
                                 <Form.Group className="mb-4" controlId="formPassword">
                                     <Form.Control
-                                        type="Password"
+                                        type="password"
                                         placeholder="รหัสผ่าน"
-                                        name='password'
+                                        name="password"
                                         value={formData.password}
                                         onChange={handleChange}
                                         required
@@ -95,9 +95,13 @@ function Login() {
                                 <Button variant="primary" type="submit" className="w-100">
                                     เข้าสู่ระบบ
                                 </Button>
-
                             </Form>
-                            <Button variant="outline-primary" className="w-100 mt-4" onClick={() => changepage('signup')}>
+
+                            <Button
+                                variant="outline-primary"
+                                className="w-100 mt-3"
+                                onClick={() => changepage("signup")}
+                            >
                                 สร้างบัญชีผู้ใช้งาน
                             </Button>
                         </Card.Body>
@@ -105,6 +109,7 @@ function Login() {
                 </Col>
             </Row>
         </Container>
+
     );
 }
 

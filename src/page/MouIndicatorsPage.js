@@ -28,6 +28,20 @@ function MouIndicatorsPage() {
 
     })
 
+    const unitList = [
+        "รพสต.บ้านบางเหียน",
+        "รพสต.บ้านทะเลหอย",
+        "รพสต.บ้านช่องแบก",
+        "รพสต.บ้านตัวอย่าง",
+        "รพสต.บ้านเขาต่อ",
+        "รพสต.บ้านนา",
+        "รพสต.บ้านบางเหลียว",
+        "รพสต.บ้านโคกแซะ",
+        "รพ.ปลายพระยา",
+        "รพสต.บ้านคลองปัญญา",
+        "ศสช.รพ.ปลายพระยา",
+    ];
+
     const hospitals = [
         { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านบางเหียน", hospcode: "09034", key: "1" },
         { name: "โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านทะเลหอย", hospcode: "09035", key: "2" },
@@ -506,7 +520,7 @@ function MouIndicatorsPage() {
 
 
             <Row className='mt-5'>
-                <Table striped bordered hover>
+                <Table striped bordered hover responsive>
                     <thead className="table-primary text-center">
                         <tr>
                             <th >ลำดับ</th>
@@ -558,8 +572,12 @@ function MouIndicatorsPage() {
 
                                         </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
-                                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.target}</td>
-                                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.result}</td>
+                                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                            {Number(data.target).toLocaleString()}
+                                        </td>
+                                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                            {Number(data.result).toLocaleString()}
+                                        </td>
                                         <td style={{ fontWeight: "700", backgroundColor: data.percents > data.criterion ? "#d4edda" : "#f8d7da", textAlign: 'center', verticalAlign: 'middle' }}>
                                             {data.percents}%
                                         </td>
@@ -608,167 +626,73 @@ function MouIndicatorsPage() {
                 centered
                 style={{ maxHeight: "80vh", marginTop: "4.75rem" }}
             >
-                <Modal.Header closeButton style={{
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 999,
-                    backgroundColor: '#fff'
-                }}>
+                <Modal.Header
+                    closeButton
+                    style={{
+                        position: "sticky",
+                        top: 0,
+                        zIndex: 999,
+                        backgroundColor: "#fff",
+                    }}
+                >
                     <Modal.Title>{selectedKpiData?.kpi}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body style={{ maxHeight: "80vh" }}>
+
+                <Modal.Body style={{ maxHeight: "70vh", overflowY: "auto" }}>
                     {selectedKpiData && (
                         <div className="d-flex flex-column gap-3">
-                            {/* แถวสำหรับปุ่มซิงค์ */}
-                            <div>
-                                {selectedKpiData?.sync_api && (
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <p className="mb-0 fw-bold">ซิงค์ข้อมูล:</p>
-                                        <Button
-                                            variant="outline-primary"
-                                            style={{ marginLeft: "1rem" }}
-                                            onClick={() => handleSync(selectedKpiData.sync_api)}
-                                        >
-                                            ซิงค์ข้อมูล <IoReload className="ms-2" />
-                                        </Button>
-                                    </div>
-                                )}
+                            {/* ปุ่มซิงค์ */}
+                            {selectedKpiData?.sync_api && (
+                                <div className="d-flex align-items-center flex-wrap gap-2">
+                                    <p className="mb-0 fw-bold">ซิงค์ข้อมูล:</p>
+                                    <Button
+                                        variant="outline-primary"
+                                        onClick={() => handleSync(selectedKpiData.sync_api)}
+                                    >
+                                        ซิงค์ข้อมูล <IoReload className="ms-2" />
+                                    </Button>
+                                </div>
+                            )}
 
-                                {selectedKpiData?.manual === true &&
-                                    (
-                                        <Row style={{ marginTop: '1rem' }}>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านบางเหียน</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target1' onChange={handleChange} value={formData.target1 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result1' onChange={handleChange} value={formData.result1 ?? ''} />
-                                                </Col>
-                                            </Row>
+                            {/* ฟอร์ม Manual */}
+                            {selectedKpiData?.manual === true && (
+                                <div className="mt-3">
+                                    {unitList.map((unit, idx) => (
+                                        <Row key={idx} className="align-items-center mb-3">
+                                            {/* ชื่อหน่วยงาน */}
+                                            <Col xs={12} md={3} className="mb-2 mb-md-0">
+                                                <p className="mb-0">{unit}</p>
+                                            </Col>
 
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านทะเลหอย</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target2' onChange={handleChange} value={formData.target2 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result2' onChange={handleChange} value={formData.result2 ?? ''} />
-                                                </Col>
-                                            </Row>
+                                            {/* เป้าหมาย */}
+                                            <Col xs={12} sm={6} md={4} className="mb-2 mb-sm-0">
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="กรอกเป้าหมาย..."
+                                                    name={`target${idx + 1}`}
+                                                    onChange={handleChange}
+                                                    value={formData[`target${idx + 1}`] ?? ""}
+                                                />
+                                            </Col>
 
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านช่องแบก</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target3' onChange={handleChange} value={formData.target3 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result3' onChange={handleChange} value={formData.result3 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านตัวอย่าง</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target4' onChange={handleChange} value={formData.target4 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result4' onChange={handleChange} value={formData.result4 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านเขาต่อ</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target5' onChange={handleChange} value={formData.target5 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result5' onChange={handleChange} value={formData.result5 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านนา</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target6' onChange={handleChange} value={formData.target6 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result6' onChange={handleChange} value={formData.result6 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านบางเหลียว</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target7' onChange={handleChange} value={formData.target7 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result7' onChange={handleChange} value={formData.result7 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านโคกแซะ</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target8' onChange={handleChange} value={formData.target8 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result8' onChange={handleChange} value={formData.result8 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพ.ปลายพระยา</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target9' onChange={handleChange} value={formData.target9 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result9' onChange={handleChange} value={formData.result9 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>รพสต.บ้านคลองปัญญา</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target10' onChange={handleChange} value={formData.target10 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result10' onChange={handleChange} value={formData.result10 ?? ''} />
-                                                </Col>
-                                            </Row>
-                                            <Row style={{ marginTop: '0.75rem' }}>
-                                                <Col sm={12} md={3}><p>ศสช.รพ.ปลายพระยา</p></Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                                                        name='target11' onChange={handleChange} value={formData.target11 ?? ''} />
-                                                </Col>
-                                                <Col sm={6} md={4}>
-                                                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                                                        name='result11' onChange={handleChange} value={formData.result11 ?? ''} />
-                                                </Col>
-                                            </Row>
-
+                                            {/* ผลงาน */}
+                                            <Col xs={12} sm={6} md={4}>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="กรอกผลงาน..."
+                                                    name={`result${idx + 1}`}
+                                                    onChange={handleChange}
+                                                    value={formData[`result${idx + 1}`] ?? ""}
+                                                />
+                                            </Col>
                                         </Row>
-                                    )
-                                }
-                            </div>
-
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     )}
                 </Modal.Body>
+
                 <Modal.Footer>
                     {selectedKpiData?.manual === true && (
                         <Button variant="success" onClick={handleOpenConFirmPopup}>
@@ -779,7 +703,7 @@ function MouIndicatorsPage() {
                         ปิด
                     </Button>
                 </Modal.Footer>
-            </Modal >
+            </Modal>
 
 
             {/* confirm popup */}

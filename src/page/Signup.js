@@ -57,7 +57,7 @@ function Signup() {
                     text: 'ไปยังหน้า Login เพื่อเข้าสู่ระบบ',
                     confirmButtonText: 'ตกลง'
                 }).then(() => {
-                    changepage('login'); 
+                    changepage('login');
                 });
             } else {
                 Swal.fire({
@@ -80,33 +80,34 @@ function Signup() {
 
 
     return (
-        <Container fluid className="d-flex justify-content-center align-items-center" style={{ height: "100%" }}>
-            <Row>
-                <Col>
-                    <Card style={{ width: '450px', padding: '20px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
+        <Container fluid className="d-flex justify-content-center align-items-center h-100">
+            <Row className="w-100 justify-content-center">
+                <Col xs={12} sm={10} md={8} lg={6} xl={5}>
+                    <Card className="shadow p-4">
                         <Card.Body>
-                            <h3 style={{ textAlign: "center" }}>KPI Dashboard</h3>
+                            <h3 className="text-center">KPI Dashboard</h3>
                             <Card.Title className="text-center mb-4">ลงทะเบียน</Card.Title>
+
                             <Form onSubmit={handleSignup}>
                                 <Row>
-                                    <Col sm={12} md={6} lg={6}>
-                                        <Form.Group className="mb-4" controlId="formFisrtname">
+                                    <Col xs={12} md={6}>
+                                        <Form.Group className="mb-3" controlId="formFirstname">
                                             <Form.Control
                                                 type="text"
                                                 placeholder="ชื่อ"
-                                                name='fisrtname'
-                                                value={formData.fisrtname}
+                                                name="firstname"
+                                                value={formData.firstname}
                                                 onChange={handleChange}
                                                 required
                                             />
                                         </Form.Group>
                                     </Col>
-                                    <Col sm={12} md={6} lg={6}>
-                                        <Form.Group className="mb-4" controlId="formLastname">
+                                    <Col xs={12} md={6}>
+                                        <Form.Group className="mb-3" controlId="formLastname">
                                             <Form.Control
                                                 type="text"
                                                 placeholder="นามสกุล"
-                                                name='lastname'
+                                                name="lastname"
                                                 value={formData.lastname}
                                                 onChange={handleChange}
                                                 required
@@ -115,48 +116,49 @@ function Signup() {
                                     </Col>
                                 </Row>
 
-                                <Form.Group className="mb-4" controlId="formDepartment">
-                                    <Form.Select aria-label="Default select example"
-                                        type="text"
-                                        name='department'
+                                <Form.Group className="mb-3" controlId="formDepartment">
+                                    <Form.Select
+                                        name="department"
                                         value={formData.department}
                                         onChange={handleChange}
-                                        required>
+                                        required
+                                    >
                                         <option value="">กลุ่มงาน</option>
                                         {department_list.map((data, index) => (
-                                            <option key={index} value={data}>{data}</option>
+                                            <option key={index} value={data}>
+                                                {data}
+                                            </option>
                                         ))}
                                     </Form.Select>
-
                                 </Form.Group>
 
-                                <Form.Group className="mb-4" controlId="formEmail">
+                                <Form.Group className="mb-3" controlId="formEmail">
                                     <Form.Control
                                         type="email"
                                         placeholder="อีเมล"
-                                        name='email'
+                                        name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
                                     />
                                 </Form.Group>
 
-                                <Form.Group className="mb-4" controlId="formUsername">
+                                <Form.Group className="mb-3" controlId="formUsername">
                                     <Form.Control
                                         type="text"
                                         placeholder="ชื่อผู้ใช้งาน"
-                                        name='username'
+                                        name="username"
                                         value={formData.username}
                                         onChange={handleChange}
                                         required
                                     />
                                 </Form.Group>
 
-                                <Form.Group className="mb-4" controlId="formPassword">
+                                <Form.Group className="mb-3" controlId="formPassword">
                                     <Form.Control
-                                        type="Password"
+                                        type="password"
                                         placeholder="รหัสผ่าน"
-                                        name='password'
+                                        name="password"
                                         value={formData.password}
                                         onChange={handleChange}
                                         required
@@ -165,20 +167,18 @@ function Signup() {
 
                                 <Form.Group className="mb-4" controlId="formPasswordConfirm">
                                     <Form.Control
-                                        type="Password"
+                                        type="password"
                                         placeholder="รหัสผ่านอีกครั้ง"
-                                        name='passwordConfirm'
+                                        name="passwordConfirm"
                                         value={formData.passwordConfirm}
                                         onChange={handleChange}
                                         required
                                     />
                                 </Form.Group>
 
-
                                 <Button variant="primary" type="submit" className="w-100">
                                     ลงทะเบียน
                                 </Button>
-
                             </Form>
                         </Card.Body>
                     </Card>

@@ -47,6 +47,20 @@ function InspectorIndicatorsPage() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const unitList = [
+    "รพสต.บ้านบางเหียน",
+    "รพสต.บ้านทะเลหอย",
+    "รพสต.บ้านช่องแบก",
+    "รพสต.บ้านตัวอย่าง",
+    "รพสต.บ้านเขาต่อ",
+    "รพสต.บ้านนา",
+    "รพสต.บ้านบางเหลียว",
+    "รพสต.บ้านโคกแซะ",
+    "รพ.ปลายพระยา",
+    "รพสต.บ้านคลองปัญญา",
+    "ศสช.รพ.ปลายพระยา",
+  ];
+
 
   const KpiData = [
     {
@@ -614,7 +628,7 @@ function InspectorIndicatorsPage() {
       setLoading(true)
       try {
         const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/get_summary_mou`);
-        const raw = res.data; 
+        const raw = res.data;
 
         const merged = KpiData.map((item) => {
           const found = raw.find((r) => r.kpi === item.database);
@@ -742,7 +756,7 @@ function InspectorIndicatorsPage() {
       </Row>
 
       <Row className='mt-5'>
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive>
           <thead className="table-primary text-center">
             <tr>
               <th>ลำดับ</th>
@@ -782,8 +796,13 @@ function InspectorIndicatorsPage() {
                       </Link>
                     </td>
                     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.target}</td>
-                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.result}</td>
+                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                      {Number(data.target).toLocaleString()}
+                    </td>
+                    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                      {Number(data.result).toLocaleString()}
+                    </td>
+
                     <td style={{ fontWeight: "700", backgroundColor: data.percents > data.criterion ? "#d4edda" : "#f8d7da", textAlign: 'center', verticalAlign: 'middle' }}>
                       {data.percents}%
                     </td>
@@ -833,48 +852,79 @@ function InspectorIndicatorsPage() {
         centered
         style={{ maxHeight: "80vh", marginTop: "4.75rem" }}
       >
-        <Modal.Header closeButton>
+        <Modal.Header
+          closeButton
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 999,
+            backgroundColor: "#fff",
+          }}
+        >
           <Modal.Title>{selectedKpiData?.kpi}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ maxHeight: "80vh" }}>
+
+        <Modal.Body style={{ maxHeight: "70vh", overflowY: "auto" }}>
           {selectedKpiData && (
             <div className="d-flex flex-column gap-3">
-              <div
-
-              >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+              {/* ปุ่มซิงค์ */}
+              {selectedKpiData?.sync_api && (
+                <div className="d-flex align-items-center flex-wrap gap-2">
                   <p className="mb-0 fw-bold">ซิงค์ข้อมูล:</p>
                   <Button
-                    variant="primary"
-                    style={{ marginLeft: "1rem" }}
+                    variant="outline-primary"
                     onClick={() => handleSync(selectedKpiData.sync_api)}
                   >
                     ซิงค์ข้อมูล <IoReload className="ms-2" />
                   </Button>
                 </div>
+              )}
 
-                <div className="row g-3" style={{ marginTop: "0.5rem" }}>
-                  <div className="col-md-4">
-                    <label className="form-label fw-bold">เป้าหมาย</label>
-                    <Form.Control type="text" placeholder="กรอกเป้าหมาย..."
-                      name='target' onChange={handleChange} value={formData.target} />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label fw-bold">ผลงาน</label>
-                    <Form.Control type="text" placeholder="กรอกผลงาน..."
-                      name='result' onChange={handleChange} value={formData.result} />
-                  </div>
+              {/* ฟอร์ม Manual */}
+              {selectedKpiData?.manual === true && (
+                <div className="mt-3">
+                  {unitList.map((unit, idx) => (
+                    <Row key={idx} className="align-items-center mb-3">
+                      {/* ชื่อหน่วยงาน */}
+                      <Col xs={12} md={3} className="mb-2 mb-md-0">
+                        <p className="mb-0">{unit}</p>
+                      </Col>
+
+                      {/* เป้าหมาย */}
+                      <Col xs={12} sm={6} md={4} className="mb-2 mb-sm-0">
+                        <Form.Control
+                          type="text"
+                          placeholder="กรอกเป้าหมาย..."
+                          name={`target${idx + 1}`}
+                          onChange={handleChange}
+                          value={formData[`target${idx + 1}`] ?? ""}
+                        />
+                      </Col>
+
+                      {/* ผลงาน */}
+                      <Col xs={12} sm={6} md={4}>
+                        <Form.Control
+                          type="text"
+                          placeholder="กรอกผลงาน..."
+                          name={`result${idx + 1}`}
+                          onChange={handleChange}
+                          value={formData[`result${idx + 1}`] ?? ""}
+                        />
+                      </Col>
+                    </Row>
+                  ))}
                 </div>
-              </div>
-
+              )}
             </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={handleOpenConFirmPopup}>
-            บันทึก
-          </Button>
 
+        <Modal.Footer>
+          {selectedKpiData?.manual === true && (
+            <Button variant="success" onClick={handleOpenConFirmPopup}>
+              บันทึก
+            </Button>
+          )}
           <Button variant="secondary" onClick={handleClose}>
             ปิด
           </Button>

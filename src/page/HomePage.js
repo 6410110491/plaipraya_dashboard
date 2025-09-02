@@ -394,17 +394,17 @@ function HomePage() {
                                     {kpi.map((kpi, idx) => (
                                         <Accordion.Item eventKey={`${idx}`} key={idx}>
                                             <Accordion.Header>
-                                                <div className="d-flex justify-content-between align-items-center w-100">
+                                                <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
                                                     </div>
                                                     <div
                                                         role="button"
                                                         tabIndex={0}
-                                                        className="btn btn-outline-primary btn-sm"
+                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); 
+                                                            e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -416,23 +416,32 @@ function HomePage() {
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
                                                     {kpi.details.map((detail, i) => {
-                        
                                                         const isSubItem = /^\d+\.\d+\)/.test(detail.label);
                                                         return (
                                                             <li
                                                                 key={i}
-                                                                className="list-group-item d-flex justify-content-between align-items-start"
+                                                                className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start"
                                                             >
                                                                 <span className={`fw-bold ${isSubItem ? 'ms-4' : ''}`}>
                                                                     {detail.label}
                                                                 </span>
+
+                                                                {/* progress bar + value */}
                                                                 <div className="d-flex align-items-center" style={{ minWidth: '200px' }}>
                                                                     <ProgressBar
                                                                         now={detail.value}
-                                                                        style={{ width: '120px', height: '12px' }}
-                                                                        variant={detail.value > detail.criterion ? "success" : "danger"}
+                                                                        // className="flex-grow-1"
+                                                                        style={{ minWidth: "120px", height: "12px" }}
+                                                                        variant={
+                                                                            detail.value > detail.criterion ? "success" : "danger"
+                                                                        }
                                                                     />
-                                                                    <span className={`ms-2 ${detail.value > detail.criterion ? "text-success" : "text-danger"}`}>
+                                                                    <span
+                                                                        className={`ms-2 ${detail.value > detail.criterion
+                                                                            ? "text-success"
+                                                                            : "text-danger"
+                                                                            }`}
+                                                                    >
                                                                         {detail.value}%
                                                                     </span>
                                                                 </div>
@@ -441,26 +450,26 @@ function HomePage() {
                                                     })}
                                                 </ul>
                                             </Accordion.Body>
-
                                         </Accordion.Item>
                                     ))}
                                 </Accordion>
+
 
                                 {/* กระทรวง */}
                                 <Accordion defaultActiveKey="0">
                                     {kpiMinistry.map((kpi, idx) => (
                                         <Accordion.Item eventKey={`${idx}`} key={idx}>
                                             <Accordion.Header>
-                                                <div className="d-flex justify-content-between align-items-center w-100">
+                                                <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
                                                     </div>
                                                     <span
                                                         role="button"
-                                                        className="btn btn-outline-primary btn-sm"
+                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); 
+                                                            e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -476,18 +485,31 @@ function HomePage() {
                                                         return (
                                                             <li
                                                                 key={i}
-                                                                className="list-group-item d-flex justify-content-between align-items-start"
+                                                                className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start"
                                                             >
-                                                                <span className={`fw-bold ${isSubItem ? 'ms-4' : ''}`}>
+                                                                {/* label */}
+                                                                <span
+                                                                    className={`fw-bold ${isSubItem ? "ms-4" : ""} mb-2 mb-md-0`}
+                                                                >
                                                                     {detail.label}
                                                                 </span>
+
+                                                                {/* progress bar + value */}
                                                                 <div className="d-flex align-items-center" style={{ minWidth: '200px' }}>
                                                                     <ProgressBar
                                                                         now={detail.value}
-                                                                        style={{ width: '120px', height: '12px' }}
-                                                                        variant={detail.value > detail.criterion ? "success" : "danger"}
+                                                                        // className="flex-grow-1"
+                                                                        style={{ minWidth: "120px", height: "12px" }}
+                                                                        variant={
+                                                                            detail.value > detail.criterion ? "success" : "danger"
+                                                                        }
                                                                     />
-                                                                    <span className={`ms-2 ${detail.value > detail.criterion ? "text-success" : "text-danger"}`}>
+                                                                    <span
+                                                                        className={`ms-2 ${detail.value > detail.criterion
+                                                                            ? "text-success"
+                                                                            : "text-danger"
+                                                                            }`}
+                                                                    >
                                                                         {detail.value}%
                                                                     </span>
                                                                 </div>
@@ -506,16 +528,16 @@ function HomePage() {
                                     {kpiInspector.map((kpi, idx) => (
                                         <Accordion.Item eventKey={`${idx}`} key={idx}>
                                             <Accordion.Header>
-                                                <div className="d-flex justify-content-between align-items-center w-100">
+                                                <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
                                                     </div>
                                                     <span
                                                         role="button"
-                                                        className="btn btn-outline-primary btn-sm"
+                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
                                                         style={{ marginRight: "1rem" }}
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); 
+                                                            e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
@@ -530,18 +552,31 @@ function HomePage() {
                                                         return (
                                                             <li
                                                                 key={i}
-                                                                className="list-group-item d-flex justify-content-between align-items-start"
+                                                                className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start"
                                                             >
-                                                                <span className={`fw-bold ${isSubItem ? 'ms-4' : ''}`}>
+                                                                {/* label */}
+                                                                <span
+                                                                    className={`fw-bold ${isSubItem ? "ms-4" : ""} mb-2 mb-md-0`}
+                                                                >
                                                                     {detail.label}
                                                                 </span>
+
+                                                                {/* progress bar + value */}
                                                                 <div className="d-flex align-items-center" style={{ minWidth: '200px' }}>
                                                                     <ProgressBar
                                                                         now={detail.value}
-                                                                        style={{ width: '120px', height: '12px' }}
-                                                                        variant={detail.value > detail.criterion ? "success" : "danger"}
+                                                                        // className="flex-grow-1"
+                                                                        style={{ minWidth: "120px", height: "12px" }}
+                                                                        variant={
+                                                                            detail.value > detail.criterion ? "success" : "danger"
+                                                                        }
                                                                     />
-                                                                    <span className={`ms-2 ${detail.value > detail.criterion ? "text-success" : "text-danger"}`}>
+                                                                    <span
+                                                                        className={`ms-2 ${detail.value > detail.criterion
+                                                                            ? "text-success"
+                                                                            : "text-danger"
+                                                                            }`}
+                                                                    >
                                                                         {detail.value}%
                                                                     </span>
                                                                 </div>
