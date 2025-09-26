@@ -24,7 +24,7 @@ function App() {
             width: '100%'
           }}>
             <TopBar />
-            <div style={{ padding: '20px', width: '100%', flex: 1 }}>
+            <div style={{ width: '100%', flex: 1 }}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/kpi/mou" element={<MouIndicatorsPage />} />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Modal, Row, Spinner, Table } from 'react-bootstrap'
+import { Button, Card, Col, Container, Form, Modal, Row, Spinner, Table, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { IoReload } from 'react-icons/io5';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Link } from 'react-router-dom';
@@ -8,10 +8,11 @@ import axios from 'axios'
 import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
-function MouIndicatorsPage() {
+function MouIndicatorsPage({ kpiItem }) {
     const [loading, setLoading] = useState(false);
     const [kpiData, setKpiData] = useState([]);
     const [selectedKpiData, setSelectedKpiData] = useState(null);
+    const [logs, setLogs] = useState(null);
 
     const [formData, setFormData] = useState({
         target1: '', result1: '',
@@ -256,7 +257,7 @@ function MouIndicatorsPage() {
             page: 'mou', index: '19', kpi: 'ร้อยละของอำเภอที่ประชาชนไทย มี Health ID เพื่อการเข้าถึงระบบบริการสุขภาพแบบไร้รอยต่อ', criterion: 50,
             apipath: '/s_thai_id/data',
             link: 'https://kbo.moph.go.th/health_id/',
-            sync_api: '',
+            sync_api: 's_thai_id',
             a_code: "99862",
             database: 's_thai_id',
             target: 0, result: 0, percents: 0.00, manual: true
@@ -399,9 +400,14 @@ function MouIndicatorsPage() {
                 insertPayloads.push(payload);
             });
             if (insertPayloads.length > 0) {
-                const apiEndpoint = selectedKpiData?.manual === true && `${process.env.REACT_APP_BACKEND_URL}/api/${selectedKpiData.database}/insert_data`
-                await axios.post(apiEndpoint, insertPayloads);
+                if (selectedKpiData?.manual === true) {
+                    const apiEndpoint = `${process.env.REACT_APP_BACKEND_URL}/api/${selectedKpiData.database}/insert_data`;
+                    await axios.post(apiEndpoint, insertPayloads, {
+                        withCredentials: true
+                    });
+                }
             }
+
 
             window.location.reload();
 
@@ -444,9 +450,24 @@ function MouIndicatorsPage() {
         fetchData();
     }, [selectedKpiData]);
 
+    const handleHover = async (sync_api) => {
+        try {
+            const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
+            // console.log("cleanSyncApi:", cleanSyncApi);
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
+                params: { sync_api: cleanSyncApi }
+            });
+            setLogs(res.data);
+            // console.log("logs:", logs);
+        } catch (err) { }
+    };
+
+    const handleLeave = () => {
+        setLogs(null);
+    };
 
     return (
-        <Container fluid className='mb-5'>
+        <Container fluid className='pb-5' style={{ backgroundColor: '#f8f9fa', padding: '25px' }}>
             {loading && (
                 <div
                     style={{
@@ -476,42 +497,186 @@ function MouIndicatorsPage() {
 
             {/* ... โค้ด Card, Table ตามที่เขียนไว้ ... */}
             <Row className="g-4">
-                <Col md={3}>
-                    <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                        <Card.Body className="text-center">
-                            <FaList size={28} color="#3498db" />
+                {/* รวมทั้งหมด */}
+                <Col lg={3} md={6} sm={6} xs={12}>
+                    <Card
+                        style={{
+                            background: `linear-gradient(135deg, #4286f4, #373b44)`,
+                            borderRadius: "15px",
+                            color: "white",
+                            padding: "20px",
+                            position: "relative",
+                            overflow: "hidden",
+                            minWidth: "220px",
+                            border: "none",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                top: "-40px",
+                                right: "-40px",
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.05)",
+                                top: "20px",
+                                right: "20px",
+                            }}
+                        />
+                        <Card.Body className="text-center" style={{ position: "relative", zIndex: 1 }}>
+                            <FaList size={28} color="#fff" />
                             <h6 className="mt-3 mb-1">รวมทั้งหมด</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{totalIndicators} ตัวชี้วัด</h5>
+                            <h5 className="mb-3 mt-2" style={{ fontWeight: "700", color: "#fff" }}>
+                                {totalIndicators} ตัวชี้วัด
+                            </h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col md={3}>
-                    <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                        <Card.Body className="text-center">
-                            <FaCheckCircle size={28} color="#2ecc71" />
+                {/* ผ่านแล้ว */}
+                <Col lg={3} md={6} sm={6} xs={12}>
+                    <Card
+                        style={{
+                            background: `linear-gradient(135deg, #2ecc71, #27ae60)`,
+                            borderRadius: "15px",
+                            color: "white",
+                            padding: "20px",
+                            position: "relative",
+                            overflow: "hidden",
+                            minWidth: "220px",
+                            border: "none",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                top: "-40px",
+                                right: "-40px",
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.05)",
+                                top: "20px",
+                                right: "20px",
+                            }}
+                        />
+                        <Card.Body className="text-center" style={{ position: "relative", zIndex: 1 }}>
+                            <FaCheckCircle size={28} color="#fff" />
                             <h6 className="mt-3 mb-1">ผ่านแล้ว</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{passedIndicators} ตัวชี้วัด</h5>
+                            <h5 className="mb-3 mt-2" style={{ fontWeight: "700", color: "#fff" }}>
+                                {passedIndicators} ตัวชี้วัด
+                            </h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col md={3}>
-                    <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                        <Card.Body className="text-center">
-                            <FaTimesCircle size={28} color="#e74c3c" />
+                {/* ยังไม่ผ่าน */}
+                <Col lg={3} md={6} sm={6} xs={12}>
+                    <Card
+                        style={{
+                            background: `linear-gradient(135deg, #e74c3c, #c0392b)`,
+                            borderRadius: "15px",
+                            color: "white",
+                            padding: "20px",
+                            position: "relative",
+                            overflow: "hidden",
+                            minWidth: "220px",
+                            border: "none",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                top: "-40px",
+                                right: "-40px",
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.05)",
+                                top: "20px",
+                                right: "20px",
+                            }}
+                        />
+                        <Card.Body className="text-center" style={{ position: "relative", zIndex: 1 }}>
+                            <FaTimesCircle size={28} color="#fff" />
                             <h6 className="mt-3 mb-1">ยังไม่ผ่าน</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{notPassedIndicators} ตัวชี้วัด</h5>
+                            <h5 className="mb-3 mt-2" style={{ fontWeight: "700", color: "#fff" }}>
+                                {notPassedIndicators} ตัวชี้วัด
+                            </h5>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col md={3}>
-                    <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                        <Card.Body className="text-center">
-                            <FaPercentage size={28} color="#f1c40f" />
+                {/* ร้อยละ */}
+                <Col lg={3} md={6} sm={6} >
+                    <Card
+                        style={{
+                            background: `linear-gradient(135deg, #f1c40f, #f39c12)`,
+                            borderRadius: "15px",
+                            color: "white",
+                            padding: "20px",
+                            position: "relative",
+                            overflow: "hidden",
+                            minWidth: "220px",
+                            border: "none",
+                        }}
+                    >
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.1)",
+                                top: "-40px",
+                                right: "-40px",
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                width: "100px",
+                                height: "100px",
+                                borderRadius: "50%",
+                                background: "rgba(255, 255, 255, 0.05)",
+                                top: "20px",
+                                right: "20px",
+                            }}
+                        />
+                        <Card.Body className="text-center" style={{ position: "relative", zIndex: 1 }}>
+                            <FaPercentage size={28} color="#fff" />
                             <h6 className="mt-3 mb-1">ร้อยละ</h6>
-                            <h5 className="text-muted mb-3 mt-2" style={{ fontWeight: "700" }}>{successPercent}%</h5>
+                            <h5 className="mb-3 mt-2" style={{ fontWeight: "700", color: "#fff" }}>
+                                {successPercent}%
+                            </h5>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -519,23 +684,25 @@ function MouIndicatorsPage() {
 
 
 
+
             <Row className='mt-5'>
                 <Table striped bordered hover responsive>
-                    <thead className="table-primary text-center">
+                    <thead className="table-primary text-center custom-thead">
                         <tr>
-                            <th >ลำดับ</th>
-                            <th >ตัวชี้วัด</th>
-                            <th >เกณฑ์</th>
-                            <th >เป้าหมาย</th>
-                            <th >ผลงาน</th>
-                            <th >ร้อยละ</th>
-                            <th >อ้างอิง</th>
-                            <th></th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ลำดับ</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ตัวชี้วัด</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>เกณฑ์</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>เป้าหมาย</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ผลงาน</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ร้อยละ</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>อ้างอิง</th>
+                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}></th>
                         </tr>
                     </thead>
                     <tbody>
                         {kpiData.map((data, index) =>
-                            <tr key={index}>
+                            <tr key={index}
+                                onMouseEnter={() => handleHover(data.sync_api)}>
                                 <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{data.index}</td>
                                 {data.notDisplay ? (
                                     <>
@@ -551,26 +718,32 @@ function MouIndicatorsPage() {
                                     </>
                                 ) : (
                                     <>
-                                        <td style={{ textAlign: "start", verticalAlign: 'middle' }}>
-                                            {/* <Link
-                                                to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}`}
-                                                state={{ apipath: data.apipath, criterion: data.criterion, notDisplay: data.notDisplay }}
-                                            >
-                                                {data.kpi}
-                                            </Link> */}
-                                            <Link
-                                                to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}
-                                                ?apipath=${encodeURIComponent(data.apipath)}
-                                                &criterion=${data.criterion}
-                                                &notDisplay=${data.notDisplay}
-                                                &a_code=${data.a_code}`}
-                                                target="_blank"
-                                            >
-                                                {data.kpi}
-                                            </Link>
+                                        <OverlayTrigger
+                                            placement="top"
+                                            delay={{ show: 700, hide: 700 }}
+                                            overlay={
+                                                <Tooltip id="button-tooltip">
+                                                    {logs
+                                                        ? `วันเวลา: ${new Date(logs.timestamp).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })} 
+                                                             ผู้ซิงค์: ${logs.message.replace(/\bcalled\b/g, "")}`
+                                                        : "ไม่มีข้อมูล"}
+                                                </Tooltip>
+                                            }
+                                        >
 
+                                            <td style={{ textAlign: "start", verticalAlign: 'middle', cursor: 'pointer' }}
+                                                onMouseEnter={() => handleHover(data.sync_api, index)}
+                                                onMouseLeave={handleLeave}
+                                            >
+                                                <Link
+                                                    to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}?apipath=${encodeURIComponent(data.apipath)}&criterion=${data.criterion}&notDisplay=${data.notDisplay}&a_code=${data.a_code}`}
+                                                    target="_blank"
+                                                >
+                                                    {data.kpi}
+                                                </Link>
+                                            </td>
+                                        </OverlayTrigger>
 
-                                        </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                                             {Number(data.target).toLocaleString()}
@@ -578,7 +751,7 @@ function MouIndicatorsPage() {
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                                             {Number(data.result).toLocaleString()}
                                         </td>
-                                        <td style={{ fontWeight: "700", backgroundColor: data.percents > data.criterion ? "#d4edda" : "#f8d7da", textAlign: 'center', verticalAlign: 'middle' }}>
+                                        <td style={{ fontWeight: "700", backgroundColor: data.percents >= data.criterion ? "#d4edda" : "#f8d7da", textAlign: 'center', verticalAlign: 'middle' }}>
                                             {data.percents}%
                                         </td>
                                         <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
@@ -657,6 +830,22 @@ function MouIndicatorsPage() {
                             {/* ฟอร์ม Manual */}
                             {selectedKpiData?.manual === true && (
                                 <div className="mt-3">
+                                    <Row className="align-items-center mb-3">
+                                        {/* ชื่อหน่วยงาน */}
+                                        <Col xs={12} md={3} className="mb-2 mb-md-0">
+                                            <p className="mb-0" style={{ fontWeight: '600' }}>ชื่อหน่วยงาน</p>
+                                        </Col>
+
+                                        {/* เป้าหมาย */}
+                                        <Col xs={12} sm={6} md={4} className="mb-2 mb-md-0">
+                                            <p className="mb-0" style={{ fontWeight: '600' }}>เป้าหมาย</p>
+                                        </Col>
+
+                                        {/* ผลงาน */}
+                                        <Col xs={12} sm={6} md={4} className="mb-2 mb-md-0">
+                                            <p className="mb-0" style={{ fontWeight: '600' }}>ผลงาน</p>
+                                        </Col>
+                                    </Row>
                                     {unitList.map((unit, idx) => (
                                         <Row key={idx} className="align-items-center mb-3">
                                             {/* ชื่อหน่วยงาน */}

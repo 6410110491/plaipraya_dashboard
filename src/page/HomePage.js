@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Accordion, ProgressBar, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 
-import { FaHandshake, FaUniversity, FaSearch } from 'react-icons/fa';
+import { FaHandshake, FaUniversity, FaSearch, FaWallet, FaUsers, FaChartLine } from 'react-icons/fa';
+import KpiCard from '../components/KpiCard';
 
 function HomePage() {
     const [loading, setLoading] = useState(false);
@@ -315,7 +316,7 @@ function HomePage() {
                 </Spinner>
             </div>
         ) : (
-            <Container fluid>
+            <Container fluid style={{ backgroundColor: '#f8f9fa', padding: '25px' }}>
                 <Row>
                     <h2 className="text-start my-3" style={{ fontWeight: '700', color: '#2c3e50', }}>
                         หน้าหลัก
@@ -325,75 +326,51 @@ function HomePage() {
                 <Row className="g-4">
                     {/* MOU */}
                     <Col md={4}>
-                        <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                            <Card.Body className="text-center">
-                                <FaHandshake size={36} color="#3498db" />
-                                <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ตัวชี้วัด MOU</h5>
-                                <p className="text-muted mb-3">มีตัวชี้วัดทั้งหมด 23 ตัวชี้วัด</p>
-                                <div className="d-flex align-items-center justify-content-center" >
-                                    <Button
-                                        variant="light"
-                                        className="d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => changepage('kpi/mou')}
-                                    >
-                                        <span>แสดงรายละเอียด</span>
-                                    </Button>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                        <KpiCard
+                            title="มีตัวชี้วัดทั้งหมด 23 ตัวชี้วัด"
+                            value="ตัวชี้วัด MOU"
+                            icon={FaWallet}
+                            color="#0575e6"
+                            gradient="#021b79"
+                            path="kpi/mou"
+                        />
                     </Col>
 
                     {/* กระทรวง */}
                     <Col md={4}>
-                        <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                            <Card.Body className="text-center">
-                                <FaUniversity size={36} color="#2ecc71" />
-                                <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ตัวชี้วัดกระทรวง</h5>
-                                <p className="text-muted mb-3">มีตัวชี้วัดทั้งหมด 47 ตัวชี้วัด</p>
-                                <div className="d-flex align-items-center justify-content-center" >
-                                    <Button
-                                        variant="light"
-                                        className="d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => changepage('kpi/ministry')}
-                                    >
-                                        <span>แสดงรายละเอียด</span>
-                                    </Button>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                        <KpiCard
+                            title="มีตัวชี้วัดทั้งหมด 47 ตัวชี้วัด"
+                            value="ตัวชี้วัดกระทรวง"
+                            icon={FaUniversity}
+                            color="#34e89e"
+                            gradient="#0f3443"
+                            path="kpi/ministry"
+                        />
                     </Col>
 
                     {/* ตรวจราชการ */}
                     <Col md={4}>
-                        <Card className="border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                            <Card.Body className="text-center">
-                                <FaSearch size={36} color="#e67e22" />
-                                <h5 className="mt-3 mb-1" style={{ fontWeight: '600' }}>ตัวชี้วัดตรวจราชการ</h5>
-                                <p className="text-muted mb-3">มีตัวชี้วัดทั้งหมด 59 ตัวชี้วัด</p>
-                                <div className="d-flex align-items-center justify-content-center" >
-                                    <Button
-                                        variant="light"
-                                        className="d-flex align-items-center justify-content-center gap-2"
-                                        onClick={() => changepage('kpi/inspector')}
-                                    >
-                                        <span>แสดงรายละเอียด</span>
-                                    </Button>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                        <KpiCard
+                            title="มีตัวชี้วัดทั้งหมด 59 ตัวชี้วัด"
+                            value="ตัวชี้วัดตรวจราชการ"
+                            icon={FaSearch}
+                            color="#c94b4b"
+                            gradient="#4b134f"
+                            path="kpi/inspector"
+                        />
                     </Col>
                 </Row>
 
                 <Row className="mt-4">
                     <Col>
                         <Card>
-                            <Card.Header>สรุปตัวชี้วัด (KPI Summary)</Card.Header>
+                            <Card.Header style={{ backgroundColor: '#FFF', fontWeight: '600', fontSize: '1.125rem' }}>สรุปตัวชี้วัด (KPI Summary)</Card.Header>
                             <Card.Body>
                                 {/* MOU */}
                                 <Accordion defaultActiveKey="0">
                                     {kpi.map((kpi, idx) => (
                                         <Accordion.Item eventKey={`${idx}`} key={idx}>
-                                            <Accordion.Header>
+                                            <Accordion.Header style={{ backgroundColor: '#e3f2fd' }}>
                                                 <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
                                                     <div>
                                                         <strong>{kpi.title}</strong>
@@ -401,8 +378,24 @@ function HomePage() {
                                                     <div
                                                         role="button"
                                                         tabIndex={0}
-                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
-                                                        style={{ marginRight: "1rem" }}
+                                                        className="btn btn-sm mt-2 mt-sm-0"
+                                                        style={{
+                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            color: "white",                           // สีตัวอักษรปกติ
+                                                            borderRadius: "10px",
+                                                            padding: "6px 12px",
+                                                            fontWeight: "500",
+                                                            marginRight: "1rem",
+                                                            border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.color = "white";
+                                                        }}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
@@ -411,7 +404,9 @@ function HomePage() {
                                                         รายละเอียด
                                                     </div>
                                                 </div>
+
                                             </Accordion.Header>
+
 
                                             <Accordion.Body className="bg-light">
                                                 <ul className="list-group list-group-flush">
@@ -464,17 +459,34 @@ function HomePage() {
                                                     <div>
                                                         <strong>{kpi.title}</strong>
                                                     </div>
-                                                    <span
+                                                    <div
                                                         role="button"
-                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
-                                                        style={{ marginRight: "1rem" }}
+                                                        tabIndex={0}
+                                                        className="btn btn-sm mt-2 mt-sm-0"
+                                                        style={{
+                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            color: "white",                           // สีตัวอักษรปกติ
+                                                            borderRadius: "10px",
+                                                            padding: "6px 12px",
+                                                            fontWeight: "500",
+                                                            marginRight: "1rem",
+                                                            border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.color = "white";
+                                                        }}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
                                                         รายละเอียด
-                                                    </span>
+                                                    </div>
                                                 </div>
                                             </Accordion.Header>
 
@@ -532,17 +544,34 @@ function HomePage() {
                                                     <div>
                                                         <strong>{kpi.title}</strong>
                                                     </div>
-                                                    <span
+                                                    <div
                                                         role="button"
-                                                        className="btn btn-outline-primary btn-sm mt-2 mt-sm-0"
-                                                        style={{ marginRight: "1rem" }}
+                                                        tabIndex={0}
+                                                        className="btn btn-sm mt-2 mt-sm-0"
+                                                        style={{
+                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            color: "white",                           // สีตัวอักษรปกติ
+                                                            borderRadius: "10px",
+                                                            padding: "6px 12px",
+                                                            fontWeight: "500",
+                                                            marginRight: "1rem",
+                                                            border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.color = "white";
+                                                        }}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             changepage(`kpi/${kpi.page}`);
                                                         }}
                                                     >
                                                         รายละเอียด
-                                                    </span>
+                                                    </div>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body className="bg-light">

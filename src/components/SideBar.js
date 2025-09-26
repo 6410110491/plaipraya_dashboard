@@ -20,16 +20,16 @@ const Sidebar = () => {
                 <CDBSidebarContent className="sidebar-content">
                     <CDBSidebarMenu>
                         <NavLink to="/">
-                            <CDBSidebarMenuItem icon="columns">หน้าหลัก</CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="home">หน้าหลัก</CDBSidebarMenuItem>
                         </NavLink>
                         <NavLink to="/kpi/mou">
-                            <CDBSidebarMenuItem icon="table">ตัวชี้วัด MOU</CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="wallet">ตัวชี้วัด MOU</CDBSidebarMenuItem>
                         </NavLink>
                         <NavLink to="/kpi/ministry">
-                            <CDBSidebarMenuItem icon="user">ตัวชี้วัดกระทรวง</CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="university">ตัวชี้วัดกระทรวง</CDBSidebarMenuItem>
                         </NavLink>
                         <NavLink to="/kpi/inspector">
-                            <CDBSidebarMenuItem icon="chart-line">ตัวชี้วัดตรวจราชการ</CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="search">ตัวชี้วัดตรวจราชการ</CDBSidebarMenuItem>
                         </NavLink>
 
                     </CDBSidebarMenu>

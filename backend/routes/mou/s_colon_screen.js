@@ -145,7 +145,7 @@ router.get('/get_s_colon_screen', isLoggedIn, async (req, res) => {
         `);
 
         logger.info(`${decoded.username} called`, {
-            context: 'get_s_2q_adl_anc_chronic',
+            context: 'get_s_colon_screen',
             username: decoded.username
         });
         res.status(200).json({ message: 'Import success', count: dataList.length });
@@ -153,7 +153,7 @@ router.get('/get_s_colon_screen', isLoggedIn, async (req, res) => {
         console.error(err);
         logger.error('Error in API', {
             username: decoded.username,
-            context: 'get_s_2q_adl_anc_chronic',
+            context: 'get_s_colon_screen',
             stack: err.stack,
             error: err.message,
             timestamp: new Date().toISOString(),

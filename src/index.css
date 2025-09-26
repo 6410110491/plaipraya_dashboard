@@ -39,3 +39,33 @@ code {
 .btn-group .btn:hover {
   transform: scale(1.05);
 }
+
+.accordion .accordion-button {
+  --bs-accordion-btn-bg: #fff;
+  /* สีพื้นหลังตอนปิด (ฟ้าอ่อน) */
+  --bs-accordion-active-bg: #2C3B50;
+  /* สีพื้นหลังตอนเปิด (ฟ้าอ่อนสดใสขึ้น) */
+  --bs-accordion-btn-color: #2C3B50;
+  /* สีตัวหนังสือเข้ม อ่านง่าย */
+  --bs-accordion-active-color: #fff;
+  /* สีตัวหนังสือตอน active (น้ำเงินเข้ม) */
+  --bs-accordion-border-color: #cfd8dc;
+  /* สีเส้นขอบอ่อน ๆ */
+  border-radius: 8px;
+  /* มุมโค้งนิดหน่อย */
+  margin-bottom: 8px;
+  /* เว้นระยะระหว่าง accordion */
+  box-shadow: none !important;
+  /* ลบเส้นสีน้ำเงิน */
+  border-color: transparent !important;
+  /* กันไม่ให้ขึ้น border สีฟ้า */
+}
+
+.custom-thead .thead.table-primary.text-center.custom-thead {
+  background-color: #2C3B50;
+  /* สีพื้นหลัง */
+  color: white;
+  /* สีตัวอักษร */
+  text-align: center;
+  /* จัดกลาง */
+}

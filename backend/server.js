@@ -11,18 +11,18 @@ const db = require('./config/db');
 
 const app = express();
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    standardHeaders: true,
-    legacyHeaders: false,
-})
+// const limiter = rateLimit({
+//     windowMs: 15 * 60 * 1000,
+//     max: 100,
+//     standardHeaders: true,
+//     legacyHeaders: false,
+// })
 
 
 // Middleware
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(helmet());
-app.use(limiter)
+// app.use(limiter)
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -66,7 +66,8 @@ app.use('/api', require('./routes/inspector/summary_inspector'));
 
 //auth
 app.use('/api', require('./routes/auth'));
-
+//logs
+app.use('/api', require('./routes/logs'));
 
 // Port
 const port = process.env.PORT || 4000;

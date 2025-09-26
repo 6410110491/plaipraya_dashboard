@@ -8,8 +8,10 @@ const isLoggedIn = require('../../middleware/isLogin');
 const jwt = require('jsonwebtoken');
 
 
-router.post('/s_thai_id/insert_data', isLoggedIn, async (req, res) => {
+router.post('/s_thai_id/insert_data', async (req, res) => {
     const dataToInsert = req.body;
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
 
     if (!Array.isArray(dataToInsert) || dataToInsert.length === 0) {
         return res.status(400).send('Invalid data provided. Expected an array of objects.');
@@ -18,8 +20,6 @@ router.post('/s_thai_id/insert_data', isLoggedIn, async (req, res) => {
     const client = await pool.connect();
 
     try {
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
         await client.query('BEGIN');
 
         await client.query('TRUNCATE TABLE s_thai_id');
@@ -48,6 +48,7 @@ router.post('/s_thai_id/insert_data', isLoggedIn, async (req, res) => {
                 , coalesce(ROUND(SUM("result") * 100.0 /
                 nullif(SUM("target"), 0),2
                 ), 0) as percent
+                , 's_thai_id' AS kpi
             from
                 chospital as h
             inner join s_thai_id as s on

@@ -11,7 +11,7 @@ import { Dropdown } from 'react-bootstrap';
 function TopBar() {
     const [username, setUsername] = useState(null);
 
-    const bgBlack = { backgroundColor: '#333', color: '#f4f4f4' };
+    const bgBlack = { backgroundColor: '#f0f1f3', color: '#2A2F5B' };
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -52,25 +52,59 @@ function TopBar() {
                         <CDBNavItem>
                             {username ? (
                                 <Dropdown align="end">
-                                    <Dropdown.Toggle variant="outline-light" id="dropdown-user">
+                                    <Dropdown.Toggle
+                                        variant="outline-light"
+                                        id="dropdown-user"
+                                        style={{
+                                            backgroundColor: "#2C3B50",
+                                            color: "#ffffff",
+                                            border: "none",
+                                            borderRadius: "8px",
+                                            padding: "6px 12px"
+                                        }}
+                                    >
                                         {username}
                                     </Dropdown.Toggle>
 
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item onClick={handleLogout}>
+                                    <Dropdown.Menu
+                                        style={{
+                                            backgroundColor: "#ffffff",
+                                            borderRadius: "8px",
+                                            border: 'none'
+                                        }}
+                                    >
+                                        <Dropdown.Item
+                                            onClick={handleLogout}
+                                            style={{
+                                                color: "#2C3B50",
+                                                fontWeight: "500",
+                                            }}
+                                        >
                                             ออกจากระบบ
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
+
                             ) : (
                                 <NavLink
                                     to="/login"
-                                    className="btn btn-outline-light"
-                                    style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+                                    className="btn"
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: 8,
+                                        backgroundColor: "#2A2F5B", // พื้นหลังกรมท่า
+                                        color: "#ffffff",           // ตัวอักษรสีขาว
+                                        border: "none",             // ไม่มีเส้นขอบ
+                                        borderRadius: "8px",        // มุมโค้ง
+                                        padding: "6px 14px",        // ระยะห่าง
+                                        fontWeight: "500"
+                                    }}
                                 >
                                     <i className="fa fa-sign-in-alt" aria-hidden="true" />
                                     เข้าสู่ระบบ
                                 </NavLink>
+
                             )}
                         </CDBNavItem>
                     </CDBNavbarNav>
