@@ -689,14 +689,28 @@ function MouIndicatorsPage({ kpiItem }) {
                 <Table striped bordered hover responsive>
                     <thead className="table-primary text-center custom-thead">
                         <tr>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ลำดับ</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ตัวชี้วัด</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>เกณฑ์</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>เป้าหมาย</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ผลงาน</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>ร้อยละ</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}>อ้างอิง</th>
-                            <th style={{ backgroundColor: '#2C3B50', color: '#fff', textAlign: 'center' }}></th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                ลำดับ
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                ตัวชี้วัด
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                เกณฑ์
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                เป้าหมาย
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                ผลงาน
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                ร้อยละ
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                                อ้างอิง
+                            </th>
+                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}></th>
                         </tr>
                     </thead>
                     <tbody>

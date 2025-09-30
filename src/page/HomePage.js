@@ -380,7 +380,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -393,7 +393,7 @@ function HomePage() {
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.backgroundColor = "#757f8f";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {
@@ -464,7 +464,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -477,7 +477,7 @@ function HomePage() {
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.backgroundColor = "#757f8f";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {
@@ -549,7 +549,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "rgba(44, 59, 80, 0.8)", // สีพื้นปกติ
+                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -562,7 +562,7 @@ function HomePage() {
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "rgba(44, 59, 80, 0.8)";
+                                                            e.currentTarget.style.backgroundColor = "#757f8f";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {
