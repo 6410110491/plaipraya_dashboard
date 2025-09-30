@@ -7,11 +7,17 @@ import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
+import { FaSignOutAlt, FaUser } from 'react-icons/fa';
 
 function TopBar() {
     const [username, setUsername] = useState(null);
+    const [hoverLogin, setHoverLogin] = useState(false);
 
     const bgBlack = { backgroundColor: '#f0f1f3', color: '#2A2F5B' };
+
+    const changepage = (path) => {
+        window.location.href = "/" + path
+    }
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -26,7 +32,7 @@ function TopBar() {
                 if (error.response && error.response.status === 401) {
                     return
                 }
-                console.error("Auth check failed:", error);
+                // console.error("Auth check failed:", error);
             }
         };
         checkAuth();
@@ -40,6 +46,8 @@ function TopBar() {
             // setUsername(null)
         } catch (error) {
             console.error("Auth check failed:", error);
+        } finally {
+            changepage('')
         }
         window.location.reload();
     };
@@ -56,7 +64,7 @@ function TopBar() {
                                         variant="outline-light"
                                         id="dropdown-user"
                                         style={{
-                                            backgroundColor: "#2C3B50",
+                                            backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
                                             color: "#ffffff",
                                             border: "none",
                                             borderRadius: "8px",
@@ -74,13 +82,27 @@ function TopBar() {
                                         }}
                                     >
                                         <Dropdown.Item
+                                            onClick={() => changepage('profile-edit')}
+                                            style={{
+                                                color: "#2C3B50",
+                                                fontWeight: "500",
+                                                display: 'flex',
+                                                alignItems: 'center'
+                                            }}
+
+                                        >
+                                            <FaUser size={16} style={{ marginRight: '0.5rem' }} /> ข้อมูลส่วนตัว
+                                        </Dropdown.Item>
+                                        <Dropdown.Item
                                             onClick={handleLogout}
                                             style={{
                                                 color: "#2C3B50",
                                                 fontWeight: "500",
+                                                display: 'flex',
+                                                alignItems: 'center'
                                             }}
                                         >
-                                            ออกจากระบบ
+                                            <FaSignOutAlt size={16} style={{ marginRight: '0.5rem' }} /> ออกจากระบบ
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -93,13 +115,15 @@ function TopBar() {
                                         display: 'inline-flex',
                                         alignItems: 'center',
                                         gap: 8,
-                                        backgroundColor: "#2A2F5B", // พื้นหลังกรมท่า
-                                        color: "#ffffff",           // ตัวอักษรสีขาว
+                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                        color: "#ffffff",
                                         border: "none",             // ไม่มีเส้นขอบ
                                         borderRadius: "8px",        // มุมโค้ง
                                         padding: "6px 14px",        // ระยะห่าง
                                         fontWeight: "500"
                                     }}
+                                    onMouseEnter={() => setHoverLogin(true)}
+                                    onMouseLeave={() => setHoverLogin(false)}
                                 >
                                     <i className="fa fa-sign-in-alt" aria-hidden="true" />
                                     เข้าสู่ระบบ

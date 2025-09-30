@@ -3,8 +3,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
 const helmet = require('helmet');
-const session = require("express-session");
-const rateLimit = require("express-rate-limit");
 const cookieParser = require('cookie-parser');
 
 const db = require('./config/db');
@@ -66,6 +64,7 @@ app.use('/api', require('./routes/inspector/summary_inspector'));
 
 //auth
 app.use('/api', require('./routes/auth'));
+app.use('/api', require('./routes/user'));
 //logs
 app.use('/api', require('./routes/logs'));
 

@@ -19,19 +19,41 @@ const Sidebar = () => {
 
                 <CDBSidebarContent className="sidebar-content">
                     <CDBSidebarMenu>
-                        <NavLink to="/">
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                `menu-link ${isActive ? "active" : ""}`
+                            }
+                        >
                             <CDBSidebarMenuItem icon="home">หน้าหลัก</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink to="/kpi/mou">
+
+                        <NavLink
+                            to="/kpi/mou"
+                            className={({ isActive }) =>
+                                `menu-link ${isActive ? "active" : ""}`
+                            }
+                        >
                             <CDBSidebarMenuItem icon="wallet">ตัวชี้วัด MOU</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink to="/kpi/ministry">
+
+                        <NavLink
+                            to="/kpi/ministry"
+                            className={({ isActive }) =>
+                                `menu-link ${isActive ? "active" : ""}`
+                            }
+                        >
                             <CDBSidebarMenuItem icon="university">ตัวชี้วัดกระทรวง</CDBSidebarMenuItem>
                         </NavLink>
-                        <NavLink to="/kpi/inspector">
+
+                        <NavLink
+                            to="/kpi/inspector"
+                            className={({ isActive }) =>
+                                `menu-link ${isActive ? "active" : ""}`
+                            }
+                        >
                             <CDBSidebarMenuItem icon="search">ตัวชี้วัดตรวจราชการ</CDBSidebarMenuItem>
                         </NavLink>
-
                     </CDBSidebarMenu>
                 </CDBSidebarContent>
             </CDBSidebar>

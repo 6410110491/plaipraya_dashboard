@@ -69,3 +69,29 @@ code {
   text-align: center;
   /* จัดกลาง */
 }
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #d9d9d9 !important;
+  /* สีเทาเข้มขึ้น */
+  color: #2C3B50;
+  /* ให้ตัวอักษรยังคงสีเดิม */
+}
+
+.menu-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.menu-link:hover {
+  background-color: #f0f0f038;
+  /* สีเทาอ่อนมากเวลา hover */
+}
+
+.menu-link.active {
+  background-color: #e0e0e08e;
+  /* สีเทาอ่อน แต่เข้มกว่า hover เล็กน้อย */
+}

@@ -4,6 +4,8 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 
 function Login() {
+    const [hoverLogin, setHoverLogin] = useState(false);
+    const [hoverSignup, setHoverSignup] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -92,14 +94,28 @@ function Login() {
                                     />
                                 </Form.Group>
 
-                                <Button variant="primary" type="submit" className="w-100">
+                                <Button variant="primary" type="submit" className="w-100"
+                                    style={{
+                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                        color: "#ffffff",
+                                        border: 'none',
+                                        transition: 'background-color 0.3s'
+                                    }} onMouseEnter={() => setHoverLogin(true)}
+                                    onMouseLeave={() => setHoverLogin(false)}>
                                     เข้าสู่ระบบ
                                 </Button>
                             </Form>
 
                             <Button
-                                variant="outline-primary"
                                 className="w-100 mt-3"
+                                style={{
+                                    backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
+                                    color: hoverSignup ? "#ffffff" : "#2A2F5B",
+                                    border: '1px solid #2A2F5B',
+                                    transition: 'all 0.3s'
+                                }}
+                                onMouseEnter={() => setHoverSignup(true)}
+                                onMouseLeave={() => setHoverSignup(false)}
                                 onClick={() => changepage("signup")}
                             >
                                 สร้างบัญชีผู้ใช้งาน

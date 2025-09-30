@@ -4,6 +4,7 @@ import { Form, Button, Card, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios'
 
 function Signup() {
+    const [hoverLogin, setHoverLogin] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -176,7 +177,15 @@ function Signup() {
                                     />
                                 </Form.Group>
 
-                                <Button variant="primary" type="submit" className="w-100">
+                                <Button variant="primary" type="submit" className="w-100"
+                                    style={{
+                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                        color: "#ffffff",
+                                        border: 'none',
+                                        transition: 'background-color 0.3s'
+                                    }}
+                                    onMouseEnter={() => setHoverLogin(true)}
+                                    onMouseLeave={() => setHoverLogin(false)}>
                                     ลงทะเบียน
                                 </Button>
                             </Form>

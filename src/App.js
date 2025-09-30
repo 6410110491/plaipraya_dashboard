@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import TopBar from './components/TopBar';
 import Login from './page/Login';
 import Signup from './page/Signup';
+import ProfileEdit from './page/ProfileEdit';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/kpi/inspector" element={<InspectorIndicatorsPage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/profile-edit" element={<ProfileEdit />} />
 
                 <Route path="/kpi/:page/detail/:kpiname" element={<KpiDetail />} />
               </Routes>
