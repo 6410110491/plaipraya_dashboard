@@ -241,9 +241,10 @@ router.get('/get_s_epi1_3', isLoggedIn, async (req, res) => {
         order by a_code;
         `);
 
-        logger.info(`${decoded.username} called`, {
+        logger.info(`${decoded.first_name} ${decoded.last_name} called`, {
             context: 'get_s_epi1_3',
-            username: decoded.username
+            first_name: decoded.first_name,
+            last_name: decoded.last_name
         });
         res.status(200).json({ message: 'Import success', count_epi1: dataList.length, count_epi3: dataList_s_epi3.length });
     } catch (err) {

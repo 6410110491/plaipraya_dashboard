@@ -74,9 +74,10 @@ router.get('/get_s_dm_hba1c', isLoggedIn, async (req, res) => {
             h.hoscode
         `);
 
-        logger.info(`${decoded.username} called`, {
+        logger.info(`${decoded.first_name} ${decoded.last_name} called`, {
             context: 'get_s_dm_hba1c',
-            username: decoded.username
+            first_name: decoded.first_name,
+            last_name: decoded.last_name
         });
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {

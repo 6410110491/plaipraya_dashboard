@@ -201,9 +201,10 @@ router.get('/get_s_2q_adl_anc_chronic', isLoggedIn, async (req, res) => {
                     and h.hoscode = '99862'
             `);
 
-        logger.info(`${decoded.username} called`, {
+        logger.info(`${decoded.first_name} ${decoded.last_name} called`, {
             context: 'get_s_2q_adl_anc_chronic',
-            username: decoded.username
+            first_name: decoded.first_name,
+            last_name: decoded.last_name
         });
         res.status(200).json({ message: 'Import success', count_adl: dataList.length, count_anc: dataList_anc.length, count_chronic: dataList_chronic.length });
     } catch (err) {

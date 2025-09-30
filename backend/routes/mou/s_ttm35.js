@@ -108,9 +108,10 @@ router.get('/get_s_ttm35', isLoggedIn, async (req, res) => {
         GROUP BY h.hoscode, h.hosname
         `);
 
-        logger.info(`${decoded.username} called`, {
+        logger.info(`${decoded.first_name} ${decoded.last_name} called`, {
             context: 'get_s_ttm35',
-            username: decoded.username
+            first_name: decoded.first_name,
+            last_name: decoded.last_name
         });
         res.status(200).json({ message: 'Import success', count: dataList.length });
     } catch (err) {

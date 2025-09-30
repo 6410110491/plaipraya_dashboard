@@ -8,11 +8,12 @@ import axios from 'axios'
 import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
-function MouIndicatorsPage({ kpiItem }) {
+function MouIndicatorsPage() {
     const [loading, setLoading] = useState(false);
     const [kpiData, setKpiData] = useState([]);
     const [selectedKpiData, setSelectedKpiData] = useState(null);
     const [logs, setLogs] = useState(null);
+    const [hoverSignup, setHoverSignup] = useState(false);
 
     const [formData, setFormData] = useState({
         target1: '', result1: '',
@@ -257,7 +258,7 @@ function MouIndicatorsPage({ kpiItem }) {
             page: 'mou', index: '19', kpi: 'ร้อยละของอำเภอที่ประชาชนไทย มี Health ID เพื่อการเข้าถึงระบบบริการสุขภาพแบบไร้รอยต่อ', criterion: 50,
             apipath: '/s_thai_id/data',
             link: 'https://kbo.moph.go.th/health_id/',
-            sync_api: 's_thai_id',
+            sync_api: '',
             a_code: "99862",
             database: 's_thai_id',
             target: 0, result: 0, percents: 0.00, manual: true
@@ -835,7 +836,14 @@ function MouIndicatorsPage({ kpiItem }) {
                                     <Button
                                         variant="outline-primary"
                                         onClick={() => handleSync(selectedKpiData.sync_api)}
-                                    >
+                                        style={{
+                                            backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
+                                            color: hoverSignup ? "#ffffff" : "#2A2F5B",
+                                            border: '1px solid #2A2F5B',
+                                            transition: 'all 0.3s'
+                                        }}
+                                        onMouseEnter={() => setHoverSignup(true)}
+                                        onMouseLeave={() => setHoverSignup(false)}>
                                         ซิงค์ข้อมูล <IoReload className="ms-2" />
                                     </Button>
                                 </div>

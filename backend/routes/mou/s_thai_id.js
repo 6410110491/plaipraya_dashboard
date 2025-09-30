@@ -8,7 +8,7 @@ const isLoggedIn = require('../../middleware/isLogin');
 const jwt = require('jsonwebtoken');
 
 
-router.post('/s_thai_id/insert_data', async (req, res) => {
+router.post('/s_thai_id/insert_data', isLoggedIn, async (req, res) => {
     const dataToInsert = req.body;
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.COOKIE_SECRET);
@@ -63,9 +63,10 @@ router.post('/s_thai_id/insert_data', async (req, res) => {
         `);
 
         await client.query('COMMIT'); // Commit the transaction
-        logger.info(`${decoded.username} called`, {
+        logger.info(`${decoded.first_name} ${decoded.last_name} called`, {
             context: 's_thai_id',
-            username: decoded.username
+            first_name: decoded.first_name,
+            last_name: decoded.last_name
         });
         res.status(200).json({ message: 'บันทึกข้อมูลสำเร็จ' });
     } catch (err) {

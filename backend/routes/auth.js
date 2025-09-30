@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
         }
 
         const potentialLogin = await pool.query(
-            'SELECT id, username, password FROM users WHERE username=$1',
+            'SELECT id, username, password, first_name, last_name FROM users WHERE username=$1',
             [username]
         );
 
@@ -50,9 +50,11 @@ router.post('/login', async (req, res) => {
         }
 
         const payload = {
-            id: potentialLogin.rows[0].id,       // แก้จาก potentialLogin.id
+            // id: potentialLogin.rows[0].id,       // แก้จาก potentialLogin.id
             loggedIn: true,
-            username: potentialLogin.rows[0].username
+            username: potentialLogin.rows[0].username,
+            first_name: potentialLogin.rows[0].first_name,
+            last_name: potentialLogin.rows[0].last_name
         };
 
         jwt.sign(payload, process.env.COOKIE_SECRET, { expiresIn: '1d' }, (err, token) => {
