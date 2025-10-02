@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button, Accordion, ProgressBar, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Accordion, ProgressBar, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 
-import { FaHandshake, FaUniversity, FaSearch, FaWallet, FaUsers, FaChartLine } from 'react-icons/fa';
+import { FaUniversity, FaSearch, FaWallet, } from 'react-icons/fa';
 import KpiCard from '../components/KpiCard';
 
 function HomePage() {

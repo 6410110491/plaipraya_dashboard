@@ -4,23 +4,25 @@ const bodyParser = require('body-parser');
 const createError = require('http-errors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const rateLimit = require("express-rate-limit");
 
 const db = require('./config/db');
 
 const app = express();
 
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     max: 100,
-//     standardHeaders: true,
-//     legacyHeaders: false,
-// })
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: "Too many request",
+})
 
 
 // Middleware
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(helmet());
-// app.use(limiter)
+app.use(limiter)
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',

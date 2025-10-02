@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Form, Button, Card, Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Form, Button, Card, Container, Row, Col, Spinner } from 'react-bootstrap';
 import axios from 'axios'
 import Swal from 'sweetalert2';
 
 function Login() {
     const [hoverLogin, setHoverLogin] = useState(false);
     const [hoverSignup, setHoverSignup] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -63,69 +64,88 @@ function Login() {
         window.location.href = "/" + path
     }
 
+    useEffect(() => {
+        const loading = async () => {
+            setLoading(true)
+            setTimeout(() => {
+                setLoading(false);
+            }, 500);
+
+        };
+
+        loading();
+    }, []);
+
     return (
-        <Container fluid className="d-flex justify-content-center align-items-center h-100">
-            <Row className="w-100 justify-content-center">
-                <Col xs={12} sm={8} md={6} lg={4} xl={3}>
-                    <Card className="shadow p-3">
-                        <Card.Body>
-                            <h3 className="text-center">KPI Dashboard</h3>
-                            <Card.Title className="text-center mb-4">เข้าสู่ระบบ</Card.Title>
-                            <Form onSubmit={handleLogin}>
-                                <Form.Group className="mb-4" controlId="formUsername">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="ชื่อผู้ใช้งาน"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </Form.Group>
+        loading ? (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+                <Spinner animation="border" role="status" size='lg'>
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+        ) : (
+            <Container fluid className="d-flex justify-content-center align-items-center h-100">
+                <Row className="w-100 justify-content-center">
+                    <Col xs={12} sm={8} md={6} lg={4} xl={3}>
+                        <Card className="shadow p-3">
+                            <Card.Body>
+                                <h3 className="text-center">KPI Dashboard</h3>
+                                <Card.Title className="text-center mb-4">เข้าสู่ระบบ</Card.Title>
+                                <Form onSubmit={handleLogin}>
+                                    <Form.Group className="mb-4" controlId="formUsername">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="ชื่อผู้ใช้งาน"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
 
-                                <Form.Group className="mb-4" controlId="formPassword">
-                                    <Form.Control
-                                        type="password"
-                                        placeholder="รหัสผ่าน"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </Form.Group>
+                                    <Form.Group className="mb-4" controlId="formPassword">
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="รหัสผ่าน"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </Form.Group>
 
-                                <Button variant="primary" type="submit" className="w-100"
+                                    <Button variant="primary" type="submit" className="w-100"
+                                        style={{
+                                            backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                            color: "#ffffff",
+                                            border: 'none',
+                                            transition: 'background-color 0.3s'
+                                        }} onMouseEnter={() => setHoverLogin(true)}
+                                        onMouseLeave={() => setHoverLogin(false)}>
+                                        เข้าสู่ระบบ
+                                    </Button>
+                                </Form>
+
+                                <Button
+                                    className="w-100 mt-3"
                                     style={{
-                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
-                                        color: "#ffffff",
-                                        border: 'none',
-                                        transition: 'background-color 0.3s'
-                                    }} onMouseEnter={() => setHoverLogin(true)}
-                                    onMouseLeave={() => setHoverLogin(false)}>
-                                    เข้าสู่ระบบ
+                                        backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
+                                        color: hoverSignup ? "#ffffff" : "#2A2F5B",
+                                        border: '1px solid #2A2F5B',
+                                        transition: 'all 0.3s'
+                                    }}
+                                    onMouseEnter={() => setHoverSignup(true)}
+                                    onMouseLeave={() => setHoverSignup(false)}
+                                    onClick={() => changepage("signup")}
+                                >
+                                    สร้างบัญชีผู้ใช้งาน
                                 </Button>
-                            </Form>
-
-                            <Button
-                                className="w-100 mt-3"
-                                style={{
-                                    backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
-                                    color: hoverSignup ? "#ffffff" : "#2A2F5B",
-                                    border: '1px solid #2A2F5B',
-                                    transition: 'all 0.3s'
-                                }}
-                                onMouseEnter={() => setHoverSignup(true)}
-                                onMouseLeave={() => setHoverSignup(false)}
-                                onClick={() => changepage("signup")}
-                            >
-                                สร้างบัญชีผู้ใช้งาน
-                            </Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
-
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        )
     );
 }
 

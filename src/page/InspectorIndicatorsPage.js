@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Container, Form, Modal, Row, Spinner, Table, Card, Col } from 'react-bootstrap'
+import { Button, Container, Form, Modal, Row, Spinner, Table, Card, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { IoReload } from 'react-icons/io5';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Link } from 'react-router-dom';
@@ -9,9 +9,12 @@ import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/
 import Swal from 'sweetalert2';
 
 function InspectorIndicatorsPage() {
+  let hoverTimer;
   const [loading, setLoading] = useState(false);
   const [kpiData, setKpiData] = useState([]);
   const [selectedKpiData, setSelectedKpiData] = useState(null);
+  const [hoverSignup, setHoverSignup] = useState(false);
+  const [logs, setLogs] = useState(null);
 
   const [formData, setFormData] = useState({
     target: '',
@@ -683,6 +686,26 @@ function InspectorIndicatorsPage() {
     }
   };
 
+  const handleHover = (sync_api) => {
+    clearTimeout(hoverTimer);
+
+    hoverTimer = setTimeout(async () => {
+      try {
+        const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
+          params: { sync_api: cleanSyncApi }
+        });
+        setLogs(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 900);
+  };
+
+  const handleLeave = () => {
+    setLogs(null);
+  };
+
   return (
     <Container fluid className='pb-5' style={{ backgroundColor: '#f8f9fa', padding: '25px' }}>
       {loading && (
@@ -946,14 +969,32 @@ function InspectorIndicatorsPage() {
                   </>
                 ) : (
                   <>
-                    <td style={{ textAlign: "start", verticalAlign: 'middle' }}>
-                      <Link
-                        to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}`}
-                        state={{ apipath: data.apipath, criterion: data.criterion, notDisplay: data.notDisplay }}
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 1000, hide: 500 }}
+                      overlay={
+                        <Tooltip id="button-tooltip">
+                          {logs
+                            ? `วันเวลา: ${new Date(logs.timestamp).toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })} 
+                                                             ผู้ซิงค์: ${logs.message.replace(/\bcalled\b/g, "")}`
+                            : "ไม่มีข้อมูล"}
+                        </Tooltip>
+                      }
+                    >
+
+                      <td style={{ textAlign: "start", verticalAlign: 'middle', cursor: 'pointer' }}
+                        onMouseEnter={() => handleHover(data.sync_api, index)}
+                        onMouseLeave={handleLeave}
                       >
-                        {data.kpi}
-                      </Link>
-                    </td>
+                        <Link
+                          to={`/kpi/${data.page}/detail/${encodeURIComponent(data.kpi)}?apipath=${encodeURIComponent(data.apipath)}&criterion=${data.criterion}&notDisplay=${data.notDisplay}&a_code=${data.a_code}`}
+                          target="_blank"
+                        >
+                          {data.kpi}
+                        </Link>
+                      </td>
+                    </OverlayTrigger>
+
                     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>≥{data.criterion}%</td>
                     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                       {Number(data.target).toLocaleString()}
@@ -1033,7 +1074,14 @@ function InspectorIndicatorsPage() {
                   <Button
                     variant="outline-primary"
                     onClick={() => handleSync(selectedKpiData.sync_api)}
-                  >
+                    style={{
+                      backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
+                      color: hoverSignup ? "#ffffff" : "#2A2F5B",
+                      border: '1px solid #2A2F5B',
+                      transition: 'all 0.3s'
+                    }}
+                    onMouseEnter={() => setHoverSignup(true)}
+                    onMouseLeave={() => setHoverSignup(false)}>
                     ซิงค์ข้อมูล <IoReload className="ms-2" />
                   </Button>
                 </div>

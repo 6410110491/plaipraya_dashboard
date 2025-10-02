@@ -9,6 +9,7 @@ import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/
 import Swal from 'sweetalert2';
 
 function MouIndicatorsPage() {
+    let hoverTimer;
     const [loading, setLoading] = useState(false);
     const [kpiData, setKpiData] = useState([]);
     const [selectedKpiData, setSelectedKpiData] = useState(null);
@@ -408,13 +409,36 @@ function MouIndicatorsPage() {
                     });
                 }
             }
-
-
-            window.location.reload();
+            setLoading(false);
+            await Swal.fire({
+                icon: 'success',
+                title: 'Sync สำเร็จ',
+                text: 'ข้อมูลถูกซิงค์เรียบร้อยแล้ว',
+                confirmButtonText: 'ตกลง',
+            }).then(() => {
+                window.location.reload();
+            });
 
         } catch (error) {
             console.error("Insert error:", error);
-            alert(error.response.data.error);
+            setLoading(false);
+            if (error.response && error.response.status === 401) {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'ยังไม่ได้เข้าสู่ระบบ',
+                    text: 'กรุณาเข้าสู่ระบบใหม่',
+                    confirmButtonText: 'ไปที่หน้าเข้าสู่ระบบ',
+                }).then(() => {
+                    changepage("login");
+                });
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Sync ล้มเหลว',
+                    text: 'ไม่สามารถซิงค์ข้อมูลได้ กรุณาลองใหม่',
+                    confirmButtonText: 'ตกลง',
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -451,16 +475,20 @@ function MouIndicatorsPage() {
         fetchData();
     }, [selectedKpiData]);
 
-    const handleHover = async (sync_api) => {
-        try {
-            const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
-            // console.log("cleanSyncApi:", cleanSyncApi);
-            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
-                params: { sync_api: cleanSyncApi }
-            });
-            setLogs(res.data);
-            // console.log("logs:", logs);
-        } catch (err) { }
+    const handleHover = (sync_api) => {
+        clearTimeout(hoverTimer);
+
+        hoverTimer = setTimeout(async () => {
+            try {
+                const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
+                const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
+                    params: { sync_api: cleanSyncApi }
+                });
+                setLogs(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        }, 900); 
     };
 
     const handleLeave = () => {
@@ -735,7 +763,7 @@ function MouIndicatorsPage() {
                                     <>
                                         <OverlayTrigger
                                             placement="top"
-                                            delay={{ show: 700, hide: 700 }}
+                                            delay={{ show: 1000, hide: 500 }}
                                             overlay={
                                                 <Tooltip id="button-tooltip">
                                                     {logs

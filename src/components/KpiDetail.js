@@ -163,11 +163,11 @@ function KpiDetail() {
                     <Table striped bordered hover responsive>
                         <thead className="table-primary text-center">
                             <tr>
-                                <th>รหัสหน่วยบริการ</th>
-                                <th style={{ textAlign: "left" }}>ชื่อหน่วยบริการ</th>
-                                <th>เป้าหมาย</th>
-                                <th>ผลงาน</th>
-                                <th>ร้อยละ</th>
+                                <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>รหัสหน่วยบริการ</th>
+                                <th style={{ textAlign: "left", backgroundColor: '#757f8f', color: '#fff' }}>ชื่อหน่วยบริการ</th>
+                                <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>เป้าหมาย</th>
+                                <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>ผลงาน</th>
+                                <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>ร้อยละ</th>
                             </tr>
                         </thead>
                         <tbody>

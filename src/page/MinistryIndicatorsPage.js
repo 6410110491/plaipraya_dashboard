@@ -9,9 +9,11 @@ import { FaList, FaTimesCircle, FaCheckCircle, FaPercentage } from 'react-icons/
 import Swal from 'sweetalert2';
 
 function MinistryIndicatorsPage() {
+  let hoverTimer;
   const [loading, setLoading] = useState(false);
   const [kpiData, setKpiData] = useState([]);
   const [selectedKpiData, setSelectedKpiData] = useState(null);
+  const [hoverSignup, setHoverSignup] = useState(false);
   const [logs, setLogs] = useState(null);
 
   const [formData, setFormData] = useState({
@@ -231,7 +233,6 @@ function MinistryIndicatorsPage() {
       apipath: '/s_death28pa/data',
       link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/0acbbb84a5c774c129dfc849a742d766',
       sync_api: '/get_s_death28pa',
-      a_code: "99862",
       database: 's_death28pa',
       a_code: "11344",
       a_name: "โรงพยาบาลปลายพระยา",
@@ -707,16 +708,19 @@ function MinistryIndicatorsPage() {
   }, [selectedKpiData]);
 
 
-  const handleHover = async (sync_api) => {
-    try {
-      const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
-      // console.log("cleanSyncApi:", cleanSyncApi);
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
-        params: { sync_api: cleanSyncApi }
-      });
-      setLogs(res.data);
-      // console.log("logs:", logs);
-    } catch (err) { }
+  const handleHover = (sync_api) => {
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(async () => {
+      try {
+        const cleanSyncApi = sync_api.replace(/^\//, "").replace(/insertdata$/, "");
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/logs`, {
+          params: { sync_api: cleanSyncApi }
+        });
+        setLogs(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 900);
   };
 
   const handleLeave = () => {
@@ -991,7 +995,7 @@ function MinistryIndicatorsPage() {
                   <>
                     <OverlayTrigger
                       placement="top"
-                      delay={{ show: 700, hide: 700 }}
+                      delay={{ show: 1000, hide: 500 }}
                       overlay={
                         <Tooltip id="button-tooltip">
                           {logs
@@ -1092,7 +1096,14 @@ function MinistryIndicatorsPage() {
                   <Button
                     variant="outline-primary"
                     onClick={() => handleSync(selectedKpiData.sync_api)}
-                  >
+                    style={{
+                      backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
+                      color: hoverSignup ? "#ffffff" : "#2A2F5B",
+                      border: '1px solid #2A2F5B',
+                      transition: 'all 0.3s'
+                    }}
+                    onMouseEnter={() => setHoverSignup(true)}
+                    onMouseLeave={() => setHoverSignup(false)}>
                     ซิงค์ข้อมูล <IoReload className="ms-2" />
                   </Button>
                 </div>
