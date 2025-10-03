@@ -11,6 +11,7 @@ import TopBar from './components/TopBar';
 import Login from './page/Login';
 import Signup from './page/Signup';
 import ProfileEdit from './page/ProfileEdit';
+import NotFound from './page/NotFound ';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
                 <Route path="/profile-edit" element={<ProfileEdit />} />
 
                 <Route path="/kpi/:page/detail/:kpiname" element={<KpiDetail />} />
+
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
             <Footer />
