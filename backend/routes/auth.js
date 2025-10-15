@@ -110,19 +110,15 @@ router.post('/signup', async (req, res) => {
 
         const hashedPass = await bcrypt.hash(password, 10);
         const gen_id = generateTimestampId();
+        const default_role =  'user'
 
         const newUserQuery = await pool.query(
             `INSERT INTO users
-            (id, username, password, email, first_name, last_name, department)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            (id, username, password, email, first_name, last_name, department, role)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING id, username`,
-            [gen_id, username, hashedPass, email, first_name, last_name, department]
+            [gen_id, username, hashedPass, email, first_name, last_name, department, default_role]
         );
-
-        req.session.user = {
-            username: username,
-            id: newUserQuery.rows[0].id,
-        };
 
         res.json({ loggedIn: true, username });
 

@@ -10,7 +10,7 @@ function Signup() {
         password: '',
         passwordConfirm: '',
         email: '',
-        fisrtname: '',
+        firstname: '',
         lastname: '',
         department: '',
     })
@@ -46,7 +46,7 @@ function Signup() {
                 username: formData.username,
                 password: formData.password,
                 email: formData.email,
-                first_name: formData.fisrtname,
+                first_name: formData.firstname,
                 last_name: formData.lastname,
                 department: formData.department
             }, { withCredentials: true });
@@ -80,6 +80,7 @@ function Signup() {
     };
 
 
+    console.log(formData)
     return (
         <Container fluid className="d-flex justify-content-center align-items-center h-100">
             <Row className="w-100 justify-content-center">

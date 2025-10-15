@@ -7,7 +7,7 @@ router.get('/profile', isLoggedIn, async (req, res) => {
     try {
         const userId = req.user.id;
         const result = await pool.query(
-            'SELECT id, username, email, first_name, last_name, department, created_at, updated_at FROM users WHERE id = $1',
+            'SELECT id, username, email, first_name, last_name, department, role, created_at, updated_at FROM users WHERE id = $1',
             [userId]
         );
 
@@ -25,7 +25,7 @@ router.get('/profile', isLoggedIn, async (req, res) => {
 router.put('/profile', isLoggedIn, async (req, res) => {
     try {
         const userId = req.user.id;
-        const { first_name, last_name, email, department } = req.body;
+        const { first_name, last_name, email, department, role } = req.body;
 
         const query = `
             UPDATE users
@@ -33,9 +33,10 @@ router.put('/profile', isLoggedIn, async (req, res) => {
                 last_name = COALESCE($2, last_name),
                 email = COALESCE($3, email),
                 department = COALESCE($4, department),
+                role = COALESCE($5, role),
                 updated_at = CURRENT_TIMESTAMP
-            WHERE id = $5
-            RETURNING id, username, email, first_name, last_name, department, created_at, updated_at
+            WHERE id = $6
+            RETURNING id, username, email, first_name, last_name, department, created_at, updated_at, role
         `;
 
         const values = [
@@ -43,6 +44,7 @@ router.put('/profile', isLoggedIn, async (req, res) => {
             last_name || null,
             email || null,
             department || null,
+            role || null,
             userId
         ];
 
@@ -51,7 +53,7 @@ router.put('/profile', isLoggedIn, async (req, res) => {
         res.json({ message: 'Profile updated', user: result.rows[0] });
     } catch (err) {
         console.error(err);
-        if (err.code === '23505') { // unique_violation
+        if (err.code === '23505') { 
             return res.status(400).json({ error: 'Email หรือ Username ซ้ำ' });
         }
         res.status(500).json({ error: 'Server error' });

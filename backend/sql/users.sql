@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS "users" (
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     department VARCHAR(100),
+    role VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
