@@ -12,6 +12,8 @@ import Login from './page/Login';
 import Signup from './page/Signup';
 import ProfileEdit from './page/ProfileEdit';
 import NotFound from './page/NotFound ';
+import PpFeeSchedule from './page/PpFeeSchedule';
+import AdminPPFeePage from './page/AdminPPFeePage';
 
 function App() {
   return (
@@ -35,8 +37,10 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/profile-edit" element={<ProfileEdit />} />
+                <Route path="/pp-fee-management" element={<AdminPPFeePage />} />
 
                 <Route path="/kpi/:page/detail/:kpiname" element={<KpiDetail />} />
+                <Route path="/pp-fee/:years" element={<PpFeeSchedule />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

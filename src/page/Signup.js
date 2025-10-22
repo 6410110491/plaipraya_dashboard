@@ -180,7 +180,7 @@ function Signup() {
 
                                 <Button variant="primary" type="submit" className="w-100"
                                     style={{
-                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                        backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488",
                                         color: "#ffffff",
                                         border: 'none',
                                         transition: 'background-color 0.3s'

@@ -951,28 +951,28 @@ function MinistryIndicatorsPage() {
         <Table striped bordered hover responsive>
           <thead className="table-primary text-center">
             <tr>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 ลำดับ
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 ตัวชี้วัด
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 เกณฑ์
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 เป้าหมาย
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 ผลงาน
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 ร้อยละ
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                 อ้างอิง
               </th>
-              <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}></th>
+              <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -1097,9 +1097,9 @@ function MinistryIndicatorsPage() {
                     variant="outline-primary"
                     onClick={() => handleSync(selectedKpiData.sync_api)}
                     style={{
-                      backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
-                      color: hoverSignup ? "#ffffff" : "#2A2F5B",
-                      border: '1px solid #2A2F5B',
+                      backgroundColor: hoverSignup ? "#0d9488" : "transparent",
+                      color: hoverSignup ? "#ffffff" : "#0d9488",
+                      border: '1px solid #0d9488',
                       transition: 'all 0.3s'
                     }}
                     onMouseEnter={() => setHoverSignup(true)}

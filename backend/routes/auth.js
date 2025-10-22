@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
         }
 
         const potentialLogin = await pool.query(
-            'SELECT id, username, password, first_name, last_name FROM users WHERE username=$1',
+            'SELECT id, username, password, first_name, last_name, role FROM users WHERE username=$1',
             [username]
         );
 
@@ -54,7 +54,8 @@ router.post('/login', async (req, res) => {
             loggedIn: true,
             username: potentialLogin.rows[0].username,
             first_name: potentialLogin.rows[0].first_name,
-            last_name: potentialLogin.rows[0].last_name
+            last_name: potentialLogin.rows[0].last_name,
+            role: potentialLogin.rows[0].role
         };
 
         jwt.sign(payload, process.env.COOKIE_SECRET, { expiresIn: '1d' }, (err, token) => {
@@ -110,7 +111,7 @@ router.post('/signup', async (req, res) => {
 
         const hashedPass = await bcrypt.hash(password, 10);
         const gen_id = generateTimestampId();
-        const default_role =  'user'
+        const default_role = 'user'
 
         const newUserQuery = await pool.query(
             `INSERT INTO users
@@ -159,6 +160,7 @@ router.get("/checkAuth", isLoggedIn, (req, res) => {
         res.json({
             username: decoded.username,
             loggedIn: true,
+            role: decoded.role,
             id: decoded.id
         });
     } catch (err) {

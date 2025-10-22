@@ -7,10 +7,11 @@ import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
-import { FaSignOutAlt, FaUser } from 'react-icons/fa';
+import { FaSignOutAlt, FaUser, FaUserCog } from 'react-icons/fa';
 
 function TopBar() {
     const [username, setUsername] = useState(null);
+    const [role, setRole] = useState(null);
     const [hoverLogin, setHoverLogin] = useState(false);
 
     const bgBlack = { backgroundColor: '#f0f1f3', color: '#2A2F5B' };
@@ -27,6 +28,7 @@ function TopBar() {
                 });
                 if (res.data.loggedIn && res.data.username) {
                     setUsername(res.data.username);
+                    setRole(res.data.role)
                 }
             } catch (error) {
                 if (error.response && error.response.status === 401) {
@@ -64,7 +66,7 @@ function TopBar() {
                                         variant="outline-light"
                                         id="dropdown-user"
                                         style={{
-                                            backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                            backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488",
                                             color: "#ffffff",
                                             border: "none",
                                             borderRadius: "8px",
@@ -93,6 +95,20 @@ function TopBar() {
                                         >
                                             <FaUser size={16} style={{ marginRight: '0.5rem' }} /> ข้อมูลส่วนตัว
                                         </Dropdown.Item>
+                                        {role === "admin" && (
+                                            <Dropdown.Item
+                                                onClick={() => changepage('pp-fee-management')}
+                                                style={{
+                                                    color: "#2C3B50",
+                                                    fontWeight: "500",
+                                                    display: 'flex',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <FaUserCog size={16} style={{ marginRight: '0.5rem' }} /> แอดมิน
+                                            </Dropdown.Item>
+                                        )}
+
                                         <Dropdown.Item
                                             onClick={handleLogout}
                                             style={{
@@ -115,11 +131,11 @@ function TopBar() {
                                         display: 'inline-flex',
                                         alignItems: 'center',
                                         gap: 8,
-                                        backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                        backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488",
                                         color: "#ffffff",
-                                        border: "none",             // ไม่มีเส้นขอบ
-                                        borderRadius: "8px",        // มุมโค้ง
-                                        padding: "6px 14px",        // ระยะห่าง
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "6px 14px",
                                         fontWeight: "500"
                                     }}
                                     onMouseEnter={() => setHoverLogin(true)}
