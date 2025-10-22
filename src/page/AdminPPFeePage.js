@@ -12,10 +12,12 @@ function AdminPPFeePage() {
     const [hoverLogin, setHoverLogin] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const [selectedYear, setSelectedYear] = useState(null);
     const [yearData, setYearData] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editItem, setEditItem] = useState(null);
+    const [deleteItem, setDeleteItem] = useState(null);
 
 
     const [showAddModal, setShowAddModal] = useState(false);
@@ -60,7 +62,8 @@ function AdminPPFeePage() {
             const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years`, {
                 year: newYear,
                 status: status
-            });
+            },
+                { withCredentials: true });
             setNewYear('');
             setStatus('inactive');
             fetchYears();
@@ -211,6 +214,55 @@ function AdminPPFeePage() {
     }, {});
 
     const rows = Object.values(groupedData);
+
+
+    const handleOpenConfirmDelete = (item) => {
+        setDeleteItem({ ...item });
+        setShowConfirm(true);
+    };
+
+    const handleDelete = async () => {
+        try {
+            setLoading(true);
+
+            // เรียก API เพื่อลบข้อมูล
+            const res = await axios.delete(
+                `${process.env.REACT_APP_BACKEND_URL}/api/ppfee/data/${deleteItem.id}`
+            );
+
+            if (res.data.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "ลบข้อมูลสำเร็จ",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                setShowConfirm(false);
+
+                const updated = await axios.get(
+                    `${process.env.REACT_APP_BACKEND_URL}/api/ppfee/data/${selectedYear.id}`
+                );
+                setYearData(updated.data);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "เกิดข้อผิดพลาด",
+                    text: res.data.message || "ไม่สามารถลบข้อมูลได้",
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting data:", error);
+            Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด",
+                text: error.response?.data?.message || "ไม่สามารถลบข้อมูลได้",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     useEffect(() => {
         const loading = async () => {
@@ -391,14 +443,14 @@ function AdminPPFeePage() {
                             <Table bordered hover responsive className="mt-3">
                                 <thead className="table-light">
                                     <tr>
-                                        <th style={{ textAlign: 'center' }}>หน่วยที่ให้บริการ</th>
-                                        <th style={{ textAlign: 'center' }}>ชื่อของหน่วยให้บริการ</th>
-                                        <th style={{ textAlign: 'center' }}>กิจกรรมหลัก</th>
-                                        <th style={{ textAlign: 'center' }}>กิจกรรมย่อย</th>
-                                        <th style={{ textAlign: 'center' }}>รับบริการ (คน)</th>
-                                        <th style={{ textAlign: 'center' }}>จำนวนครั้ง</th>
-                                        <th style={{ textAlign: 'center' }}>การเบิกจ่าย</th>
-                                        <th style={{ textAlign: 'center' }}>จัดการ</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>หน่วยที่ให้บริการ</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>ชื่อของหน่วยให้บริการ</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>กิจกรรมหลัก</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>กิจกรรมย่อย</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>รับบริการ (คน)</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>จำนวนครั้ง</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>การเบิกจ่าย</th>
+                                        <th style={{ textAlign: 'center', backgroundColor: '#0d9488', color: '#fff' }}>จัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -427,7 +479,9 @@ function AdminPPFeePage() {
                                                 <td className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.275rem' }}>
                                                     <Button variant="outline-warning" size="sm" className="me-1"
                                                         onClick={() => handleEdit(sub)}><FaEdit /></Button>
-                                                    <Button variant="outline-danger" size="sm"><FaRegTrashAlt /></Button>
+                                                    <Button variant="outline-danger" size="sm"
+                                                        onClick={() => handleOpenConfirmDelete(sub)}
+                                                    ><FaRegTrashAlt /></Button>
                                                 </td>
                                             </tr>
                                         ))
@@ -584,6 +638,33 @@ function AdminPPFeePage() {
                         </Button>
                         <Button variant="primary" onClick={handleUpdate}>
                             บันทึก
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+
+                {/* Modal ยืนยันการลบ */}
+                <Modal
+                    show={showConfirm}
+                    onHide={() => setShowConfirm(false)}
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>ยืนยันการลบ</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowConfirm(false)}>
+                            ยกเลิก
+                        </Button>
+                        <Button
+                            variant="danger"
+                            onClick={handleDelete}
+                            disabled={loading}
+                        >
+                            {loading ? "กำลังลบ..." : "ลบข้อมูล"}
                         </Button>
                     </Modal.Footer>
                 </Modal>

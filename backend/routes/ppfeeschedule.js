@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const isAdmin = require('../middleware/isAdmin');
 
 function generateTimestampId() {
     const timestamp = Date.now();
@@ -47,7 +48,7 @@ router.get('/ppfee/:year', async (req, res) => {
 
 
 // POST เพิ่มปีงบ
-router.post('/ppfee/years', async (req, res) => {
+router.post('/ppfee/years', isAdmin, async (req, res) => {
     const { year, status } = req.body;
     const gen_id = generateTimestampId();
     try {
@@ -145,6 +146,45 @@ router.post('/ppfee/data/:yearId', async (req, res) => {
         });
     }
 });
+
+router.delete('/ppfee/data/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing ID parameter',
+            });
+        }
+
+        const result = await pool.query(
+            'DELETE FROM ppfee_data WHERE id = $1 RETURNING *',
+            [id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Data not found',
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Deleted successfully',
+            deleted: result.rows[0],
+        });
+
+    } catch (err) {
+        console.error('Error deleting ppfee data:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error while deleting data',
+        });
+    }
+});
+
 
 // PUT: แก้ไขข้อมูลกิจกรรมย่อย
 router.put('/ppfee/data/:id', async (req, res) => {
