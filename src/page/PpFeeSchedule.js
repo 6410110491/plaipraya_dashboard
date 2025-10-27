@@ -1,12 +1,26 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Button, Col, Row, Spinner } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FaFileExcel } from 'react-icons/fa';
+import * as XLSX from "xlsx";
 
 function PpFeeSchedule() {
   const { years } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [isValid, setIsValid] = useState(null);
+  const navigate = useNavigate();
+
+  const tableHeaders = [
+    "หน่วยที่ให้บริการ",
+    "ชื่อของหน่วยให้บริการ",
+    "กิจกรรมหลัก",
+    "กิจกรรมย่อย",
+    "รับบริการ (คน)",
+    "จำนวน (ครั้ง)",
+    "การเบิกจ่าย (บาท)",
+  ];
 
   useEffect(() => {
     const loading = async () => {
@@ -47,31 +61,91 @@ function PpFeeSchedule() {
     fetchData();
   }, [years]); // <--- เพิ่ม years เป็น dependency
 
+  useEffect(() => {
+    const checkYear = async () => {
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years`);
+        const data = res.data;
+
+        // ตรวจสอบว่าปีที่เข้ามามีอยู่ในฐานข้อมูล และ status เป็น active
+        const found = data.find(item =>
+          String(item.year) === String(years) && item.status === "active"
+        );
+
+        if (!found) {
+          navigate("*", { replace: true }); // ไปหน้า NotFound
+        } else {
+          setIsValid(true);
+        }
+
+      } catch (err) {
+        console.error(err);
+        navigate("*", { replace: true }); // ถ้าเกิด error ก็ไป NotFound
+      }
+    };
+
+    checkYear();
+  }, [years, navigate]);
+
+  if (isValid === null) return <div>กำลังตรวจสอบข้อมูล...</div>;
 
   const groupedData = data.reduce((acc, curr) => {
-    const key = curr.main_activity;
+    // ใช้ key รวมกันของหน่วยบริการและกิจกรรมหลัก
+    const key = `${curr.service_unit_code}-${curr.service_unit_name}-${curr.main_activity}`;
+
     if (!acc[key]) {
       acc[key] = {
-        main_activity: curr.main_activity,
         service_unit_code: curr.service_unit_code,
         service_unit_name: curr.service_unit_name,
+        main_activity: curr.main_activity,
         sub_activities: [],
       };
     }
+
     acc[key].sub_activities.push({
       id: curr.id,
-      service_unit_code: curr.service_unit_code,
-      service_unit_name: curr.service_unit_name,
-      main_activity: curr.main_activity,
       sub_activity: curr.sub_activity,
       person_count: curr.person_count,
       service_count: curr.service_count,
       amount: curr.amount,
     });
+
     return acc;
   }, {});
 
   const rows = Object.values(groupedData);
+  // สร้างตัวแปรรวมข้อมูลทั้งหมด
+  const tableData = rows.flatMap((group) =>
+    group.sub_activities.map((sub, i) => ({
+      "หน่วยที่ให้บริการ": i === 0 ? group.service_unit_code : "",
+      "ชื่อของหน่วยให้บริการ": i === 0 ? group.service_unit_name : "",
+      "กิจกรรมหลัก": i === 0 ? group.main_activity : "",
+      "กิจกรรมย่อย": sub.sub_activity,
+      "รับบริการ (คน)": sub.person_count,
+      "จำนวน (ครั้ง)": sub.service_count,
+      "การเบิกจ่าย (บาท)": Number(sub.amount).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+      }),
+    }))
+  );
+
+
+  const calculateColumnWidths = (tableData) => {
+    if (!tableData || tableData.length === 0) return [];
+    const keys = Object.keys(tableData[0]);
+    return keys.map((key) => ({
+      wch: Math.max(key.length, ...tableData.map((item) => item[key]?.toString().length || 0)) + 2,
+    }));
+  };
+
+  const exportToExcel = () => {
+    if (!tableData || tableData.length === 0) return;
+    const worksheet = XLSX.utils.json_to_sheet(tableData);
+    worksheet["!cols"] = calculateColumnWidths(tableData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, years);
+    XLSX.writeFile(workbook, `PpFeeSchedule ปีงบประมาณ ${years}.xlsx`);
+  };
 
   return (
     loading ? (
@@ -83,17 +157,34 @@ function PpFeeSchedule() {
     ) : (
       <div className="container mt-4">
         <h2 className="mb-4">ตารางข้อมูล PpFeeSchedule ปีงบ {years}</h2>
-        <div className="table-responsive">
+        <Row style={{ display: 'flex', alignItems: "center", justifyContent: "flex-end", marginBottom: '1rem' }}>
+          <Col xs={12} sm={6} md={4} xl={3} xxl={2} className="mb-2 mb-md-0">
+            <Button
+              onClick={exportToExcel}
+              variant="outline-success"
+              style={{ width: "100%" }}
+            >
+              <FaFileExcel className="me-2" /> ส่งออก Excel
+            </Button>
+          </Col>
+        </Row>
+        <div className="table-responsive mb-4" >
           <table className="table table-bordered align-middle">
             <thead className="table-light">
               <tr>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>หน่วยที่ให้บริการ</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>ชื่อของหน่วยให้บริการ</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>กิจกรรมหลัก</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>กิจกรรมย่อย</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>รับบริการ (คน)</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>จำนวนครั้ง</th>
-                <th className="text-center" style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>การเบิกจ่าย</th>
+                {tableHeaders.map((header, index) => (
+                  <th
+                    key={index}
+                    className="text-center"
+                    style={{
+                      backgroundColor: header === "จัดการ" ? '#334155' : '#0d9488',
+                      color: '#fff',
+                      textAlign: 'center'
+                    }}
+                  >
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>

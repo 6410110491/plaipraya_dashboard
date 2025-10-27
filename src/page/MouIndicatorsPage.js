@@ -95,7 +95,7 @@ function MouIndicatorsPage() {
     const KpiData = [
         {
             page: 'mou', index: '1', kpi: 'ร้อยละของเด็กอายุ 0-5 ปี พัฒนาการสมวัย', criterion: 87,
-            apipath: '/s_childdev/data',
+            apipath: '/s_childdev_specialpp/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/2238b7879f442749bd1804032119e824',
             sync_api: '/get_s_childdev',
             a_code: "99862",

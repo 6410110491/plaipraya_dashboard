@@ -146,6 +146,7 @@ function AdminPPFeePage() {
 
                 const updated = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/data/${selectedYear.id}`);
                 setYearData(updated.data);
+                setShowModal(true)
             }
         } catch (error) {
             console.error(error);
@@ -191,25 +192,26 @@ function AdminPPFeePage() {
 
 
     const groupedData = yearData.reduce((acc, curr) => {
-        const key = curr.main_activity;
+        // ใช้ key รวมกันของหน่วยบริการและกิจกรรมหลัก
+        const key = `${curr.service_unit_code}-${curr.service_unit_name}-${curr.main_activity}`;
+
         if (!acc[key]) {
             acc[key] = {
-                main_activity: curr.main_activity,
                 service_unit_code: curr.service_unit_code,
                 service_unit_name: curr.service_unit_name,
+                main_activity: curr.main_activity,
                 sub_activities: [],
             };
         }
+
         acc[key].sub_activities.push({
             id: curr.id,
-            service_unit_code: curr.service_unit_code,
-            service_unit_name: curr.service_unit_name,
-            main_activity: curr.main_activity,
             sub_activity: curr.sub_activity,
             person_count: curr.person_count,
             service_count: curr.service_count,
             amount: curr.amount,
         });
+
         return acc;
     }, {});
 
@@ -571,7 +573,13 @@ function AdminPPFeePage() {
                         <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                             ยกเลิก
                         </Button>
-                        <Button variant="primary" onClick={handleAddData}>
+                        <Button variant="primary" onClick={handleAddData}
+                            style={{
+                                backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488", color: "#ffffff",
+                                border: "none",
+                                borderRadius: "8px",
+                                padding: "6px 12px"
+                            }}>
                             บันทึก
                         </Button>
                     </Modal.Footer>
@@ -636,7 +644,12 @@ function AdminPPFeePage() {
                         <Button variant="secondary" onClick={() => setShowEditModal(false)}>
                             ยกเลิก
                         </Button>
-                        <Button variant="primary" onClick={handleUpdate}>
+                        <Button variant="primary" onClick={handleUpdate} style={{
+                            backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488", color: "#ffffff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "6px 12px"
+                        }}>
                             บันทึก
                         </Button>
                     </Modal.Footer>

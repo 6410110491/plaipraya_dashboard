@@ -141,7 +141,7 @@ router.get('/get_s_childdev', isLoggedIn, async (req, res) => {
     }
 });
 
-router.get('/s_childdev/data', async (req, res) => {
+router.get('/s_childdev_specialpp/data', async (req, res) => {
     try {
         const response = await pool.query(`
         select
