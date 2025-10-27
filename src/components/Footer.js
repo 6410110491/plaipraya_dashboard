@@ -26,7 +26,7 @@ function Footer() {
                     }}
                 >
                     <a
-                        href="https://plaiprayahos.com/"
+                        href="https://plaiprayahos.moph.go.th/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="d-flex align-items-center p-0 text-dark"

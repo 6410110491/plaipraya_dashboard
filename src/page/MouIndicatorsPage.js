@@ -95,7 +95,7 @@ function MouIndicatorsPage() {
     const KpiData = [
         {
             page: 'mou', index: '1', kpi: 'ร้อยละของเด็กอายุ 0-5 ปี พัฒนาการสมวัย', criterion: 87,
-            apipath: '/s_childdev/data',
+            apipath: '/s_childdev_specialpp/data',
             link: 'https://hdc.moph.go.th/kbi/public/standard-report-detail/2238b7879f442749bd1804032119e824',
             sync_api: '/get_s_childdev',
             a_code: "99862",
@@ -718,28 +718,28 @@ function MouIndicatorsPage() {
                 <Table striped bordered hover responsive>
                     <thead className="table-primary text-center custom-thead">
                         <tr>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 ลำดับ
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 ตัวชี้วัด
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 เกณฑ์
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 เป้าหมาย
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 ผลงาน
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 ร้อยละ
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}>
                                 อ้างอิง
                             </th>
-                            <th style={{ backgroundColor: '#757f8f', color: '#fff', textAlign: 'center' }}></th>
+                            <th style={{ backgroundColor: '#0d9488', color: '#fff', textAlign: 'center' }}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -865,9 +865,9 @@ function MouIndicatorsPage() {
                                         variant="outline-primary"
                                         onClick={() => handleSync(selectedKpiData.sync_api)}
                                         style={{
-                                            backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
-                                            color: hoverSignup ? "#ffffff" : "#2A2F5B",
-                                            border: '1px solid #2A2F5B',
+                                            backgroundColor: hoverSignup ? "#0d9488" : "transparent",
+                                            color: hoverSignup ? "#ffffff" : "#0d9488",
+                                            border: '1px solid #0d9488',
                                             transition: 'all 0.3s'
                                         }}
                                         onMouseEnter={() => setHoverSignup(true)}

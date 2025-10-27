@@ -69,6 +69,8 @@ app.use('/api', require('./routes/auth'));
 app.use('/api', require('./routes/user'));
 //logs
 app.use('/api', require('./routes/logs'));
+//ppfeeschedule
+app.use('/api', require('./routes/ppfeeschedule'));
 
 // Port
 const port = process.env.PORT || 4000;

@@ -1,13 +1,31 @@
 import {
     CDBSidebar,
-    CDBSidebarContent,
     CDBSidebarHeader,
-    CDBSidebarMenu,
     CDBSidebarMenuItem,
+    CDBSidebarContent,
+    CDBSidebarMenu,
 } from 'cdbreact';
+import { useEffect } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+function SideBar() {
+    const [years, setYears] = useState([]);
+
+    useEffect(() => {
+        const fetchYears = async () => {
+            try {
+                const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years`);
+                const data = await res.json();
+                setYears(data);
+            } catch (err) {
+                console.error('Error fetching years:', err);
+            }
+        };
+
+        fetchYears();
+    }, []);
+
     return (
         <div style={{ display: 'flex', minHeight: '100vh', overflow: 'scroll initial' }}>
             <CDBSidebar textColor="#fff" backgroundColor="#333">
@@ -18,47 +36,49 @@ const Sidebar = () => {
                 </CDBSidebarHeader>
 
                 <CDBSidebarContent className="sidebar-content">
+                    {/* Main Menu */}
                     <CDBSidebarMenu>
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) =>
-                                `menu-link ${isActive ? "active" : ""}`
-                            }
-                        >
+                        <NavLink to="/" className={({ isActive }) => `menu-link ${isActive ? "active" : ""}`}>
                             <CDBSidebarMenuItem icon="home">หน้าหลัก</CDBSidebarMenuItem>
                         </NavLink>
 
-                        <NavLink
-                            to="/kpi/mou"
-                            className={({ isActive }) =>
-                                `menu-link ${isActive ? "active" : ""}`
-                            }
-                        >
+                        <NavLink to="/kpi/mou" className={({ isActive }) => `menu-link ${isActive ? "active" : ""}`}>
                             <CDBSidebarMenuItem icon="wallet">ตัวชี้วัด MOU</CDBSidebarMenuItem>
                         </NavLink>
 
-                        <NavLink
-                            to="/kpi/ministry"
-                            className={({ isActive }) =>
-                                `menu-link ${isActive ? "active" : ""}`
-                            }
-                        >
+                        <NavLink to="/kpi/ministry" className={({ isActive }) => `menu-link ${isActive ? "active" : ""}`}>
                             <CDBSidebarMenuItem icon="university">ตัวชี้วัดกระทรวง</CDBSidebarMenuItem>
                         </NavLink>
 
-                        <NavLink
-                            to="/kpi/inspector"
-                            className={({ isActive }) =>
-                                `menu-link ${isActive ? "active" : ""}`
-                            }
-                        >
+                        <NavLink to="/kpi/inspector" className={({ isActive }) => `menu-link ${isActive ? "active" : ""}`}>
                             <CDBSidebarMenuItem icon="search">ตัวชี้วัดตรวจราชการ</CDBSidebarMenuItem>
                         </NavLink>
+
+                        {/* หัวข้อหลัก */}
+                        <CDBSidebarMenuItem icon="file-invoice-dollar">
+                            PP FEE SCHEDULE
+                        </CDBSidebarMenuItem>
+
+                        {/* รายการปีจากฐานข้อมูล */}
+                        {years
+                            .filter(item => item.status === 'active') 
+                            .map((item) => (
+                                <NavLink
+                                    key={item.id}
+                                    to={`/pp-fee/${item.year}`}
+                                    className={({ isActive }) => `menu-link ${isActive ? 'active' : ''}`}
+                                >
+                                    <CDBSidebarMenuItem style={{ paddingLeft: '35px' }}>
+                                        {item.year}
+                                    </CDBSidebarMenuItem>
+                                </NavLink>
+                            ))
+                        }
                     </CDBSidebarMenu>
                 </CDBSidebarContent>
             </CDBSidebar>
         </div>
-    );
-};
+    )
+}
 
-export default Sidebar;
+export default SideBar

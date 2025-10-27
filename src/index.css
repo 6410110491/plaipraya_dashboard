@@ -43,7 +43,7 @@ code {
 .accordion .accordion-button {
   --bs-accordion-btn-bg: #fff;
   /* สีพื้นหลังตอนปิด (ฟ้าอ่อน) */
-  --bs-accordion-active-bg: #757f8f;
+  --bs-accordion-active-bg: #0d9488;
   /* สีพื้นหลังตอนเปิด (ฟ้าอ่อนสดใสขึ้น) */
   --bs-accordion-btn-color: #212529;
   /* สีตัวหนังสือเข้ม อ่านง่าย */

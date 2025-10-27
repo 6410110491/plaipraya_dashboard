@@ -380,7 +380,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
+                                                            backgroundColor: "#0d9488", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -389,11 +389,11 @@ function HomePage() {
                                                             border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
                                                         }}
                                                         onMouseEnter={e => {
-                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.backgroundColor = "#0d7c73ff";  // สีพื้นตอน hover
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "#757f8f";
+                                                            e.currentTarget.style.backgroundColor = "#0d9488";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {
@@ -464,7 +464,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
+                                                            backgroundColor: "#0d9488", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -473,11 +473,11 @@ function HomePage() {
                                                             border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
                                                         }}
                                                         onMouseEnter={e => {
-                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.backgroundColor = "#0d7c73ff";  // สีพื้นตอน hover
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "#757f8f";
+                                                            e.currentTarget.style.backgroundColor = "#0d9488";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {
@@ -549,7 +549,7 @@ function HomePage() {
                                                         tabIndex={0}
                                                         className="btn btn-sm mt-2 mt-sm-0"
                                                         style={{
-                                                            backgroundColor: "#757f8f", // สีพื้นปกติ
+                                                            backgroundColor: "#0d9488", // สีพื้นปกติ
                                                             color: "white",                           // สีตัวอักษรปกติ
                                                             borderRadius: "10px",
                                                             padding: "6px 12px",
@@ -558,11 +558,11 @@ function HomePage() {
                                                             border: "1px solid rgba(255, 255, 255, 0.5)" // ขอบปุ่ม
                                                         }}
                                                         onMouseEnter={e => {
-                                                            e.currentTarget.style.backgroundColor = "#2C3B50";  // สีพื้นตอน hover
+                                                            e.currentTarget.style.backgroundColor = "#0d7c73ff";  // สีพื้นตอน hover
                                                             e.currentTarget.style.color = "#fff";               // สีตัวอักษรตอน hover
                                                         }}
                                                         onMouseLeave={e => {
-                                                            e.currentTarget.style.backgroundColor = "#757f8f";
+                                                            e.currentTarget.style.backgroundColor = "#0d9488";
                                                             e.currentTarget.style.color = "white";
                                                         }}
                                                         onClick={(e) => {

@@ -116,7 +116,7 @@ function Login() {
 
                                     <Button variant="primary" type="submit" className="w-100"
                                         style={{
-                                            backgroundColor: hoverLogin ? "#1f2347" : "#2A2F5B",
+                                            backgroundColor: hoverLogin ? "#0d7c73ff" : "#0d9488",
                                             color: "#ffffff",
                                             border: 'none',
                                             transition: 'background-color 0.3s'
@@ -129,9 +129,9 @@ function Login() {
                                 <Button
                                     className="w-100 mt-3"
                                     style={{
-                                        backgroundColor: hoverSignup ? "#2A2F5B" : "transparent",
-                                        color: hoverSignup ? "#ffffff" : "#2A2F5B",
-                                        border: '1px solid #2A2F5B',
+                                        backgroundColor: hoverSignup ? "#0d9488" : "transparent",
+                                        color: hoverSignup ? "#ffffff" : "#0d9488",
+                                        border: '1px solid #0d9488',
                                         transition: 'all 0.3s'
                                     }}
                                     onMouseEnter={() => setHoverSignup(true)}
