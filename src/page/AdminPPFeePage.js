@@ -10,6 +10,7 @@ function AdminPPFeePage() {
     const [newYear, setNewYear] = useState('');
     const [status, setStatus] = useState('inactive');
     const [hoverLogin, setHoverLogin] = useState(false);
+    const [role, setRole] = useState(null);
 
     const [showModal, setShowModal] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -278,7 +279,6 @@ function AdminPPFeePage() {
         loading();
     }, []);
 
-
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -287,8 +287,8 @@ function AdminPPFeePage() {
                 });
 
                 if (res.data.loggedIn && res.data.username) {
-
-                    if (res.data.role !== "admin") {
+                    setRole(res.data.role)
+                    if (res.data.role !== "admin" && res.data.role !== "superadmin") {
                         changepage('')
                     }
                 } else {
@@ -481,9 +481,11 @@ function AdminPPFeePage() {
                                                 <td className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.275rem' }}>
                                                     <Button variant="outline-warning" size="sm" className="me-1"
                                                         onClick={() => handleEdit(sub)}><FaEdit /></Button>
-                                                    <Button variant="outline-danger" size="sm"
-                                                        onClick={() => handleOpenConfirmDelete(sub)}
-                                                    ><FaRegTrashAlt /></Button>
+                                                    {role === "superadmin" && (
+                                                        <Button variant="outline-danger" size="sm"
+                                                            onClick={() => handleOpenConfirmDelete(sub)}
+                                                        ><FaRegTrashAlt /></Button>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))

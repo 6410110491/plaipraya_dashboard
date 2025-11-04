@@ -14,6 +14,8 @@ import ProfileEdit from './page/ProfileEdit';
 import NotFound from './page/NotFound ';
 import PpFeeSchedule from './page/PpFeeSchedule';
 import AdminPPFeePage from './page/AdminPPFeePage';
+import AdminManagementPage from './page/AdminManagementPage';
+import UserManagementPage from './page/UserManagementPage';
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/profile-edit" element={<ProfileEdit />} />
                 <Route path="/pp-fee-management" element={<AdminPPFeePage />} />
+                <Route path="/admin/management" element={<AdminManagementPage />} />
+                <Route path="/admin/user-management" element={<UserManagementPage />} />
 
                 <Route path="/kpi/:page/detail/:kpiname" element={<KpiDetail />} />
                 <Route path="/pp-fee/:years" element={<PpFeeSchedule />} />

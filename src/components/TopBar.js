@@ -95,9 +95,9 @@ function TopBar() {
                                         >
                                             <FaUser size={16} style={{ marginRight: '0.5rem' }} /> ข้อมูลส่วนตัว
                                         </Dropdown.Item>
-                                        {role === "admin" && (
+                                        {role === "superadmin" && (
                                             <Dropdown.Item
-                                                onClick={() => changepage('pp-fee-management')}
+                                                onClick={() => changepage('admin/management')}
                                                 style={{
                                                     color: "#2C3B50",
                                                     fontWeight: "500",
