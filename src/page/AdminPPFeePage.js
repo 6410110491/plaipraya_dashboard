@@ -88,10 +88,33 @@ function AdminPPFeePage() {
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-        await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years/${id}`, { status: newStatus });
-        fetchYears();
+        try {
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years/${id}`, {
+                status: newStatus
+            });
+
+            Swal.fire({
+                icon: "success",
+                title: "เปลี่ยนสถานะสำเร็จ",
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.reload();
+            });
+
+        } catch (error) {
+            console.error("Error updating status:", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด",
+                text: "ไม่สามารถเปลี่ยนสถานะได้"
+            });
+        }
     };
+
 
     const handleOpenModal = async (year) => {
         setSelectedYear(year);
