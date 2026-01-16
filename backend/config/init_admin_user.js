@@ -9,7 +9,7 @@ async function createAdminUser() {
         const firstName = process.env.ADMIN_FIRSTNAME;
         const lastName = process.env.ADMIN_LASTNAME;
         const department = process.env.ADMIN_DEPARTMENT;
-        const default_role = 'admin';
+        const default_role = 'superadmin';
 
         const checkUser = await pool.query(
             `SELECT id FROM users WHERE username = $1 OR email = $2`,

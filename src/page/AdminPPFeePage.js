@@ -10,6 +10,7 @@ function AdminPPFeePage() {
     const [newYear, setNewYear] = useState('');
     const [status, setStatus] = useState('inactive');
     const [hoverLogin, setHoverLogin] = useState(false);
+    const [role, setRole] = useState(null);
 
     const [showModal, setShowModal] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -87,10 +88,33 @@ function AdminPPFeePage() {
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-        await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years/${id}`, { status: newStatus });
-        fetchYears();
+        try {
+            const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+
+            await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/ppfee/years/${id}`, {
+                status: newStatus
+            });
+
+            Swal.fire({
+                icon: "success",
+                title: "เปลี่ยนสถานะสำเร็จ",
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.reload();
+            });
+
+        } catch (error) {
+            console.error("Error updating status:", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด",
+                text: "ไม่สามารถเปลี่ยนสถานะได้"
+            });
+        }
     };
+
 
     const handleOpenModal = async (year) => {
         setSelectedYear(year);
@@ -278,7 +302,6 @@ function AdminPPFeePage() {
         loading();
     }, []);
 
-
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -287,8 +310,8 @@ function AdminPPFeePage() {
                 });
 
                 if (res.data.loggedIn && res.data.username) {
-
-                    if (res.data.role !== "admin") {
+                    setRole(res.data.role)
+                    if (res.data.role !== "admin" && res.data.role !== "superadmin") {
                         changepage('')
                     }
                 } else {
@@ -481,9 +504,11 @@ function AdminPPFeePage() {
                                                 <td className="text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.275rem' }}>
                                                     <Button variant="outline-warning" size="sm" className="me-1"
                                                         onClick={() => handleEdit(sub)}><FaEdit /></Button>
-                                                    <Button variant="outline-danger" size="sm"
-                                                        onClick={() => handleOpenConfirmDelete(sub)}
-                                                    ><FaRegTrashAlt /></Button>
+                                                    {role === "superadmin" && (
+                                                        <Button variant="outline-danger" size="sm"
+                                                            onClick={() => handleOpenConfirmDelete(sub)}
+                                                        ><FaRegTrashAlt /></Button>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))

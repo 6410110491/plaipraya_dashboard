@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const isAdmin = require('../middleware/isAdmin');
+const isSuperAdmin = require('../middleware/isSuperAdmin');
 
 function generateTimestampId() {
     const timestamp = Date.now();
@@ -147,7 +148,7 @@ router.post('/ppfee/data/:yearId', async (req, res) => {
     }
 });
 
-router.delete('/ppfee/data/:id', async (req, res) => {
+router.delete('/ppfee/data/:id', isSuperAdmin, async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -187,7 +188,7 @@ router.delete('/ppfee/data/:id', async (req, res) => {
 
 
 // PUT: แก้ไขข้อมูลกิจกรรมย่อย
-router.put('/ppfee/data/:id', async (req, res) => {
+router.put('/ppfee/data/:id', isAdmin, async (req, res) => {
     const { id } = req.params;
     const {
         service_unit_code,
@@ -209,21 +210,31 @@ router.put('/ppfee/data/:id', async (req, res) => {
             });
         }
 
-        // อัปเดตข้อมูล
         const update = await pool.query(
             `UPDATE ppfee_data 
-             SET service_unit_code= $1,
-                service_unit_name= $2,
-                main_activity = $3,
-                sub_activity = $4,
-                person_count = $5,
-                service_count = $6,
-                amount = $7,
-                updated_at = CURRENT_TIMESTAMP
-             WHERE id = $8
-             RETURNING *`,
-            [service_unit_code, service_unit_name, main_activity, sub_activity, person_count, service_count, amount, id]
+                SET 
+                    service_unit_code = COALESCE($1, service_unit_code),
+                    service_unit_name = COALESCE($2, service_unit_name),
+                    main_activity = COALESCE($3, main_activity),
+                    sub_activity = COALESCE($4, sub_activity),
+                    person_count = COALESCE($5, person_count),
+                    service_count = COALESCE($6, service_count),
+                    amount = COALESCE($7, amount),
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = $8
+                RETURNING *`,
+            [
+                service_unit_code ?? null,
+                service_unit_name ?? null,
+                main_activity ?? null,
+                sub_activity ?? null,
+                person_count ?? null,
+                service_count ?? null,
+                amount ?? null,
+                id
+            ]
         );
+
 
         res.json({
             success: true,

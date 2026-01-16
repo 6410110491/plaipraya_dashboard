@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 
-const isAdmin = async (req, res, next) => {
+const isSuperAdmin = async (req, res, next) => {
     try {
         const token = req.cookies.token;
         if (!token) {
@@ -26,7 +26,7 @@ const isAdmin = async (req, res, next) => {
 
         const user = result.rows[0];
 
-        if (user.role !== "admin" && user.role !== "superadmin") {
+        if (user.role !== "superadmin") {
             return res.status(403).json({ message: "Forbidden – You don’t have permission to access this resource" });
         }
 
@@ -34,9 +34,9 @@ const isAdmin = async (req, res, next) => {
         next();
 
     } catch (err) {
-        console.error("Error in isAdmin middleware:", err);
+        console.error("Error in isSuperAdmin middleware:", err);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 
-module.exports = isAdmin;
+module.exports = isSuperAdmin;

@@ -488,7 +488,7 @@ function MouIndicatorsPage() {
             } catch (err) {
                 console.error(err);
             }
-        }, 900); 
+        }, 900);
     };
 
     const handleLeave = () => {
@@ -496,7 +496,7 @@ function MouIndicatorsPage() {
     };
 
     return (
-        <Container fluid className='pb-5' style={{ backgroundColor: '#f8f9fa', padding: '25px' }}>
+        <Container fluid className='pb-5' style={{ backgroundColor: '#f8f9fa', padding: '25px', minHeight: '100vh' }}>
             {loading && (
                 <div
                     style={{

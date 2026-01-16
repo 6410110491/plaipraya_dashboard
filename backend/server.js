@@ -28,7 +28,8 @@ app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    allowedHeaders: ["Content-Type", "Authorization"],
     exposedHeaders: ["set-cookie"]
 }));
 
